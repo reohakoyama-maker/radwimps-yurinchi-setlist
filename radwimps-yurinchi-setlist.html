@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#f3efec">
+<title>ユーリンチー セトリまとめ(非公式)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: light;
+    --bg:#f3efec;
+    --black:#0a0a0a;
+    --charcoal:#1a1a1a;
+    --ash:#606060;
+    --line:#e5e5e5;
+    --steel:#c0c0c0;
+    --white:#fcfcfc;
+    --accent:#eb5a02;
+    --font-body:"EB Garamond","YuGothic","游ゴシック","Hiragino Kaku Gothic ProN","ヒラギノ角ゴ ProN",Meiryo,sans-serif;
+    --font-mono:"JetBrains Mono","Courier New",monospace;
+  }
+
+  *{box-sizing:border-box;}
+
+  html{color-scheme: light;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--black);
+    font-family:var(--font-body);font-weight:300;font-size:15px;line-height:1.8;}
+
+  a{color:inherit;}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+  .wrap{max-width:900px;margin:0 auto;padding:40px 20px 90px;}
+
+  .site-eyebrow{font-size:11px;color:var(--ash);letter-spacing:0.06em;margin-bottom:10px;}
+  .site-title{font-size:26px;font-weight:500;margin:0 0 26px;}
+  hr{border:none;border-top:1px solid var(--line);margin:0 0 30px;}
+
+  /* ---------- gate ---------- */
+  #gate{
+    padding:50px 0 30px;text-align:center;
+    opacity:1; transform:translateY(0);
+    transition:opacity .45s ease, transform .45s ease;
+  }
+  #gate.leaving{opacity:0; transform:translateY(-14px); pointer-events:none;}
+
+  .gate-text{font-size:15px;line-height:2.1;max-width:480px;margin:0 auto 22px;}
+  .gate-text b{color:var(--accent);font-weight:500;}
+  .gate-note2{font-size:13px;color:var(--ash);max-width:440px;margin:0 auto 34px;line-height:2;}
+  .btn{
+    font-family:var(--font-body);font-size:15px;font-weight:500;color:var(--white);
+    background:var(--black);border:1px solid var(--black);
+    padding:13px 34px;cursor:pointer;letter-spacing:0.02em;
+    transition:transform .2s ease, background .2s ease;
+  }
+  .btn:hover{background:var(--charcoal); transform:translateY(-1px);}
+  .btn:active{transform:translateY(0);}
+
+  /* ---------- content ---------- */
+  #content{
+    display:none;
+    opacity:0; transform:translateY(10px);
+    transition:opacity .5s ease, transform .5s ease;
+  }
+  #content.visible{display:block;}
+  #content.fade-in{opacity:1; transform:translateY(0);}
+
+  h2.section-title{font-size:18px;font-weight:500;margin:0 0 4px;}
+  .section-sub{font-size:12.5px;color:var(--ash);margin:0 0 20px;}
+
+  .legend{font-size:12.5px;color:var(--ash);margin-bottom:30px;}
+  .legend span{margin-right:18px;}
+  .legend b{color:var(--black);font-weight:600;border-bottom:1.5px solid var(--black);padding-bottom:1px;}
+  .legend .tag-sometimes{color:var(--ash);font-weight:500;border-bottom:1.5px solid var(--steel);padding-bottom:1px;}
+  .legend .tag-rare{color:var(--accent);font-weight:600;border-bottom:1.5px solid var(--accent);padding-bottom:1px;}
+
+  .summary-line{font-size:13px;color:var(--ash);margin-bottom:38px;}
+  .summary-line b{color:var(--black);font-weight:500;}
+
+  .board{display:flex;gap:28px;flex-wrap:wrap;}
+  .board-item{flex:1 1 240px;min-width:220px;}
+
+  .show-date{font-size:14px;font-weight:500;}
+  .show-city{font-size:11.5px;color:var(--ash);letter-spacing:0.08em;margin-bottom:10px;}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th,td{text-align:left;padding:7px 4px;border-bottom:1px solid var(--line);}
+  th{font-weight:400;color:var(--ash);font-size:11px;border-bottom:1px solid var(--black);}
+  td.n{color:var(--steel);width:28px;font-family:var(--font-mono);font-size:11px;}
+  td.freq{white-space:nowrap;font-size:11.5px;color:var(--ash);letter-spacing:0.02em;}
+  td.freq span{border-bottom:1.5px solid transparent;padding-bottom:1px;}
+  td.freq.fixed span{color:var(--black);font-weight:600;border-bottom-color:var(--black);}
+  td.freq.sometimes span{color:var(--ash);font-weight:500;border-bottom-color:var(--steel);}
+  td.freq.rare span{color:var(--accent);font-weight:600;border-bottom-color:var(--accent);}
+
+  .footnote{margin-top:50px;padding-top:24px;border-top:1px solid var(--line);
+    font-size:12px;color:var(--ash);line-height:2;}
+  .footnote .handle{color:var(--black);}
+
+  @media (prefers-reduced-motion: reduce){
+    #gate, #content, .btn{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="site-eyebrow">RADWIMPS Official Fan Club Tour 2026 “ユーリンチー”(非公式まとめ)</div>
+  <div class="site-title">セットリスト</div>
+  <hr>
+
+  <section id="gate">
+    <p class="gate-text">このページには4公演分のセットリストを掲載しています。<br><b>ネタバレを含みます。</b>まだ知りたくない方はここで戻ってください。</p>
+    <p class="gate-note2">なお、まだ見たくない方もいます。曲順やアンコールの本数なども、多くの人が見る場では話さないようにお願いします。<br>愛あるwimperのみなさん、見た者同士で楽しみましょう。</p>
+    <button class="btn" id="revealBtn">セトリを見る</button>
+  </section>
+
+  <main id="content">
+    <h2 class="section-title">4公演 セトリ比較</h2>
+    <p class="section-sub">名古屋1日目(7/22)・名古屋2日目(7/23)・福岡1日目(7/27)・福岡2日目(7/28)</p>
+
+    <div class="legend">
+      <span><b>固定</b> = 全公演で演奏</span>
+      <span class="tag-sometimes">たまに</span><span> = 2〜3公演で演奏</span>
+      <span class="tag-rare">限定</span><span> = 1公演のみ</span>
+    </div>
+
+    <div class="summary-line" id="summary"></div>
+
+    <div class="board" id="board"></div>
+
+    <p class="footnote">
+      参戦メモを元にした個人まとめ(非公式)です。<br>
+      誤りがあれば下記アカウントまでご連絡ください。<br>
+      <span class="handle">フッサフッサのベイビー/Leo &nbsp;@w_w_wimper2002</span><br>
+      このページは見たくない人には見せず、見た者同士で楽しんでください。<br>
+      EN = アンコール<br><br>
+      毎回公演後、随時更新予定です。YouTubeやSpotifyのリンクなども今後追加していくかもしれません。少しずつ改善していきます。
+    </p>
+  </main>
+
+</div>
+
+<script>
+const shows = [
+  { label:"名古屋 1日目", date:"7/22", songs:[
+    ["1","いいんですか？"],["2","4645"],["3","イーディーピー〜飛んで火に入る夏の君〜"],
+    ["4","π"],["5","アイアンバイブル"],["6","ワールドエンドガールフレンド"],
+    ["7","ささくれ"],["8","週刊少年ジャンプ"],["9","DADA"],["10","億万笑者"],
+    ["11","俺色スカイ"],["12","ラバボー"],["13","やどかり"],["14","叫べ"],
+    ["15","最後の歌"],["16","ララバイ"],["EN1","もしも"],["EN2","会心の一撃"]
+  ]},
+  { label:"名古屋 2日目", date:"7/23", songs:[
+    ["1","いいんですか？"],["2","4645"],["3","イーディーピー〜飛んで火に入る夏の君〜"],
+    ["4","π"],["5","アイアンバイブル"],["6","ワールドエンドガールフレンド"],
+    ["7","ラストバージン"],["8","シザースタンド"],["9","DADA"],["10","億万笑者"],
+    ["11","俺色スカイ"],["12","ピクニック"],["13","セプテンバーさん"],["14","叫べ"],
+    ["15","最後の歌"],["16","ララバイ"],["EN1","もしも"],["EN2","有心論"]
+  ]},
+  { label:"福岡 1日目", date:"7/27", songs:[
+    ["1","いいんですか？"],["2","4645"],["3","イーディーピー〜飛んで火に入る夏の君〜"],
+    ["4","π"],["5","アイアンバイブル"],["6","ワールドエンドガールフレンド"],
+    ["7","ささくれ"],["8","週刊少年ジャンプ"],["9","DADA"],["10","億万笑者"],
+    ["11","バイ・マイ・サイ"],["12","やどかり"],["13","俺色スカイ"],["14","叫べ"],
+    ["15","最後の歌"],["16","ララバイ"],["EN1","もしも"],["EN2","有心論"]
+  ]},
+  { label:"福岡 2日目", date:"7/28", songs:[
+    ["1","いいんですか？"],["2","4645"],["3","イーディーピー〜飛んで火に入る夏の君〜"],
+    ["4","π"],["5","アイアンバイブル"],["6","ワールドエンドガールフレンド"],
+    ["7","ラストバージン"],["8","シザースタンド"],["9","DADA"],["10","億万笑者"],
+    ["11","俺色スカイ"],["12","言の葉"],["13","叫べ"],["14","最後の歌"],
+    ["15","ララバイ"],["EN1","もしも"],["EN2","会心の一撃"]
+  ]}
+];
+
+const countByTitle = {};
+shows.forEach(show => {
+  const seen = new Set();
+  show.songs.forEach(([n, title]) => {
+    if (!seen.has(title)) {
+      countByTitle[title] = (countByTitle[title] || 0) + 1;
+      seen.add(title);
+    }
+  });
+});
+
+const totalShows = shows.length;
+
+function classFor(title){
+  const c = countByTitle[title];
+  if (c === totalShows) return "fixed";
+  if (c === 1) return "rare";
+  return "sometimes";
+}
+function labelFor(cls){
+  return cls === "fixed" ? "固定" : cls === "sometimes" ? "たまに" : "限定";
+}
+
+const board = document.getElementById("board");
+shows.forEach(show => {
+  const item = document.createElement("div");
+  item.className = "board-item";
+
+  const head = document.createElement("div");
+  head.innerHTML = `<div class="show-date">${show.date}</div><div class="show-city">${show.label}</div>`;
+  item.appendChild(head);
+
+  const table = document.createElement("table");
+  table.innerHTML = `<thead><tr><th>No.</th><th>曲目</th><th>頻度</th></tr></thead>`;
+  const tbody = document.createElement("tbody");
+  show.songs.forEach(([n, title]) => {
+    const cls = classFor(title);
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td class="n">${n}</td><td>${title}</td><td class="freq ${cls}"><span>${labelFor(cls)}</span></td>`;
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  item.appendChild(table);
+  board.appendChild(item);
+});
+
+const total = Object.keys(countByTitle).length;
+const fixedCount = Object.values(countByTitle).filter(c => c === totalShows).length;
+const rareCount = Object.values(countByTitle).filter(c => c === 1).length;
+const sometimesCount = total - fixedCount - rareCount;
+
+document.getElementById("summary").innerHTML =
+  `全<b>${total}</b>曲中 &nbsp;固定<b>${fixedCount}</b>曲 &nbsp;たまに<b>${sometimesCount}</b>曲 &nbsp;限定<b>${rareCount}</b>曲`;
+
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+document.getElementById("revealBtn").addEventListener("click", () => {
+  const gate = document.getElementById("gate");
+  const content = document.getElementById("content");
+  const delay = prefersReducedMotion ? 0 : 420;
+
+  gate.classList.add("leaving");
+  setTimeout(() => {
+    gate.style.display = "none";
+    content.classList.add("visible");
+    requestAnimationFrame(() => content.classList.add("fade-in"));
+  }, delay);
+});
+</script>
+</body>
+</html>
