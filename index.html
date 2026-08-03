@@ -33,7 +33,7 @@
   a{color:inherit;}
   :focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
 
-  .wrap{max-width:900px;margin:0 auto;padding:40px 20px 90px;}
+  .wrap{max-width:1080px;margin:0 auto;padding:40px 20px 90px;}
 
   .site-eyebrow{font-size:11px;color:var(--ash);letter-spacing:0.06em;margin-bottom:10px;}
   .site-title{font-size:26px;font-weight:500;margin:0 0 26px;}
@@ -80,17 +80,17 @@
   .summary-line{font-size:13px;color:var(--ash);margin-bottom:38px;}
   .summary-line b{color:var(--black);font-weight:500;}
 
-  .board{display:flex;gap:28px;flex-wrap:wrap;}
-  .board-item{flex:1 1 240px;min-width:220px;}
+  .board{display:flex;gap:24px;flex-wrap:wrap;}
+  .board-item{flex:1 1 200px;min-width:200px;}
 
   .show-date{font-size:14px;font-weight:500;}
   .show-city{font-size:11.5px;color:var(--ash);letter-spacing:0.08em;margin-bottom:10px;}
 
-  table{width:100%;border-collapse:collapse;font-size:13px;}
-  th,td{text-align:left;padding:7px 4px;border-bottom:1px solid var(--line);}
-  th{font-weight:400;color:var(--ash);font-size:11px;border-bottom:1px solid var(--black);}
-  td.n{color:var(--steel);width:28px;font-family:var(--font-mono);font-size:11px;}
-  td.freq{white-space:nowrap;font-size:11.5px;color:var(--ash);letter-spacing:0.02em;}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;}
+  th,td{text-align:left;padding:6px 4px;border-bottom:1px solid var(--line);}
+  th{font-weight:400;color:var(--ash);font-size:10.5px;border-bottom:1px solid var(--black);}
+  td.n{color:var(--steel);width:26px;font-family:var(--font-mono);font-size:10.5px;}
+  td.freq{white-space:nowrap;font-size:11px;color:var(--ash);letter-spacing:0.02em;}
   td.freq span{border-bottom:1.5px solid transparent;padding-bottom:1px;}
   td.freq.fixed span{color:var(--black);font-weight:600;border-bottom-color:var(--black);}
   td.freq.sometimes span{color:var(--ash);font-weight:500;border-bottom-color:var(--steel);}
@@ -113,18 +113,18 @@
   <hr>
 
   <section id="gate">
-    <p class="gate-text">このページには4公演分のセットリストを掲載しています。<br><b>ネタバレを含みます。</b>まだ知りたくない方はここで戻ってください。</p>
+    <p class="gate-text">このページには5公演分のセットリストを掲載しています。<br><b>ネタバレを含みます。</b>まだ知りたくない方はここで戻ってください。</p>
     <p class="gate-note2">なお、まだ見たくない方もいます。曲順やアンコールの本数なども、多くの人が見る場では話さないようにお願いします。<br>愛あるwimperのみなさん、見た者同士で楽しみましょう。</p>
     <button class="btn" id="revealBtn">セトリを見る</button>
   </section>
 
   <main id="content">
-    <h2 class="section-title">4公演 セトリ比較</h2>
-    <p class="section-sub">名古屋1日目(7/22)・名古屋2日目(7/23)・福岡1日目(7/27)・福岡2日目(7/28)</p>
+    <h2 class="section-title">5公演 セトリ比較</h2>
+    <p class="section-sub">名古屋1日目(7/22)・名古屋2日目(7/23)・福岡1日目(7/27)・福岡2日目(7/28)・大阪1日目(8/3)</p>
 
     <div class="legend">
       <span><b>固定</b> = 全公演で演奏</span>
-      <span class="tag-sometimes">たまに</span><span> = 2〜3公演で演奏</span>
+      <span class="tag-sometimes">たまに</span><span> = 一部の公演で演奏</span>
       <span class="tag-rare">限定</span><span> = 1公演のみ</span>
     </div>
 
@@ -171,8 +171,16 @@ const shows = [
     ["1","いいんですか？"],["2","4645"],["3","イーディーピー〜飛んで火に入る夏の君〜"],
     ["4","π"],["5","アイアンバイブル"],["6","ワールドエンドガールフレンド"],
     ["7","ラストバージン"],["8","シザースタンド"],["9","DADA"],["10","億万笑者"],
-    ["11","俺色スカイ"],["12","音の葉"],["13","やどかり"],["14","叫べ"],["15","最後の歌"],
-    ["16","ララバイ"],["EN1","もしも"],["EN2","会心の一撃"]
+    ["11","俺色スカイ"],["12","言の葉"],["13","叫べ"],["14","最後の歌"],
+    ["15","ララバイ"],["EN1","もしも"],["EN2","会心の一撃"]
+  ]},
+  { label:"大阪 1日目", date:"8/3", songs:[
+    ["1","いいんですか？"],["2","4645"],["3","イーディーピー〜飛んで火に入る夏の君〜"],
+    ["4","π"],["5","アイアンバイブル"],["6","ワールドエンドガールフレンド"],
+    ["7","ささくれ"],["8","週刊少年ジャンプ"],["9","DADA"],["10","億万笑者"],
+    ["11","俺色スカイ"],["12","MOUNTAIN VANILLA"],["13","セプテンバーさん"],["14","叫べ"],
+    ["15","夕星-ゆうづつ-（1番まで）"],["16","新曲（1番まで）"],["17","最後の歌"],["18","ララバイ"],
+    ["EN1","もしも"],["EN2","会心の一撃"]
   ]}
 ];
 
