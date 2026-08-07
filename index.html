@@ -1,145 +1,333 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="color-scheme" content="light">
-<meta name="theme-color" content="#f3efec">
+<meta name="theme-color" content="#f2ede6">
 <title>ユーリンチー セトリまとめ(非公式)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
 <script data-goatcounter="https://reohakoyama-maker.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root{
-    color-scheme: light;
-    --bg:#f3efec;
-    --black:#0a0a0a;
-    --charcoal:#1a1a1a;
-    --ash:#606060;
-    --line:#e5e5e5;
-    --steel:#c0c0c0;
-    --white:#fcfcfc;
-    --accent:#eb5a02;
-    --font-body:"EB Garamond","YuGothic","游ゴシック","Hiragino Kaku Gothic ProN","ヒラギノ角ゴ ProN",Meiryo,sans-serif;
-    --font-mono:"JetBrains Mono","Courier New",monospace;
+    --bg:#f2ede6;
+    --paper:#faf7f2;
+    --ink:#161412;
+    --ink-soft:#4a453f;
+    --ash:#8c8478;
+    --line:#e2dbcf;
+    --line-strong:#161412;
+    --accent:#e8590c;
+    --accent-soft:#f6d9c4;
+    --rare:#b23a48;
+    --rare-soft:#f3d9dc;
+    --focus:#e8590c;
+    --font-body:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif;
+    --font-display:var(--font-body);
+    --font-num:var(--font-body);
+  }
+
+  :root[data-theme="dark"]{
+    --bg:#17150f;
+    --paper:#1f1c15;
+    --ink:#efe9de;
+    --ink-soft:#c4bcac;
+    --ash:#847c6c;
+    --line:#332f24;
+    --line-strong:#efe9de;
+    --accent:#ff7a2e;
+    --accent-soft:#3a2a19;
+    --rare:#e8707d;
+    --rare-soft:#3a2024;
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#17150f;
+      --paper:#1f1c15;
+      --ink:#efe9de;
+      --ink-soft:#c4bcac;
+      --ash:#847c6c;
+      --line:#332f24;
+      --line-strong:#efe9de;
+      --accent:#ff7a2e;
+      --accent-soft:#3a2a19;
+      --rare:#e8707d;
+      --rare-soft:#3a2024;
+    }
   }
 
   *{box-sizing:border-box;}
-
-  html{color-scheme: light;}
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--black);
-    font-family:var(--font-body);font-weight:300;font-size:15px;line-height:1.8;}
-
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:var(--font-body);font-weight:400;font-size:15px;line-height:1.75;
+    -webkit-font-smoothing:antialiased;}
   a{color:inherit;}
-  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+  :focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
+  ::selection{background:var(--accent-soft);color:var(--ink);}
 
-  .wrap{max-width:1080px;margin:0 auto;padding:40px 20px 90px;}
+  .wrap{max-width:1120px;margin:0 auto;padding:48px 22px 100px;}
 
-  .site-eyebrow{font-size:11px;color:var(--ash);letter-spacing:0.06em;margin-bottom:10px;}
-  .site-title{font-size:26px;font-weight:500;margin:0 0 26px;}
-  hr{border:none;border-top:1px solid var(--line);margin:0 0 30px;}
+  /* ---------- header ---------- */
+  .masthead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;
+    margin-bottom:22px;flex-wrap:wrap;}
+  .site-eyebrow{font-size:11px;color:var(--ash);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;}
+  .site-title{font-family:var(--font-display);font-size:32px;font-weight:700;margin:0;
+    text-wrap:balance;letter-spacing:0.01em;}
+  .theme-toggle{font-family:var(--font-body);font-size:11px;letter-spacing:0.06em;color:var(--ash);
+    background:none;border:1px solid var(--line);border-radius:100px;padding:6px 14px;cursor:pointer;
+    transition:border-color .15s ease, color .15s ease;}
+  .theme-toggle:hover{border-color:var(--ink-soft);color:var(--ink);}
+  hr{border:none;border-top:1px solid var(--line-strong);margin:0 0 34px;}
 
   /* ---------- gate ---------- */
-  #gate{
-    padding:50px 0 30px;text-align:center;
-    opacity:1; transform:translateY(0);
-    transition:opacity .45s ease, transform .45s ease;
-  }
-  #gate.leaving{opacity:0; transform:translateY(-14px); pointer-events:none;}
-
-  .gate-text{font-size:15px;line-height:2.1;max-width:480px;margin:0 auto 22px;}
-  .gate-text b{color:var(--accent);font-weight:500;}
-  .gate-note2{font-size:13px;color:var(--ash);max-width:440px;margin:0 auto 34px;line-height:2;}
+  #gate{padding:60px 0 30px;text-align:center;
+    opacity:1;transform:translateY(0);transition:opacity .45s ease, transform .45s ease;}
+  #gate.leaving{opacity:0;transform:translateY(-14px);pointer-events:none;}
+  .gate-text{font-size:16px;line-height:2.15;max-width:480px;margin:0 auto 22px;}
+  .gate-text b{color:var(--accent);font-weight:700;}
+  .gate-note2{font-size:13px;color:var(--ash);max-width:440px;margin:0 auto 36px;line-height:2;}
   .btn{
-    font-family:var(--font-body);font-size:15px;font-weight:500;color:var(--white);
-    background:var(--black);border:1px solid var(--black);
-    padding:13px 34px;cursor:pointer;letter-spacing:0.02em;
-    transition:transform .2s ease, background .2s ease;
-  }
-  .btn:hover{background:var(--charcoal); transform:translateY(-1px);}
+    font-family:var(--font-body);font-size:14px;font-weight:700;color:var(--paper);
+    background:var(--ink);border:1px solid var(--ink);border-radius:2px;
+    padding:14px 38px;cursor:pointer;letter-spacing:0.04em;
+    transition:transform .2s ease, background .2s ease;}
+  .btn:hover{background:var(--accent);border-color:var(--accent);transform:translateY(-1px);}
   .btn:active{transform:translateY(0);}
 
   /* ---------- content ---------- */
-  #content{
-    display:none;
-    opacity:0; transform:translateY(10px);
-    transition:opacity .5s ease, transform .5s ease;
-  }
+  #content{display:none;opacity:0;transform:translateY(10px);
+    transition:opacity .5s ease, transform .5s ease;}
   #content.visible{display:block;}
-  #content.fade-in{opacity:1; transform:translateY(0);}
+  #content.fade-in{opacity:1;transform:translateY(0);}
 
-  h2.section-title{font-size:18px;font-weight:500;margin:0 0 4px;}
-  .section-sub{font-size:12.5px;color:var(--ash);margin:0 0 20px;}
+  h2.section-title{font-family:var(--font-display);font-size:21px;font-weight:700;margin:0 0 4px;}
+  .section-sub{font-size:12.5px;color:var(--ash);margin:0 0 22px;}
 
-  .legend{font-size:12.5px;color:var(--ash);margin-bottom:30px;}
-  .legend span{margin-right:18px;}
-  .legend b{color:var(--black);font-weight:600;border-bottom:1.5px solid var(--black);padding-bottom:1px;}
-  .legend .tag-sometimes{color:var(--ash);font-weight:500;border-bottom:1.5px solid var(--steel);padding-bottom:1px;}
-  .legend .tag-rare{color:var(--accent);font-weight:600;border-bottom:1.5px solid var(--accent);padding-bottom:1px;}
+  /* view switch */
+  .viewswitch{display:inline-flex;border:1px solid var(--line-strong);border-radius:3px;
+    overflow:hidden;margin-bottom:26px;}
+  .viewswitch button{font-family:var(--font-body);font-size:12.5px;letter-spacing:0.03em;
+    background:transparent;color:var(--ink-soft);border:none;padding:9px 20px;cursor:pointer;
+    transition:background .15s ease, color .15s ease;}
+  .viewswitch button + button{border-left:1px solid var(--line-strong);}
+  .viewswitch button.active{background:var(--ink);color:var(--paper);}
+  .viewswitch button:hover:not(.active){background:var(--line);}
 
-  .summary-line{font-size:13px;color:var(--ash);margin-bottom:38px;}
-  .summary-line b{color:var(--black);font-weight:500;}
+  .legend{font-size:12.5px;color:var(--ash);margin-bottom:26px;display:flex;flex-wrap:wrap;gap:18px;}
+  .legend .chip{display:inline-flex;align-items:center;gap:6px;}
+  .legend .dot{width:8px;height:8px;border-radius:50%;display:inline-block;}
+  .dot.fixed{background:var(--paper);border:1.5px solid var(--ink-soft);}
+  .dot.sometimes{background:var(--ash);}
+  .dot.rare{background:var(--accent);}
 
-  .board{display:flex;gap:24px;flex-wrap:wrap;}
-  .board-item{flex:1 1 200px;min-width:200px;}
+  .summary-line{font-size:13px;color:var(--ash);margin-bottom:38px;font-variant-numeric:tabular-nums;}
+  .summary-line b{color:var(--ink);font-weight:700;}
 
-  .show-date{font-size:14px;font-weight:500;}
-  .show-city{font-size:11.5px;color:var(--ash);letter-spacing:0.08em;margin-bottom:10px;}
+  /* ---------- per-show board: floating 3D cards ---------- */
+  .board{display:flex;gap:26px;flex-wrap:wrap;perspective:1400px;}
+  .board-item{
+    flex:1 1 210px;min-width:210px;background:var(--paper);border:1px solid var(--line);
+    border-radius:10px;padding:16px 16px 10px;position:relative;
+    transform-style:preserve-3d;will-change:transform;
+    transform:perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0) scale(1);
+    box-shadow:0 1px 2px rgba(20,15,5,.05), 0 10px 24px -16px rgba(20,15,5,.25);
+    transition:transform .5s cubic-bezier(.22,1,.36,1), box-shadow .5s cubic-bezier(.22,1,.36,1);
+  }
+  .board-item .tilt-layer{transition:transform .5s cubic-bezier(.22,1,.36,1);}
+  .show-date{font-family:var(--font-num);font-size:17px;font-weight:500;font-variant-numeric:tabular-nums;}
+  .show-city{font-size:11px;color:var(--ash);letter-spacing:0.09em;margin-bottom:12px;}
 
   table{width:100%;border-collapse:collapse;font-size:12.5px;}
   th,td{text-align:left;padding:6px 4px;border-bottom:1px solid var(--line);}
-  th{font-weight:400;color:var(--ash);font-size:10.5px;border-bottom:1px solid var(--black);}
-  td.n{color:var(--steel);width:26px;font-family:var(--font-mono);font-size:10.5px;}
-  td.freq{white-space:nowrap;font-size:11px;color:var(--ash);letter-spacing:0.02em;}
-  td.freq span{border-bottom:1.5px solid transparent;padding-bottom:1px;}
-  td.freq.fixed span{color:var(--black);font-weight:600;border-bottom-color:var(--black);}
-  td.freq.sometimes span{color:var(--ash);font-weight:500;border-bottom-color:var(--steel);}
-  td.freq.rare span{color:var(--accent);font-weight:600;border-bottom-color:var(--accent);}
+  th{font-weight:400;color:var(--ash);font-size:10px;letter-spacing:0.04em;
+    border-bottom:1px solid var(--line-strong);}
+  td.n{color:var(--ash);width:24px;font-family:var(--font-num);font-size:11px;font-variant-numeric:tabular-nums;}
+  td.freq{white-space:nowrap;}
+  .freq .dot{margin-right:5px;}
+  .freq.fixed{color:var(--ink-soft);}
+  .freq.sometimes{color:var(--ash);}
+  .freq.rare{color:var(--accent);font-weight:600;}
 
-  .footnote{margin-top:50px;padding-top:24px;border-top:1px solid var(--line);
+  /* MC memo */
+  .mc-memo{margin-top:10px;border-top:1px solid var(--line);padding-top:8px;}
+  .mc-memo summary{cursor:pointer;font-size:11.5px;color:var(--ash);letter-spacing:0.03em;
+    list-style:none;display:flex;align-items:center;gap:6px;}
+  .mc-memo summary::-webkit-details-marker{display:none;}
+  .mc-memo summary::before{content:"MC";font-size:9.5px;border:1px solid var(--line);border-radius:3px;
+    padding:1px 5px;color:var(--ink-soft);}
+  .mc-memo summary:after{content:"";width:6px;height:6px;border-right:1.5px solid var(--ash);
+    border-bottom:1.5px solid var(--ash);transform:rotate(-45deg);margin-left:auto;transition:transform .2s ease;}
+  .mc-memo[open] summary:after{transform:rotate(45deg);}
+  .mc-memo p{font-size:12px;color:var(--ink-soft);line-height:1.9;margin:10px 0 4px;}
+  .mc-memo p a{color:var(--accent);}
+
+  @media (hover:hover) and (pointer:fine){
+    .board-item:hover{box-shadow:0 2px 4px rgba(20,15,5,.06), 0 30px 40px -20px rgba(20,15,5,.35);}
+  }
+
+  /* ---------- matrix (comparison) view ---------- */
+  #matrixView{display:none;}
+  #matrixView.active{display:block;}
+  #boardView.hidden{display:none;}
+
+  .matrix-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:4px;background:var(--paper);}
+  table.matrix{width:100%;border-collapse:collapse;font-size:12.5px;min-width:760px;}
+  table.matrix caption{caption-side:top;text-align:left;padding:12px 14px 0;font-size:11px;color:var(--ash);}
+  table.matrix th, table.matrix td{padding:9px 12px;border-bottom:1px solid var(--line);white-space:nowrap;}
+  table.matrix thead th{position:sticky;top:0;background:var(--paper);z-index:2;
+    font-weight:500;font-size:11.5px;color:var(--ink-soft);border-bottom:1px solid var(--line-strong);
+    text-align:center;}
+  table.matrix thead th.songcol{text-align:left;position:sticky;left:0;z-index:3;}
+  table.matrix tbody th{position:sticky;left:0;background:var(--paper);text-align:left;
+    font-weight:400;white-space:normal;max-width:220px;border-right:1px solid var(--line);z-index:1;}
+  table.matrix tbody th .freqdot{margin-right:7px;}
+  table.matrix td{text-align:center;font-family:var(--font-num);font-variant-numeric:tabular-nums;
+    color:var(--ash);}
+  table.matrix td.played{color:var(--ink);font-weight:600;}
+  table.matrix td.encore{color:var(--accent);font-weight:700;}
+  table.matrix tbody tr:hover td, table.matrix tbody tr:hover th{background:var(--accent-soft);}
+  table.matrix tbody tr.row-rare th{color:var(--accent);}
+
+  .footnote{margin-top:54px;padding-top:26px;border-top:1px solid var(--line);
     font-size:12px;color:var(--ash);line-height:2;}
-  .footnote .handle{color:var(--black);}
+  .footnote .handle{color:var(--ink);}
+
+  /* ---------- comments ---------- */
+  .comments{margin-top:14px;border-top:1px solid var(--line);padding-top:10px;}
+  .comments-toggle{cursor:pointer;font-size:11.5px;color:var(--ash);letter-spacing:0.03em;
+    list-style:none;display:flex;align-items:center;gap:6px;}
+  .comments-toggle::-webkit-details-marker{display:none;}
+  .comments-toggle::before{content:"talk";font-size:9.5px;border:1px solid var(--line);border-radius:3px;
+    padding:1px 5px;color:var(--ink-soft);}
+  .comments-toggle .count{color:var(--ink-soft);}
+  .comments-body{margin-top:10px;}
+  .comment-list{display:flex;flex-direction:column;gap:10px;margin-bottom:12px;}
+  .comment{display:flex;gap:8px;}
+  .comment.reply{margin-left:26px;}
+  .comment .avatar{width:26px;height:26px;border-radius:50%;background:var(--line);flex:none;
+    object-fit:cover;border:1px solid var(--line);}
+  .comment .body-col{flex:1;min-width:0;}
+  .comment .meta{font-size:11px;color:var(--ash);display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;}
+  .comment .meta .name{color:var(--ink);font-weight:600;}
+  .comment .text{font-size:12.5px;color:var(--ink-soft);line-height:1.7;margin:3px 0 4px;
+    overflow-wrap:anywhere;}
+  .comment .actions{display:flex;gap:12px;align-items:center;}
+  .like-btn{border:none;background:none;cursor:pointer;font-size:12px;color:var(--ash);
+    display:inline-flex;align-items:center;gap:4px;padding:0;}
+  .like-btn .heart{font-size:13px;}
+  .like-btn.liked{color:var(--accent);}
+  .like-btn.liked .heart{filter:none;}
+  .like-btn:not(.liked) .heart{filter:grayscale(1) opacity(.6);}
+  .reply-btn{border:none;background:none;cursor:pointer;font-size:11.5px;color:var(--ash);padding:0;}
+  .reply-btn:hover, .like-btn:hover{color:var(--ink);}
+  .like-names{font-size:10.5px;color:var(--ash);margin-top:2px;}
+
+  .comment-form{display:flex;flex-direction:column;gap:6px;}
+  .comment-form.reply-form{margin:8px 0 0 26px;}
+  .comment-form .row{display:flex;gap:8px;align-items:center;}
+  .comment-form input[type="text"], .comment-form textarea{
+    font-family:var(--font-body);font-size:12.5px;background:var(--bg);color:var(--ink);
+    border:1px solid var(--line);border-radius:4px;padding:8px 10px;width:100%;}
+  .comment-form input[type="text"]{flex:1;}
+  .comment-form textarea{resize:vertical;min-height:52px;}
+  .comment-form button{align-self:flex-end;font-family:var(--font-body);font-size:12px;font-weight:700;
+    color:var(--paper);background:var(--ink);border:1px solid var(--ink);border-radius:4px;
+    padding:7px 18px;cursor:pointer;}
+  .comment-form button:hover{background:var(--accent);border-color:var(--accent);}
+  .comment-empty{font-size:12px;color:var(--ash);}
+
+  .avatar-picker{position:relative;flex:none;width:38px;height:38px;}
+  .avatar-picker .avatar-preview{width:38px;height:38px;border-radius:50%;object-fit:cover;
+    border:1.5px solid var(--line);background:var(--bg);display:block;}
+    .avatar-picker .avatar-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-body);font-size:18px;font-weight:300;color:var(--ink-soft);
+    border-radius:50%;background:var(--line);border:1.5px dashed var(--ink-soft);
+    pointer-events:none;line-height:1;}
+  .avatar-picker.has-image .avatar-icon{display:none;}
+  .avatar-picker input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+  .avatar-picker .uploading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-size:9px;color:var(--ink);background:rgba(0,0,0,.15);border-radius:50%;}
+
+
+  .general-talk{background:var(--paper);border:1px solid var(--line);border-radius:10px;
+    padding:18px 18px 14px;margin-bottom:34px;
+    box-shadow:0 1px 2px rgba(20,15,5,.05), 0 10px 24px -16px rgba(20,15,5,.25);}
+  .general-talk h3{margin:0 0 4px;font-family:var(--font-display);font-size:16px;font-weight:700;}
+  .general-talk h3 .count{font-size:12px;color:var(--ash);font-weight:400;}
+  .general-talk .section-sub{margin-bottom:16px;}
+  .general-talk .comments{border-top:none;padding-top:0;margin-top:0;}
 
   @media (prefers-reduced-motion: reduce){
-    #gate, #content, .btn{transition:none !important;}
+    #gate,#content,.btn,.theme-toggle,.viewswitch button{transition:none !important;}
+  }
+
+  @media (max-width:560px){
+    .site-title{font-size:26px;}
+    table.matrix tbody th{max-width:140px;}
   }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <div class="site-eyebrow">RADWIMPS Official Fan Club Tour 2026 “ユーリンチー”(非公式まとめ)</div>
-  <div class="site-title">セットリスト</div>
+  <div class="masthead">
+    <div>
+      <div class="site-eyebrow">RADWIMPS Official Fan Club Tour 2026 “ユーリンチー” — 非公式まとめ</div>
+      <h1 class="site-title">セットリスト比較</h1>
+    </div>
+    <button class="theme-toggle" id="themeToggle" type="button">ライト / ダーク</button>
+  </div>
   <hr>
 
   <section id="gate">
-    <p class="gate-text">このページには6公演分のセットリストを掲載しています。<br><b>ネタバレを含みます。</b>まだ知りたくない方はここで戻ってください。</p>
-    <p class="gate-note2">なお、まだ見たくない方もいます。曲順やアンコールの本数なども、多くの人が見る場では話さないようにお願いします。<br>愛あるwimperのみなさん、見た者同士で楽しみましょう。</p>
+    <p class="gate-text">このページには公演分のセットリストを掲載しています。<br><b>ネタバレを含みます。</b>まだ知りたくない方はここで戻ってください。</p>
+    <p class="gate-note2">なお、まだ見たくない方もいます。曲順やアンコールの本数なども、多くの人が見る場では話さないようにお願いします。<br>このサイト内にコメント、掲示板を作成してみたので、ぜひ皆さんで共有しましょ～<br>愛あるwimperのみなさん、よろしくお願いします。</p>
     <button class="btn" id="revealBtn">セトリを見る</button>
   </section>
 
   <main id="content">
-    <h2 class="section-title">6公演 セトリ比較</h2>
-    <p class="section-sub">名古屋1日目(7/22)・名古屋2日目(7/23)・福岡1日目(7/27)・福岡2日目(7/28)・大阪1日目(8/3)・大阪2日目(8/4)</p>
+    <h2 class="section-title">公演セトリ比較</h2>
+    <p class="section-sub" id="sectionSub"></p>
+
+    <div class="viewswitch" role="tablist" aria-label="表示切り替え">
+      <button type="button" id="btnBoard" class="active" role="tab" aria-selected="true">公演別</button>
+      <button type="button" id="btnMatrix" role="tab" aria-selected="false">曲目比較</button>
+    </div>
 
     <div class="legend">
-      <span><b>固定</b> = 全公演で演奏</span>
-      <span class="tag-sometimes">たまに</span><span> = 一部の公演で演奏</span>
-      <span class="tag-rare">限定</span><span> = 1公演のみ</span>
+      <span class="chip"><span class="dot fixed"></span>固定 = 全公演で演奏</span>
+      <span class="chip"><span class="dot sometimes"></span>たまに = 一部の公演で演奏</span>
+      <span class="chip"><span class="dot rare"></span>限定 = 1公演のみ</span>
     </div>
 
     <div class="summary-line" id="summary"></div>
 
-    <div class="board" id="board"></div>
+    <div class="general-talk" id="generalTalk">
+      <h3>全体トークルーム <span class="count" data-role="count"></span></h3>
+      <p class="section-sub">次のセトリ予想、感想戦、雑談などはこちらへ。公演ごとのネタバレコメントは各カード下のコメント欄へどうぞ。</p>
+      <div class="comments-body">
+        <div class="comment-list" data-role="list"><p class="comment-empty">読み込み中...</p></div>
+      </div>
+    </div>
+
+    <div id="boardView">
+      <div class="board" id="board"></div>
+    </div>
+
+    <div id="matrixView">
+      <div class="matrix-scroll">
+        <table class="matrix" id="matrixTable"></table>
+      </div>
+    </div>
 
     <p class="footnote">
       参戦メモを元にした個人まとめ(非公式)です。<br>
       誤りがあれば下記アカウントまでご連絡ください。<br>
       <span class="handle">フッサフッサのベイビー/Leo &nbsp;@w_w_wimper2002</span><br>
-      このページは見たくない人には見せず、見た者同士で楽しんでください。<br>
       EN = アンコール<br><br>
-      毎回公演後、随時更新予定です。YouTubeやSpotifyのリンクなども今後追加していくかもしれません。少しずつ改善していきます。
+      毎回公演後、随時更新予定です。少しずつ改善していきます。
     </p>
   </main>
 
@@ -191,20 +379,27 @@ const shows = [
     ["15","最後の歌"],["16","ララバイ"],
     ["EN1","もしも"],["EN2","君と羊と青"]
   ]}
+
+  // { label:"羽田 1日目", date:"8/12", songs:[] },
+  // { label:"羽田 2日目", date:"8/13", songs:[] },
+  // { label:"札幌", date:"8/25", songs:[] },
+  // { label:"横浜（追加公演）", date:"11/10,11", songs:[] },
 ];
 
+const totalShows = shows.length;
+
 const countByTitle = {};
-shows.forEach(show => {
+const firstSeenOrder = {};
+shows.forEach((show, si) => {
   const seen = new Set();
-  show.songs.forEach(([n, title]) => {
+  show.songs.forEach(([n, title], idx) => {
     if (!seen.has(title)) {
       countByTitle[title] = (countByTitle[title] || 0) + 1;
       seen.add(title);
     }
+    if (!(title in firstSeenOrder)) firstSeenOrder[title] = si * 1000 + idx;
   });
 });
-
-const totalShows = shows.length;
 
 function classFor(title){
   const c = countByTitle[title];
@@ -216,14 +411,18 @@ function labelFor(cls){
   return cls === "fixed" ? "固定" : cls === "sometimes" ? "たまに" : "限定";
 }
 
+document.getElementById("sectionSub").textContent = shows.map(s => `${s.label}(${s.date})`).join("・");
+
+/* ---- per-show board ---- */
 const board = document.getElementById("board");
-shows.forEach(show => {
+shows.forEach((show) => {
   const item = document.createElement("div");
   item.className = "board-item";
 
-  const head = document.createElement("div");
-  head.innerHTML = `<div class="show-date">${show.date}</div><div class="show-city">${show.label}</div>`;
-  item.appendChild(head);
+  const inner = document.createElement("div");
+  inner.className = "tilt-layer";
+  inner.innerHTML = `<div class="show-date">${show.date}</div><div class="show-city">${show.label}</div>`;
+  item.appendChild(inner);
 
   const table = document.createElement("table");
   table.innerHTML = `<thead><tr><th>No.</th><th>曲目</th><th>頻度</th></tr></thead>`;
@@ -231,29 +430,412 @@ shows.forEach(show => {
   show.songs.forEach(([n, title]) => {
     const cls = classFor(title);
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td class="n">${n}</td><td>${title}</td><td class="freq ${cls}"><span>${labelFor(cls)}</span></td>`;
+    tr.innerHTML = `<td class="n">${n}</td><td class="title">${title}</td>` +
+      `<td class="freq ${cls}"><span class="dot ${cls}"></span>${labelFor(cls)}</td>`;
     tbody.appendChild(tr);
   });
   table.appendChild(tbody);
   item.appendChild(table);
+
+  const mc = document.createElement("details");
+  mc.className = "mc-memo";
+  mc.innerHTML = `<summary>MCメモ</summary>` +
+    `<p>こちらに軽く、MC情報を載せようと思ってます。お話提供してくださる方は` +
+    `Twitterの<a href="https://twitter.com/w_w_wimper2002" target="_blank" rel="noopener">` +
+    `フッサフッサのベイビー/Leo &nbsp;@w_w_wimper2002</a>までDMお願いします。</p>`;
+  item.appendChild(mc);
+
+  const showId = `${show.date}_${show.label}`;
+  const comments = document.createElement("details");
+  comments.className = "comments";
+  comments.innerHTML =
+    `<summary class="comments-toggle">みんなのコメント <span class="count" data-role="count"></span></summary>` +
+    `<div class="comments-body">` +
+      `<div class="comment-list" data-role="list"><p class="comment-empty">読み込み中...</p></div>` +
+    `</div>`;
+  item.appendChild(comments);
+  comments.addEventListener("toggle", () => {
+    if (comments.open) initShowComments(showId, comments);
+  });
+
   board.appendChild(item);
 });
 
+/* ---- summary ---- */
 const total = Object.keys(countByTitle).length;
 const fixedCount = Object.values(countByTitle).filter(c => c === totalShows).length;
 const rareCount = Object.values(countByTitle).filter(c => c === 1).length;
 const sometimesCount = total - fixedCount - rareCount;
-
 document.getElementById("summary").innerHTML =
   `全<b>${total}</b>曲中 &nbsp;固定<b>${fixedCount}</b>曲 &nbsp;たまに<b>${sometimesCount}</b>曲 &nbsp;限定<b>${rareCount}</b>曲`;
 
-const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* ---- matrix (comparison) view ---- */
+const matrixTable = document.getElementById("matrixTable");
+const titles = Object.keys(countByTitle).sort((a, b) => firstSeenOrder[a] - firstSeenOrder[b]);
 
+function buildMatrix(){
+  const thead = document.createElement("thead");
+  const htr = document.createElement("tr");
+  htr.innerHTML = `<th class="songcol">曲目</th>` +
+    shows.map(s => `<th>${s.label}<br><span style="font-weight:400;color:var(--ash);">${s.date}</span></th>`).join("");
+  thead.appendChild(htr);
+
+  const tbody = document.createElement("tbody");
+  titles.forEach(title => {
+    const cls = classFor(title);
+    const tr = document.createElement("tr");
+    if (cls === "rare") tr.className = "row-rare";
+    const th = document.createElement("th");
+    th.innerHTML = `<span class="dot freqdot ${cls}"></span>${title}`;
+    tr.appendChild(th);
+    shows.forEach(show => {
+      const found = show.songs.find(([, t]) => t === title);
+      const td = document.createElement("td");
+      if (found) {
+        const isEncore = /^EN/.test(found[0]);
+        td.className = "played" + (isEncore ? " encore" : "");
+        td.textContent = found[0];
+      } else {
+        td.textContent = "–";
+      }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+
+  matrixTable.appendChild(thead);
+  matrixTable.appendChild(tbody);
+}
+buildMatrix();
+
+/* ---- view switch ---- */
+const btnBoard = document.getElementById("btnBoard");
+const btnMatrix = document.getElementById("btnMatrix");
+const boardView = document.getElementById("boardView");
+const matrixView = document.getElementById("matrixView");
+
+btnBoard.addEventListener("click", () => {
+  boardView.classList.remove("hidden");
+  matrixView.classList.remove("active");
+  btnBoard.classList.add("active"); btnBoard.setAttribute("aria-selected","true");
+  btnMatrix.classList.remove("active"); btnMatrix.setAttribute("aria-selected","false");
+});
+btnMatrix.addEventListener("click", () => {
+  boardView.classList.add("hidden");
+  matrixView.classList.add("active");
+  btnMatrix.classList.add("active"); btnMatrix.setAttribute("aria-selected","true");
+  btnBoard.classList.remove("active"); btnBoard.setAttribute("aria-selected","false");
+});
+
+/* ---- theme toggle ---- */
+const themeToggle = document.getElementById("themeToggle");
+const root = document.documentElement;
+let stored = null;
+try { stored = localStorage.getItem("seturi-theme"); } catch (e) {}
+if (stored) root.setAttribute("data-theme", stored);
+themeToggle.addEventListener("click", () => {
+  const current = root.getAttribute("data-theme") ||
+    (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  const next = current === "dark" ? "light" : "dark";
+  root.setAttribute("data-theme", next);
+  try { localStorage.setItem("seturi-theme", next); } catch (e) {}
+});
+
+/* ---- comments (Supabase) ---- */
+const supabaseClient = window.supabase.createClient(
+  "https://dmzkiblbvzcwdnqvjsgw.supabase.co",
+  "sb_publishable_NTfVCrq9IPPNseTWcwBWgw_M75o7syP"
+);
+
+function getDeviceId(){
+  let id = localStorage.getItem("seturi-device-id");
+  if (!id) {
+    id = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random());
+    localStorage.setItem("seturi-device-id", id);
+  }
+  return id;
+}
+function getSavedProfile(){
+  return {
+    name: localStorage.getItem("seturi-name") || "",
+    avatar: localStorage.getItem("seturi-avatar") || ""
+  };
+}
+function saveProfile(name, avatar){
+  localStorage.setItem("seturi-name", name);
+  localStorage.setItem("seturi-avatar", avatar || "");
+}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+}
+function timeAgo(iso){
+  const diff = (Date.now() - new Date(iso).getTime()) / 1000;
+  if (diff < 60) return "たった今";
+  if (diff < 3600) return Math.floor(diff / 60) + "分前";
+  if (diff < 86400) return Math.floor(diff / 3600) + "時間前";
+  return Math.floor(diff / 86400) + "日前";
+}
+function commentFormHTML(isReply){
+  const p = getSavedProfile();
+  const hasImage = !!p.avatar;
+  return `<form class="comment-form${isReply ? " reply-form" : ""}">` +
+    `<div class="row">` +
+      `<div class="avatar-picker${hasImage ? " has-image" : ""}">` +
+        `<img class="avatar-preview" src="${escapeHtml(p.avatar)}" ` +
+          `onerror="this.style.visibility='hidden'" style="${hasImage ? "" : "visibility:hidden;"}">` +
+        `<span class="avatar-icon">＋</span>` +
+
+        `<input type="file" accept="image/*" class="avatar-file" title="アイコン画像を選ぶ">` +
+        `<input type="hidden" name="avatar" value="${escapeHtml(p.avatar)}">` +
+      `</div>` +
+
+      `<input type="text" name="name" placeholder="名前" value="${escapeHtml(p.name)}" required maxlength="24">` +
+    `</div>` +
+    `<textarea name="body" placeholder="感想やコメントを書く" required maxlength="500"></textarea>` +
+    `<button type="submit">投稿</button>` +
+  `</form>`;
+}
+
+async function uploadAvatar(file){
+  const ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+  const path = `${getDeviceId()}-${Date.now()}.${ext}`;
+  const { error } = await supabaseClient.storage.from("avatars").upload(path, file, { upsert: true });
+  if (error) { alert("画像のアップロードに失敗しました: " + error.message); return null; }
+  const { data } = supabaseClient.storage.from("avatars").getPublicUrl(path);
+  return data.publicUrl;
+}
+
+function wireAvatarPicker(formEl){
+  const picker = formEl.querySelector(".avatar-picker");
+  const fileInput = picker.querySelector(".avatar-file");
+  const preview = picker.querySelector(".avatar-preview");
+  const hidden = picker.querySelector('input[name="avatar"]');
+
+  fileInput.addEventListener("change", async () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+    preview.src = URL.createObjectURL(file);
+    preview.style.visibility = "visible";
+    const badge = document.createElement("div");
+    badge.className = "uploading";
+    badge.textContent = "…";
+    picker.appendChild(badge);
+    const url = await uploadAvatar(file);
+    badge.remove();
+    if (url) {
+      hidden.value = url;
+      picker.classList.add("has-image");
+    }
+  });
+}
+
+async function initShowComments(showId, detailsEl){
+  if (detailsEl.dataset.inited) return;
+  detailsEl.dataset.inited = "1";
+
+  const listEl = detailsEl.querySelector('[data-role="list"]');
+  const countEl = detailsEl.querySelector('[data-role="count"]');
+
+  async function refresh(){
+    const { data: rows, error } = await supabaseClient
+      .from("comments")
+      .select("*")
+      .eq("show_id", showId)
+      .order("created_at", { ascending: true });
+    if (error) { listEl.innerHTML = `<p class="comment-empty">読み込みに失敗しました</p>`; return; }
+
+    const ids = rows.map(r => r.id);
+    let likes = [];
+    if (ids.length) {
+      const { data: likeRows } = await supabaseClient
+        .from("comment_likes")
+        .select("comment_id, liker_name, device_id")
+        .in("comment_id", ids);
+      likes = likeRows || [];
+    }
+    render(rows, likes);
+  }
+
+  function render(rows, likes){
+    const deviceId = getDeviceId();
+    const likesByComment = new Map();
+    likes.forEach(l => {
+      if (!likesByComment.has(l.comment_id)) likesByComment.set(l.comment_id, []);
+      likesByComment.get(l.comment_id).push(l);
+    });
+
+    countEl.textContent = rows.length ? `(${rows.length})` : "";
+    if (!rows.length) {
+      listEl.innerHTML = `<p class="comment-empty">まだコメントはありません。最初の一言をどうぞ。</p>`;
+      return;
+    }
+
+    const topLevel = rows.filter(r => !r.parent_id);
+    const byParent = new Map();
+    rows.filter(r => r.parent_id).forEach(r => {
+      if (!byParent.has(r.parent_id)) byParent.set(r.parent_id, []);
+      byParent.get(r.parent_id).push(r);
+    });
+
+    function commentHTML(c, isReply){
+      const ls = likesByComment.get(c.id) || [];
+      const liked = ls.some(l => l.device_id === deviceId);
+      const avatar = c.avatar_url
+        ? `<img class="avatar" src="${escapeHtml(c.avatar_url)}" alt="">`
+        : `<div class="avatar"></div>`;
+      const namesLine = ls.length
+        ? `<div class="like-names">${ls.map(l => escapeHtml(l.liker_name)).join("、")} がいいね</div>` : "";
+      return `<div class="comment${isReply ? " reply" : ""}" data-id="${c.id}">` +
+        avatar +
+        `<div class="body-col">` +
+          `<div class="meta"><span class="name">${escapeHtml(c.name)}</span><span>${timeAgo(c.created_at)}</span></div>` +
+          `<div class="text">${escapeHtml(c.body)}</div>` +
+          `<div class="actions">` +
+            `<button type="button" class="like-btn${liked ? " liked" : ""}" data-id="${c.id}">` +
+              `<span class="heart">💙</span><span>${ls.length || ""}</span></button>` +
+            (isReply ? "" : `<button type="button" class="reply-btn" data-id="${c.id}">返信</button>`) +
+          `</div>` +
+          namesLine +
+          `<div class="reply-slot" data-slot-for="${c.id}"></div>` +
+        `</div>` +
+      `</div>`;
+    }
+
+    listEl.innerHTML = topLevel.map(c => {
+      const replies = (byParent.get(c.id) || []).map(r => commentHTML(r, true)).join("");
+      return commentHTML(c, false) +
+        (replies ? `<div class="comment-list" style="margin-left:26px;">${replies}</div>` : "");
+    }).join("");
+
+    listEl.querySelectorAll(".like-btn").forEach(btn => {
+      btn.addEventListener("click", () => toggleLike(Number(btn.dataset.id), refresh));
+    });
+    listEl.querySelectorAll(".reply-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const slot = listEl.querySelector(`.reply-slot[data-slot-for="${btn.dataset.id}"]`);
+        if (slot.querySelector("form")) { slot.innerHTML = ""; return; }
+        slot.innerHTML = commentFormHTML(true);
+        const replyForm = slot.querySelector("form");
+        wireAvatarPicker(replyForm);
+        wireForm(replyForm, Number(btn.dataset.id), refresh);
+      });
+    });
+  }
+
+  async function toggleLike(commentId, cb){
+    const deviceId = getDeviceId();
+    const profile = getSavedProfile();
+    const likerName = profile.name || "名無し";
+    const { error: insertError } = await supabaseClient
+      .from("comment_likes")
+      .insert({ comment_id: commentId, liker_name: likerName, device_id: deviceId });
+    if (insertError) {
+      await supabaseClient.from("comment_likes").delete()
+        .eq("comment_id", commentId).eq("device_id", deviceId);
+    }
+    cb();
+  }
+
+  function wireForm(formEl, parentId, cb){
+    formEl.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const fd = new FormData(formEl);
+      const name = (fd.get("name") || "").toString().trim().slice(0, 24) || "名無し";
+      const avatar = (fd.get("avatar") || "").toString().trim();
+      const body = (fd.get("body") || "").toString().trim();
+      if (!body) return;
+      saveProfile(name, avatar);
+      const submitBtn = formEl.querySelector("button");
+      submitBtn.disabled = true;
+      await supabaseClient.from("comments").insert({
+        show_id: showId, parent_id: parentId, name, avatar_url: avatar || null, body
+      });
+      formEl.reset();
+      formEl.querySelector('[name="name"]').value = name;
+      formEl.querySelector('[name="avatar"]').value = avatar;
+      submitBtn.disabled = false;
+      cb();
+    });
+  }
+
+  const formHost = detailsEl.querySelector(":scope > .comments-body");
+  formHost.insertAdjacentHTML("beforeend", commentFormHTML());
+  const rootForm = formHost.querySelector(".comment-form");
+  wireAvatarPicker(rootForm);
+  wireForm(rootForm, null, refresh);
+
+  supabaseClient
+    .channel(`comments-${showId}`)
+    .on("postgres_changes", { event: "*", schema: "public", table: "comments", filter: `show_id=eq.${showId}` }, refresh)
+    .on("postgres_changes", { event: "*", schema: "public", table: "comment_likes" }, refresh)
+    .subscribe();
+
+  refresh();
+}
+
+initShowComments("general", document.getElementById("generalTalk"));
+
+/* ---- 3D tilt on show cards ---- */
+(function initTilt(){
+  const supportsHoverFine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!supportsHoverFine || reduceMotion) return;
+
+  const MAX_TILT = 5, LIFT = 8, SCALE = 1.03, INNER_DEPTH = 14;
+  const container = document.getElementById("board");
+
+  container.addEventListener("pointerenter", onEnter, true);
+  container.addEventListener("pointermove", onMove, true);
+  container.addEventListener("pointerleave", onLeave, true);
+
+  function onEnter(e){
+    const card = e.target.closest && e.target.closest(".board-item");
+    if (!card || !container.contains(card)) return;
+    card.style.transitionDuration = "60ms";
+    const inner = card.querySelector(".tilt-layer");
+    if (inner) inner.style.transitionDuration = "60ms";
+  }
+
+  function onMove(e){
+    const card = e.target.closest && e.target.closest(".board-item");
+    if (!card || !container.contains(card)) return;
+    const rect = card.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width;
+    const py = (e.clientY - rect.top) / rect.height;
+    const rotateY = (px - 0.5) * (MAX_TILT * 2);
+    const rotateX = (0.5 - py) * (MAX_TILT * 2);
+
+    card.style.transform =
+      `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) ` +
+      `translateY(-${LIFT}px) scale(${SCALE})`;
+
+    const inner = card.querySelector(".tilt-layer");
+    if (inner) {
+      const ix = (px - 0.5) * INNER_DEPTH;
+      const iy = (py - 0.5) * INNER_DEPTH;
+      inner.style.transform = `translate3d(${ix}px, ${iy}px, 24px)`;
+    }
+  }
+
+  function onLeave(e){
+    const card = e.target.closest && e.target.closest(".board-item");
+    if (!card || !container.contains(card)) return;
+    card.style.transitionDuration = "500ms";
+    card.style.transform = "perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0) scale(1)";
+    const inner = card.querySelector(".tilt-layer");
+    if (inner) {
+      inner.style.transitionDuration = "500ms";
+      inner.style.transform = "translate3d(0, 0, 0)";
+    }
+  }
+})();
+
+/* ---- gate reveal ---- */
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 document.getElementById("revealBtn").addEventListener("click", () => {
   const gate = document.getElementById("gate");
   const content = document.getElementById("content");
   const delay = prefersReducedMotion ? 0 : 420;
-
   gate.classList.add("leaving");
   setTimeout(() => {
     gate.style.display = "none";
@@ -263,4 +845,4 @@ document.getElementById("revealBtn").addEventListener("click", () => {
 });
 </script>
 </body>
-</html>
+</html></html>
