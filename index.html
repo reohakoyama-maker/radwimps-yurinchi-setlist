@@ -121,6 +121,7 @@
   .dot.fixed{background:var(--paper);border:1.5px solid var(--ink-soft);}
   .dot.sometimes{background:var(--ash);}
   .dot.rare{background:var(--accent);}
+  .dot.unknown{background:transparent;border:1.5px dashed var(--ash);}
 
   .summary-line{font-size:13px;color:var(--ash);margin-bottom:38px;font-variant-numeric:tabular-nums;}
   .summary-line b{color:var(--ink);font-weight:700;}
@@ -138,6 +139,10 @@
   .board-item .tilt-layer{transition:transform .5s cubic-bezier(.22,1,.36,1);}
   .show-date{font-family:var(--font-num);font-size:17px;font-weight:500;font-variant-numeric:tabular-nums;}
   .show-city{font-size:11px;color:var(--ash);letter-spacing:0.09em;margin-bottom:12px;}
+  .update-badge{display:inline-block;margin-left:6px;padding:1px 7px;font-size:10px;letter-spacing:0.05em;
+    color:var(--accent);border:1px solid var(--accent);border-radius:999px;vertical-align:middle;}
+  .draft-note{font-size:11.5px;color:var(--ash);line-height:1.6;margin:-4px 0 12px;padding:8px 10px;
+    border:1px dashed var(--line);border-radius:6px;}
 
   table{width:100%;border-collapse:collapse;font-size:12.5px;}
   th,td{text-align:left;padding:6px 4px;border-bottom:1px solid var(--line);}
@@ -232,24 +237,18 @@
     border:1px solid var(--line);border-radius:4px;padding:8px 10px;width:100%;}
   .comment-form input[type="text"]{flex:1;}
   .comment-form textarea{resize:vertical;min-height:52px;}
+  .avatar-picker{position:relative;flex:none;width:38px;height:38px;}
+  .avatar-picker .avatar-preview{width:38px;height:38px;border-radius:50%;object-fit:cover;
+    border:1.5px dashed var(--line-strong);background:var(--bg);display:block;}
+  .avatar-picker.has-image .avatar-preview{border-style:solid;border-color:var(--line);}
+  .avatar-picker input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+  .avatar-picker .uploading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-size:9px;color:var(--ash);background:rgba(0,0,0,.05);border-radius:50%;}
   .comment-form button{align-self:flex-end;font-family:var(--font-body);font-size:12px;font-weight:700;
     color:var(--paper);background:var(--ink);border:1px solid var(--ink);border-radius:4px;
     padding:7px 18px;cursor:pointer;}
   .comment-form button:hover{background:var(--accent);border-color:var(--accent);}
   .comment-empty{font-size:12px;color:var(--ash);}
-
-  .avatar-picker{position:relative;flex:none;width:38px;height:38px;}
-  .avatar-picker .avatar-preview{width:38px;height:38px;border-radius:50%;object-fit:cover;
-    border:1.5px solid var(--line);background:var(--bg);display:block;}
-    .avatar-picker .avatar-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-    font-family:var(--font-body);font-size:18px;font-weight:300;color:var(--ink-soft);
-    border-radius:50%;background:var(--line);border:1.5px dashed var(--ink-soft);
-    pointer-events:none;line-height:1;}
-  .avatar-picker.has-image .avatar-icon{display:none;}
-  .avatar-picker input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-  .avatar-picker .uploading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-    font-size:9px;color:var(--ink);background:rgba(0,0,0,.15);border-radius:50%;}
-
 
   .general-talk{background:var(--paper);border:1px solid var(--line);border-radius:10px;
     padding:18px 18px 14px;margin-bottom:34px;
@@ -283,7 +282,7 @@
 
   <section id="gate">
     <p class="gate-text">このページには公演分のセットリストを掲載しています。<br><b>ネタバレを含みます。</b>まだ知りたくない方はここで戻ってください。</p>
-    <p class="gate-note2">なお、まだ見たくない方もいます。曲順やアンコールの本数なども、多くの人が見る場では話さないようにお願いします。<br>このサイト内にコメント、掲示板を作成してみたので、ぜひ皆さんで共有しましょ～<br>愛あるwimperのみなさん、よろしくお願いします。</p>
+    <p class="gate-note2">なお、まだ見たくない方もいます。曲順やアンコールの本数なども、多くの人が見る場では話さないようにお願いします。<br>愛あるwimperのみなさん、見た者同士で楽しみましょう。</p>
     <button class="btn" id="revealBtn">セトリを見る</button>
   </section>
 
@@ -326,14 +325,16 @@
       参戦メモを元にした個人まとめ(非公式)です。<br>
       誤りがあれば下記アカウントまでご連絡ください。<br>
       <span class="handle">フッサフッサのベイビー/Leo &nbsp;@w_w_wimper2002</span><br>
+      このページは見たくない人には見せず、見た者同士で楽しんでください。<br>
       EN = アンコール<br><br>
-      毎回公演後、随時更新予定です。少しずつ改善していきます。
+      毎回公演後、随時更新予定です。YouTubeやSpotifyのリンクなども今後追加していくかもしれません。少しずつ改善していきます。
     </p>
   </main>
 
 </div>
 
 <script>
+// 公演を追加する場合はこの配列に追記するだけで、固定/たまに/限定の判定・比較表は自動で更新されます。
 const shows = [
   { label:"名古屋 1日目", date:"7/22", songs:[
     ["1","いいんですか？"],["2","4645"],["3","イーディーピー〜飛んで火に入る夏の君〜"],
@@ -378,42 +379,66 @@ const shows = [
     ["11","俺色スカイ"],["12","MOUNTAIN VANILLA"],["13","やどかり"],["14","叫べ"],
     ["15","最後の歌"],["16","ララバイ"],
     ["EN1","もしも"],["EN2","君と羊と青"]
+  ]},
+  { label:"羽田 1日目", date:"8/12", note:"更新しました", draftNote:"速報でのせているため、間違いがあるかもしれません。修正点があればコメントで教えてください。", songs:[
+    ["1","いいんですか？"],["2","4645"],["3","イーディーピー〜飛んで火に入る夏の君〜"],
+    ["4","π"],["5","アイアンバイブル"],["6","ワールドエンドガールフレンド"],
+    ["7","ささくれ"],["8","週刊少年ジャンプ"],["9","DADA"],["10","億万笑者"],
+    ["11","俺色スカイ"],["12","MOUNTAIN VANILLA"],["13","バイ・マイ・サイ"],
+    ["14","夕星-ゆうづつ-"],["15","新曲"],["16","叫べ"],["17","最後の歌"],["18","ララバイ"],
+    ["EN1","もしも"],["EN2","有心論"]
+  ]},
+  { label:"羽田 2日目", date:"8/13", placeholder:true, songs:[
+    ["1","？？？"],["2","？？？"],["3","？？？"],["4","？？？"],["5","？？？"],
+    ["6","？？？"],["7","？？？"],["8","？？？"],["9","？？？"],["10","？？？"],
+    ["11","？？？"],["12","？？？"],["13","？？？"],["14","？？？"],["15","？？？"],
+    ["16","？？？"],["17","？？？"],["18","？？？"],["EN1","？？？"],["EN2","？？？"]
+  ]},
+  { label:"札幌", date:"?/??", placeholder:true, songs:[
+    ["1","？？？"],["2","？？？"],["3","？？？"],["4","？？？"],["5","？？？"],
+    ["6","？？？"],["7","？？？"],["8","？？？"],["9","？？？"],["10","？？？"],
+    ["11","？？？"],["12","？？？"],["13","？？？"],["14","？？？"],["15","？？？"],
+    ["16","？？？"],["17","？？？"],["18","？？？"],["EN1","？？？"],["EN2","？？？"]
   ]}
 
-  // { label:"羽田 1日目", date:"8/12", songs:[] },
-  // { label:"羽田 2日目", date:"8/13", songs:[] },
-  // { label:"札幌", date:"8/25", songs:[] },
-  // { label:"横浜（追加公演）", date:"11/10,11", songs:[] },
+  // 追加公演の例（判明したらコメントを外して埋めてください）:
+  // { label:"横浜（追加公演）", date:"?/??", songs:[] },
 ];
 
-const totalShows = shows.length;
+const totalShows = shows.filter(s => !s.placeholder).length;
 
 const countByTitle = {};
 const firstSeenOrder = {};
 shows.forEach((show, si) => {
   const seen = new Set();
   show.songs.forEach(([n, title], idx) => {
+    if (title === "？？？") return;
     if (!seen.has(title)) {
       countByTitle[title] = (countByTitle[title] || 0) + 1;
       seen.add(title);
     }
+    // 演奏された「順番」で並べる。EN1/EN2のような番号は数値化できないため、
+    // 曲名の数字ではなく配列内のインデックスを使う(これをparseFloatで代用すると
+    // アンコールが本編より前に来てしまうバグになる)。
     if (!(title in firstSeenOrder)) firstSeenOrder[title] = si * 1000 + idx;
   });
 });
 
 function classFor(title){
+  if (title === "？？？") return "unknown";
   const c = countByTitle[title];
   if (c === totalShows) return "fixed";
   if (c === 1) return "rare";
   return "sometimes";
 }
 function labelFor(cls){
+  if (cls === "unknown") return "未定";
   return cls === "fixed" ? "固定" : cls === "sometimes" ? "たまに" : "限定";
 }
 
 document.getElementById("sectionSub").textContent = shows.map(s => `${s.label}(${s.date})`).join("・");
 
-/* ---- per-show board ---- */
+/* ---- per-show board, with "changed vs previous show at same slot" highlight ---- */
 const board = document.getElementById("board");
 shows.forEach((show) => {
   const item = document.createElement("div");
@@ -421,7 +446,9 @@ shows.forEach((show) => {
 
   const inner = document.createElement("div");
   inner.className = "tilt-layer";
-  inner.innerHTML = `<div class="show-date">${show.date}</div><div class="show-city">${show.label}</div>`;
+  const badge = show.note ? `<span class="update-badge">${show.note}</span>` : "";
+  inner.innerHTML = `<div class="show-date">${show.date}</div><div class="show-city">${show.label}${badge}</div>` +
+    (show.draftNote ? `<p class="draft-note">${show.draftNote}</p>` : "");
   item.appendChild(inner);
 
   const table = document.createElement("table");
@@ -456,7 +483,7 @@ shows.forEach((show) => {
   item.appendChild(comments);
   comments.addEventListener("toggle", () => {
     if (comments.open) initShowComments(showId, comments);
-  });
+  }, { once: false });
 
   board.appendChild(item);
 });
@@ -469,7 +496,7 @@ const sometimesCount = total - fixedCount - rareCount;
 document.getElementById("summary").innerHTML =
   `全<b>${total}</b>曲中 &nbsp;固定<b>${fixedCount}</b>曲 &nbsp;たまに<b>${sometimesCount}</b>曲 &nbsp;限定<b>${rareCount}</b>曲`;
 
-/* ---- matrix (comparison) view ---- */
+/* ---- matrix (comparison) view: rows = songs, columns = shows ---- */
 const matrixTable = document.getElementById("matrixTable");
 const titles = Object.keys(countByTitle).sort((a, b) => firstSeenOrder[a] - firstSeenOrder[b]);
 
@@ -527,7 +554,7 @@ btnMatrix.addEventListener("click", () => {
   btnBoard.classList.remove("active"); btnBoard.setAttribute("aria-selected","false");
 });
 
-/* ---- theme toggle ---- */
+/* ---- theme toggle (defaults to system preference) ---- */
 const themeToggle = document.getElementById("themeToggle");
 const root = document.documentElement;
 let stored = null;
@@ -583,12 +610,9 @@ function commentFormHTML(isReply){
       `<div class="avatar-picker${hasImage ? " has-image" : ""}">` +
         `<img class="avatar-preview" src="${escapeHtml(p.avatar)}" ` +
           `onerror="this.style.visibility='hidden'" style="${hasImage ? "" : "visibility:hidden;"}">` +
-        `<span class="avatar-icon">＋</span>` +
-
         `<input type="file" accept="image/*" class="avatar-file" title="アイコン画像を選ぶ">` +
         `<input type="hidden" name="avatar" value="${escapeHtml(p.avatar)}">` +
       `</div>` +
-
       `<input type="text" name="name" placeholder="名前" value="${escapeHtml(p.name)}" required maxlength="24">` +
     `</div>` +
     `<textarea name="body" placeholder="感想やコメントを書く" required maxlength="500"></textarea>` +
@@ -628,6 +652,8 @@ function wireAvatarPicker(formEl){
     }
   });
 }
+
+const commentsState = {}; // showId -> { comments: [], likesByComment: Map }
 
 async function initShowComments(showId, detailsEl){
   if (detailsEl.dataset.inited) return;
@@ -725,7 +751,7 @@ async function initShowComments(showId, detailsEl){
   async function toggleLike(commentId, cb){
     const deviceId = getDeviceId();
     const profile = getSavedProfile();
-    const likerName = profile.name || "名無し";
+    const likerName = profile.name || "wimperさん";
     const { error: insertError } = await supabaseClient
       .from("comment_likes")
       .insert({ comment_id: commentId, liker_name: likerName, device_id: deviceId });
@@ -740,7 +766,7 @@ async function initShowComments(showId, detailsEl){
     formEl.addEventListener("submit", async (e) => {
       e.preventDefault();
       const fd = new FormData(formEl);
-      const name = (fd.get("name") || "").toString().trim().slice(0, 24) || "名無し";
+      const name = (fd.get("name") || "").toString().trim().slice(0, 24) || "wimperさん";
       const avatar = (fd.get("avatar") || "").toString().trim();
       const body = (fd.get("body") || "").toString().trim();
       if (!body) return;
@@ -775,13 +801,17 @@ async function initShowComments(showId, detailsEl){
 
 initShowComments("general", document.getElementById("generalTalk"));
 
-/* ---- 3D tilt on show cards ---- */
+/* ---- 3D tilt on show cards (works on any current or future .board-item) ---- */
 (function initTilt(){
   const supportsHoverFine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (!supportsHoverFine || reduceMotion) return;
 
-  const MAX_TILT = 5, LIFT = 8, SCALE = 1.03, INNER_DEPTH = 14;
+  const MAX_TILT = 5;     // deg
+  const LIFT = 8;         // px
+  const SCALE = 1.03;
+  const INNER_DEPTH = 14; // px, parallax for the date/city block
+
   const container = document.getElementById("board");
 
   container.addEventListener("pointerenter", onEnter, true);
@@ -800,8 +830,8 @@ initShowComments("general", document.getElementById("generalTalk"));
     const card = e.target.closest && e.target.closest(".board-item");
     if (!card || !container.contains(card)) return;
     const rect = card.getBoundingClientRect();
-    const px = (e.clientX - rect.left) / rect.width;
-    const py = (e.clientY - rect.top) / rect.height;
+    const px = (e.clientX - rect.left) / rect.width;   // 0..1
+    const py = (e.clientY - rect.top) / rect.height;    // 0..1
     const rotateY = (px - 0.5) * (MAX_TILT * 2);
     const rotateX = (0.5 - py) * (MAX_TILT * 2);
 
@@ -845,4 +875,4 @@ document.getElementById("revealBtn").addEventListener("click", () => {
 });
 </script>
 </body>
-</html></html>
+</html>
