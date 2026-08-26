@@ -155,45 +155,37 @@
   .freq.sometimes{color:var(--ash);}
   .freq.rare{color:var(--accent);font-weight:600;}
 
-  /* MC memo */
-  .mc-memo{margin-top:10px;border-top:1px solid var(--line);padding-top:8px;}
-  .mc-memo summary{cursor:pointer;font-size:11.5px;color:var(--ash);letter-spacing:0.03em;
-    list-style:none;display:flex;align-items:center;gap:6px;}
-  .mc-memo summary::-webkit-details-marker{display:none;}
-  .mc-memo summary::before{content:"MC";font-size:9.5px;border:1px solid var(--line);border-radius:3px;
-    padding:1px 5px;color:var(--ink-soft);}
-  .mc-memo summary:after{content:"";width:6px;height:6px;border-right:1.5px solid var(--ash);
-    border-bottom:1.5px solid var(--ash);transform:rotate(-45deg);margin-left:auto;transition:transform .2s ease;}
-  .mc-memo[open] summary:after{transform:rotate(45deg);}
-  .mc-memo p{font-size:12px;color:var(--ink-soft);line-height:1.9;margin:10px 0 4px;}
-  .mc-memo p a{color:var(--accent);}
+  .react-btn{font-family:var(--font-body);font-size:10px;letter-spacing:0.02em;color:var(--ash);
+    background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:2px 8px;
+    cursor:pointer;white-space:nowrap;
+    transition:border-color .15s ease, color .15s ease, background .15s ease;}
+  .react-btn:hover{border-color:var(--ink-soft);color:var(--ink);}
+  .react-btn.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);}
+  .react-count{font-variant-numeric:tabular-nums;}
+  td.react-cell{white-space:nowrap;}
 
   @media (hover:hover) and (pointer:fine){
     .board-item:hover{box-shadow:0 2px 4px rgba(20,15,5,.06), 0 30px 40px -20px rgba(20,15,5,.35);}
   }
 
-  /* ---------- matrix (comparison) view ---------- */
+  /* ---------- matrix (comparison) view: responsive song list, no horizontal scroll ---------- */
   #matrixView{display:none;}
   #matrixView.active{display:block;}
   #boardView.hidden{display:none;}
 
-  .matrix-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:4px;background:var(--paper);}
-  table.matrix{width:100%;border-collapse:collapse;font-size:12.5px;min-width:760px;}
-  table.matrix caption{caption-side:top;text-align:left;padding:12px 14px 0;font-size:11px;color:var(--ash);}
-  table.matrix th, table.matrix td{padding:9px 12px;border-bottom:1px solid var(--line);white-space:nowrap;}
-  table.matrix thead th{position:sticky;top:0;background:var(--paper);z-index:2;
-    font-weight:500;font-size:11.5px;color:var(--ink-soft);border-bottom:1px solid var(--line-strong);
-    text-align:center;}
-  table.matrix thead th.songcol{text-align:left;position:sticky;left:0;z-index:3;}
-  table.matrix tbody th{position:sticky;left:0;background:var(--paper);text-align:left;
-    font-weight:400;white-space:normal;max-width:220px;border-right:1px solid var(--line);z-index:1;}
-  table.matrix tbody th .freqdot{margin-right:7px;}
-  table.matrix td{text-align:center;font-family:var(--font-num);font-variant-numeric:tabular-nums;
-    color:var(--ash);}
-  table.matrix td.played{color:var(--ink);font-weight:600;}
-  table.matrix td.encore{color:var(--accent);font-weight:700;}
-  table.matrix tbody tr:hover td, table.matrix tbody tr:hover th{background:var(--accent-soft);}
-  table.matrix tbody tr.row-rare th{color:var(--accent);}
+  .song-list{display:flex;flex-direction:column;gap:10px;}
+  .song-row{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px 14px;}
+  .song-row-head{display:flex;align-items:center;gap:7px;margin-bottom:9px;font-size:13.5px;font-weight:600;}
+  .song-row-head .dot{flex:none;}
+  .show-chips{display:flex;flex-wrap:wrap;gap:6px;}
+  .show-chip{display:inline-flex;align-items:center;gap:7px;font-size:11px;border:1px solid var(--line);
+    border-radius:5px;padding:3px 9px;color:var(--ash);white-space:nowrap;background:var(--bg);}
+  .show-chip .pos{font-family:var(--font-num);color:var(--ink);font-weight:700;
+    font-variant-numeric:tabular-nums;margin-right:5px;}
+  .show-chip.encore{border-color:var(--accent);}
+  .show-chip.encore .pos{color:var(--accent);}
+  .show-chip.notplayed{opacity:.4;}
+  .show-chip.notplayed .pos{display:none;}
 
   .footnote{margin-top:54px;padding-top:26px;border-top:1px solid var(--line);
     font-size:12px;color:var(--ash);line-height:2;}
@@ -264,7 +256,6 @@
 
   @media (max-width:560px){
     .site-title{font-size:26px;}
-    table.matrix tbody th{max-width:140px;}
   }
 </style>
 </head>
@@ -316,9 +307,7 @@
     </div>
 
     <div id="matrixView">
-      <div class="matrix-scroll">
-        <table class="matrix" id="matrixTable"></table>
-      </div>
+      <div id="matrixTable"></div>
     </div>
 
     <p class="footnote">
@@ -388,7 +377,7 @@ const shows = [
     ["14","夕星-ゆうづつ-"],["15","新曲"],["16","叫べ"],["17","最後の歌"],["18","ララバイ"],
     ["EN1","もしも"],["EN2","有心論"]
   ]},
- { label:"羽田 2日目", date:"8/13", songs:[
+  { label:"羽田 2日目", date:"8/13", songs:[
     ["1","いいんですか？"],["2","4645"],["3","イーディーピー〜飛んで火に入る夏の君〜"],
     ["4","π"],["5","アイアンバイブル"],["6","ワールドエンドガールフレンド"],
     ["7","ラストバージン"],["8","シザースタンド"],["9","DADA"],["10","億万笑者"],
@@ -440,9 +429,32 @@ function labelFor(cls){
   return cls === "fixed" ? "固定" : cls === "sometimes" ? "たまに" : "限定";
 }
 
+/* ---- song reactions (良かった / 聴きたかった) ---- */
+const reactionCounts = new Map();
+const myReactions = new Set();
+function reactionKey(showDate, title, kind){ return showDate + "||" + title + "||" + kind; }
+function reactBtnHTML(showDate, title, kind, compact){
+  const key = reactionKey(showDate, title, kind);
+  const count = reactionCounts.get(key) || 0;
+  const active = myReactions.has(key);
+  const label = kind === "good" ? (compact ? "良い" : "良かった") : (compact ? "聴きたい" : "聴きたかった");
+  return `<button type="button" class="react-btn${active ? " active" : ""}" ` +
+    `data-show="${showDate}" data-title="${title}" data-kind="${kind}">` +
+    `${label} <span class="react-count">${count || ""}</span></button>`;
+}
+function refreshAllReactionButtons(){
+  document.querySelectorAll(".react-btn").forEach(btn => {
+    const key = reactionKey(btn.dataset.show, btn.dataset.title, btn.dataset.kind);
+    const count = reactionCounts.get(key) || 0;
+    const active = myReactions.has(key);
+    btn.classList.toggle("active", active);
+    btn.querySelector(".react-count").textContent = count || "";
+  });
+}
+
 document.getElementById("sectionSub").textContent = shows.map(s => `${s.label}(${s.date})`).join("・");
 
-/* ---- per-show board, with "changed vs previous show at same slot" highlight ---- */
+/* ---- per-show board ---- */
 const board = document.getElementById("board");
 shows.forEach((show) => {
   const item = document.createElement("div");
@@ -456,25 +468,18 @@ shows.forEach((show) => {
   item.appendChild(inner);
 
   const table = document.createElement("table");
-  table.innerHTML = `<thead><tr><th>No.</th><th>曲目</th><th>頻度</th></tr></thead>`;
+  table.innerHTML = `<thead><tr><th>No.</th><th>曲目</th><th>頻度</th><th></th></tr></thead>`;
   const tbody = document.createElement("tbody");
   show.songs.forEach(([n, title]) => {
     const cls = classFor(title);
     const tr = document.createElement("tr");
     tr.innerHTML = `<td class="n">${n}</td><td class="title">${title}</td>` +
-      `<td class="freq ${cls}"><span class="dot ${cls}"></span>${labelFor(cls)}</td>`;
+      `<td class="freq ${cls}"><span class="dot ${cls}"></span>${labelFor(cls)}</td>` +
+      `<td class="react-cell">${reactBtnHTML(show.date, title, "good", true)}</td>`;
     tbody.appendChild(tr);
   });
   table.appendChild(tbody);
   item.appendChild(table);
-
-  const mc = document.createElement("details");
-  mc.className = "mc-memo";
-  mc.innerHTML = `<summary>MCメモ</summary>` +
-    `<p>こちらに軽く、MC情報を載せようと思ってます。お話提供してくださる方は` +
-    `Twitterの<a href="https://twitter.com/w_w_wimper2002" target="_blank" rel="noopener">` +
-    `フッサフッサのベイビー/Leo &nbsp;@w_w_wimper2002</a>までDMお願いします。</p>`;
-  item.appendChild(mc);
 
   const showId = `${show.date}_${show.label}`;
   const comments = document.createElement("details");
@@ -500,42 +505,45 @@ const sometimesCount = total - fixedCount - rareCount;
 document.getElementById("summary").innerHTML =
   `全<b>${total}</b>曲中 &nbsp;固定<b>${fixedCount}</b>曲 &nbsp;たまに<b>${sometimesCount}</b>曲 &nbsp;限定<b>${rareCount}</b>曲`;
 
-/* ---- matrix (comparison) view: rows = songs, columns = shows ---- */
+/* ---- matrix (comparison) view: song cards with wrapping show-chips, no side-scroll on any screen ---- */
 const matrixTable = document.getElementById("matrixTable");
 const titles = Object.keys(countByTitle).sort((a, b) => firstSeenOrder[a] - firstSeenOrder[b]);
 
 function buildMatrix(){
-  const thead = document.createElement("thead");
-  const htr = document.createElement("tr");
-  htr.innerHTML = `<th class="songcol">曲目</th>` +
-    shows.map(s => `<th>${s.label}<br><span style="font-weight:400;color:var(--ash);">${s.date}</span></th>`).join("");
-  thead.appendChild(htr);
+  const list = document.createElement("div");
+  list.className = "song-list";
 
-  const tbody = document.createElement("tbody");
   titles.forEach(title => {
     const cls = classFor(title);
-    const tr = document.createElement("tr");
-    if (cls === "rare") tr.className = "row-rare";
-    const th = document.createElement("th");
-    th.innerHTML = `<span class="dot freqdot ${cls}"></span>${title}`;
-    tr.appendChild(th);
+    const row = document.createElement("div");
+    row.className = "song-row";
+
+    const head = document.createElement("div");
+    head.className = "song-row-head";
+    head.innerHTML = `<span class="dot ${cls}"></span>${title}`;
+    row.appendChild(head);
+
+    const chips = document.createElement("div");
+    chips.className = "show-chips";
     shows.forEach(show => {
       const found = show.songs.find(([, t]) => t === title);
-      const td = document.createElement("td");
+      const chip = document.createElement("span");
       if (found) {
         const isEncore = /^EN/.test(found[0]);
-        td.className = "played" + (isEncore ? " encore" : "");
-        td.textContent = found[0];
+        chip.className = "show-chip" + (isEncore ? " encore" : "");
+        chip.innerHTML = `<span class="pos">${found[0]}</span>${show.label}` +
+          reactBtnHTML(show.date, title, "good");
       } else {
-        td.textContent = "–";
+        chip.className = "show-chip notplayed";
+        chip.innerHTML = `<span>${show.label}</span>` + reactBtnHTML(show.date, title, "wanted");
       }
-      tr.appendChild(td);
+      chips.appendChild(chip);
     });
-    tbody.appendChild(tr);
+    row.appendChild(chips);
+    list.appendChild(row);
   });
 
-  matrixTable.appendChild(thead);
-  matrixTable.appendChild(tbody);
+  matrixTable.appendChild(list);
 }
 buildMatrix();
 
@@ -577,6 +585,47 @@ const supabaseClient = window.supabase.createClient(
   "https://dmzkiblbvzcwdnqvjsgw.supabase.co",
   "sb_publishable_NTfVCrq9IPPNseTWcwBWgw_M75o7syP"
 );
+
+async function loadReactions(){
+  const { data, error } = await supabaseClient
+    .from("song_reactions")
+    .select("show_date, song_title, kind, device_id");
+  if (error || !data) return;
+  const deviceId = getDeviceId();
+  data.forEach(r => {
+    const key = reactionKey(r.show_date, r.song_title, r.kind);
+    reactionCounts.set(key, (reactionCounts.get(key) || 0) + 1);
+    if (r.device_id === deviceId) myReactions.add(key);
+  });
+}
+
+async function toggleReaction(showDate, title, kind){
+  const deviceId = getDeviceId();
+  const key = reactionKey(showDate, title, kind);
+  const wasActive = myReactions.has(key);
+  if (wasActive) {
+    myReactions.delete(key);
+    reactionCounts.set(key, Math.max(0, (reactionCounts.get(key) || 1) - 1));
+  } else {
+    myReactions.add(key);
+    reactionCounts.set(key, (reactionCounts.get(key) || 0) + 1);
+  }
+  refreshAllReactionButtons();
+
+  if (wasActive) {
+    await supabaseClient.from("song_reactions").delete()
+      .eq("show_date", showDate).eq("song_title", title).eq("kind", kind).eq("device_id", deviceId);
+  } else {
+    await supabaseClient.from("song_reactions")
+      .insert({ show_date: showDate, song_title: title, kind, device_id: deviceId });
+  }
+}
+
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".react-btn");
+  if (!btn) return;
+  toggleReaction(btn.dataset.show, btn.dataset.title, btn.dataset.kind);
+});
 
 function getDeviceId(){
   let id = localStorage.getItem("seturi-device-id");
@@ -656,8 +705,6 @@ function wireAvatarPicker(formEl){
     }
   });
 }
-
-const commentsState = {}; // showId -> { comments: [], likesByComment: Map }
 
 async function initShowComments(showId, detailsEl){
   if (detailsEl.dataset.inited) return;
@@ -804,6 +851,8 @@ async function initShowComments(showId, detailsEl){
 }
 
 initShowComments("general", document.getElementById("generalTalk"));
+
+loadReactions().then(refreshAllReactionButtons);
 
 /* ---- 3D tilt on show cards (works on any current or future .board-item) ---- */
 (function initTilt(){
