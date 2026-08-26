@@ -187,6 +187,26 @@
   .show-chip.notplayed{opacity:.4;}
   .show-chip.notplayed .pos{display:none;}
 
+  /* ---------- full table view: all shows side by side (needs horizontal scroll on narrow screens) ---------- */
+  #tableView{display:none;}
+  #tableView.active{display:block;}
+  .matrix-fit{border:1px solid var(--line);border-radius:4px;background:var(--paper);overflow:hidden;}
+  table.matrix{border-collapse:collapse;font-size:12px;transform-origin:top left;}
+  table.matrix th, table.matrix td{padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap;}
+  table.matrix thead th{position:sticky;top:0;background:var(--paper);z-index:2;
+    font-weight:500;font-size:11px;color:var(--ink-soft);border-bottom:1px solid var(--line-strong);
+    text-align:center;}
+  table.matrix thead th.songcol{text-align:left;position:sticky;left:0;z-index:3;}
+  table.matrix tbody th{position:sticky;left:0;background:var(--paper);text-align:left;
+    font-weight:400;white-space:normal;max-width:180px;border-right:1px solid var(--line);z-index:1;}
+  table.matrix tbody th .dot{margin-right:6px;}
+  table.matrix td{text-align:center;font-family:var(--font-num);font-variant-numeric:tabular-nums;
+    color:var(--ash);}
+  table.matrix td.played{color:var(--ink);font-weight:600;}
+  table.matrix td.encore{color:var(--accent);font-weight:700;}
+  table.matrix tbody tr:hover td, table.matrix tbody tr:hover th{background:var(--accent-soft);}
+  table.matrix tbody tr.row-rare th{color:var(--accent);}
+
   .footnote{margin-top:54px;padding-top:26px;border-top:1px solid var(--line);
     font-size:12px;color:var(--ash);line-height:2;}
   .footnote .handle{color:var(--ink);}
@@ -284,6 +304,7 @@
     <div class="viewswitch" role="tablist" aria-label="表示切り替え">
       <button type="button" id="btnBoard" class="active" role="tab" aria-selected="true">公演別</button>
       <button type="button" id="btnMatrix" role="tab" aria-selected="false">曲目比較</button>
+      <button type="button" id="btnTable" role="tab" aria-selected="false">全公演一覧表</button>
     </div>
 
     <div class="legend">
@@ -308,6 +329,12 @@
 
     <div id="matrixView">
       <div id="matrixTable"></div>
+    </div>
+
+    <div id="tableView">
+      <div class="matrix-fit" id="matrixFit">
+        <table class="matrix" id="allTable"></table>
+      </div>
     </div>
 
     <p class="footnote">
@@ -429,7 +456,7 @@ function labelFor(cls){
   return cls === "fixed" ? "固定" : cls === "sometimes" ? "たまに" : "限定";
 }
 
-/* ---- song reactions (良かった / 聴きたかった) ---- */
+/* ---- song reactions (最高だった / 聴きたかった) ---- */
 const reactionCounts = new Map();
 const myReactions = new Set();
 function reactionKey(showDate, title, kind){ return showDate + "||" + title + "||" + kind; }
@@ -437,7 +464,7 @@ function reactBtnHTML(showDate, title, kind, compact){
   const key = reactionKey(showDate, title, kind);
   const count = reactionCounts.get(key) || 0;
   const active = myReactions.has(key);
-  const label = kind === "good" ? (compact ? "良い" : "良かった") : (compact ? "聴きたい" : "聴きたかった");
+  const label = kind === "good" ? (compact ? "最高" : "最高だった") : (compact ? "聴きたい" : "聴きたかった");
   return `<button type="button" class="react-btn${active ? " active" : ""}" ` +
     `data-show="${showDate}" data-title="${title}" data-kind="${kind}">` +
     `${label} <span class="react-count">${count || ""}</span></button>`;
@@ -547,24 +574,80 @@ function buildMatrix(){
 }
 buildMatrix();
 
+/* ---- full table view: rows = songs, columns = every show, all in one glance ---- */
+const allTable = document.getElementById("allTable");
+function buildAllTable(){
+  const thead = document.createElement("thead");
+  const htr = document.createElement("tr");
+  htr.innerHTML = `<th class="songcol">曲目</th>` +
+    shows.map(s => `<th>${s.label}<br><span style="font-weight:400;color:var(--ash);">${s.date}</span></th>`).join("");
+  thead.appendChild(htr);
+
+  const tbody = document.createElement("tbody");
+  titles.forEach(title => {
+    const cls = classFor(title);
+    const tr = document.createElement("tr");
+    if (cls === "rare") tr.className = "row-rare";
+    const th = document.createElement("th");
+    th.innerHTML = `<span class="dot ${cls}"></span>${title}`;
+    tr.appendChild(th);
+    shows.forEach(show => {
+      const found = show.songs.find(([, t]) => t === title);
+      const td = document.createElement("td");
+      if (found) {
+        const isEncore = /^EN/.test(found[0]);
+        td.className = "played" + (isEncore ? " encore" : "");
+        td.textContent = found[0];
+      } else {
+        td.textContent = "–";
+      }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+
+  allTable.appendChild(thead);
+  allTable.appendChild(tbody);
+}
+buildAllTable();
+
+/* ---- shrink the full table to fit the screen width, no horizontal scroll needed ---- */
+const matrixFit = document.getElementById("matrixFit");
+function fitAllTable(){
+  allTable.style.transform = "none";
+  matrixFit.style.height = "";
+  const naturalWidth = allTable.scrollWidth;
+  const naturalHeight = allTable.scrollHeight;
+  const availWidth = matrixFit.clientWidth;
+  const scale = Math.min(1, availWidth / naturalWidth);
+  allTable.style.transform = `scale(${scale})`;
+  matrixFit.style.height = (naturalHeight * scale) + "px";
+}
+window.addEventListener("resize", () => {
+  if (tableView.classList.contains("active")) fitAllTable();
+});
+
 /* ---- view switch ---- */
 const btnBoard = document.getElementById("btnBoard");
 const btnMatrix = document.getElementById("btnMatrix");
+const btnTable = document.getElementById("btnTable");
 const boardView = document.getElementById("boardView");
 const matrixView = document.getElementById("matrixView");
+const tableView = document.getElementById("tableView");
 
-btnBoard.addEventListener("click", () => {
-  boardView.classList.remove("hidden");
-  matrixView.classList.remove("active");
-  btnBoard.classList.add("active"); btnBoard.setAttribute("aria-selected","true");
-  btnMatrix.classList.remove("active"); btnMatrix.setAttribute("aria-selected","false");
-});
-btnMatrix.addEventListener("click", () => {
-  boardView.classList.add("hidden");
-  matrixView.classList.add("active");
-  btnMatrix.classList.add("active"); btnMatrix.setAttribute("aria-selected","true");
-  btnBoard.classList.remove("active"); btnBoard.setAttribute("aria-selected","false");
-});
+function activateView(view){
+  boardView.classList.toggle("hidden", view !== "board");
+  matrixView.classList.toggle("active", view === "matrix");
+  tableView.classList.toggle("active", view === "table");
+  [[btnBoard,"board"],[btnMatrix,"matrix"],[btnTable,"table"]].forEach(([btn, key]) => {
+    btn.classList.toggle("active", key === view);
+    btn.setAttribute("aria-selected", String(key === view));
+  });
+  if (view === "table") requestAnimationFrame(fitAllTable);
+}
+btnBoard.addEventListener("click", () => activateView("board"));
+btnMatrix.addEventListener("click", () => activateView("matrix"));
+btnTable.addEventListener("click", () => activateView("table"));
 
 /* ---- theme toggle (defaults to system preference) ---- */
 const themeToggle = document.getElementById("themeToggle");
@@ -929,3 +1012,4 @@ document.getElementById("revealBtn").addEventListener("click", () => {
 </script>
 </body>
 </html>
+
