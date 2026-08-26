@@ -71,7 +71,22 @@
 
   /* ---------- header ---------- */
   .masthead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;
-    margin-bottom:22px;flex-wrap:wrap;}
+    margin-bottom:22px;flex-wrap:wrap;position:relative;}
+  .masthead-left{display:flex;align-items:center;gap:14px;}
+  .menu-toggle{flex:none;width:34px;height:34px;border:1px solid var(--line);border-radius:6px;
+    background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:5px;}
+  .menu-toggle span{display:block;width:16px;height:1.5px;background:var(--ink-soft);}
+  .menu-toggle:hover{border-color:var(--ink-soft);}
+  .nav-menu{position:absolute;top:calc(100% + 8px);left:0;background:var(--paper);
+    border:1px solid var(--line);border-radius:8px;box-shadow:0 10px 24px -12px rgba(20,15,5,.3);
+    display:flex;flex-direction:column;min-width:180px;overflow:hidden;z-index:10;}
+  .nav-menu[hidden]{display:none;}
+  .nav-menu button{font-family:var(--font-body);font-size:13px;color:var(--ink-soft);
+    background:none;border:none;text-align:left;padding:11px 16px;cursor:pointer;
+    border-bottom:1px solid var(--line);}
+  .nav-menu button:last-child{border-bottom:none;}
+  .nav-menu button:hover{background:var(--accent-soft);color:var(--ink);}
   .site-eyebrow{font-size:11px;color:var(--ash);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;}
   .site-title{font-family:var(--font-display);font-size:32px;font-weight:700;margin:0;
     text-wrap:balance;letter-spacing:0.01em;}
@@ -184,8 +199,10 @@
     font-variant-numeric:tabular-nums;margin-right:5px;}
   .show-chip.encore{border-color:var(--accent);}
   .show-chip.encore .pos{color:var(--accent);}
-  .show-chip.notplayed{opacity:.4;}
+  .show-chip.notplayed{color:var(--ash);}
   .show-chip.notplayed .pos{display:none;}
+  .show-chip.notplayed{opacity:.7;}
+  .show-chip.notplayed .react-btn{opacity:1;}
 
   /* ---------- full table view: all shows side by side (needs horizontal scroll on narrow screens) ---------- */
   #tableView{display:none;}
@@ -263,11 +280,16 @@
   .comment-empty{font-size:12px;color:var(--ash);}
 
   .general-talk{background:var(--paper);border:1px solid var(--line);border-radius:10px;
-    padding:18px 18px 14px;margin-bottom:34px;
+    padding:16px 18px;margin-bottom:34px;
     box-shadow:0 1px 2px rgba(20,15,5,.05), 0 10px 24px -16px rgba(20,15,5,.25);}
-  .general-talk h3{margin:0 0 4px;font-family:var(--font-display);font-size:16px;font-weight:700;}
-  .general-talk h3 .count{font-size:12px;color:var(--ash);font-weight:400;}
-  .general-talk .section-sub{margin-bottom:16px;}
+  .general-talk-summary{cursor:pointer;font-family:var(--font-display);font-size:16px;font-weight:700;
+    list-style:none;display:flex;align-items:center;gap:8px;}
+  .general-talk-summary::-webkit-details-marker{display:none;}
+  .general-talk-summary .count{font-size:12px;color:var(--ash);font-weight:400;}
+  .general-talk-summary:after{content:"";width:7px;height:7px;border-right:1.5px solid var(--ash);
+    border-bottom:1.5px solid var(--ash);transform:rotate(-45deg);margin-left:auto;transition:transform .2s ease;}
+  .general-talk[open] .general-talk-summary:after{transform:rotate(45deg);}
+  .general-talk .section-sub{margin:10px 0 16px;}
   .general-talk .comments{border-top:none;padding-top:0;margin-top:0;}
 
   @media (prefers-reduced-motion: reduce){
@@ -283,11 +305,22 @@
 <div class="wrap">
 
   <div class="masthead">
-    <div>
-      <div class="site-eyebrow">RADWIMPS Official Fan Club Tour 2026 “ユーリンチー” — 非公式まとめ</div>
-      <h1 class="site-title">セットリスト比較</h1>
+    <div class="masthead-left">
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="メニュー" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <div>
+        <div class="site-eyebrow">RADWIMPS Official Fan Club Tour 2026 “ユーリンチー” — 非公式まとめ</div>
+        <h1 class="site-title">セットリスト比較</h1>
+      </div>
     </div>
     <button class="theme-toggle" id="themeToggle" type="button">ライト / ダーク</button>
+    <nav class="nav-menu" id="navMenu" hidden>
+      <button type="button" data-view="board">公演別</button>
+      <button type="button" data-view="matrix">曲目比較</button>
+      <button type="button" data-view="table">全公演一覧表</button>
+      <button type="button" id="navToTalk">全体トークルームへ</button>
+    </nav>
   </div>
   <hr>
 
@@ -315,13 +348,13 @@
 
     <div class="summary-line" id="summary"></div>
 
-    <div class="general-talk" id="generalTalk">
-      <h3>全体トークルーム <span class="count" data-role="count"></span></h3>
+    <details class="general-talk" id="generalTalk">
+      <summary class="general-talk-summary">全体トークルーム <span class="count" data-role="count"></span></summary>
       <p class="section-sub">次のセトリ予想、感想戦、雑談などはこちらへ。公演ごとのネタバレコメントは各カード下のコメント欄へどうぞ。</p>
       <div class="comments-body">
         <div class="comment-list" data-role="list"><p class="comment-empty">読み込み中...</p></div>
       </div>
-    </div>
+    </details>
 
     <div id="boardView">
       <div class="board" id="board"></div>
@@ -456,18 +489,17 @@ function labelFor(cls){
   return cls === "fixed" ? "固定" : cls === "sometimes" ? "たまに" : "限定";
 }
 
-/* ---- song reactions (最高だった / 聴きたかった) ---- */
+/* ---- song reactions (良かった / 聴きたかった) ---- */
 const reactionCounts = new Map();
 const myReactions = new Set();
 function reactionKey(showDate, title, kind){ return showDate + "||" + title + "||" + kind; }
-function reactBtnHTML(showDate, title, kind, compact){
+function reactBtnHTML(showDate, title, kind){
   const key = reactionKey(showDate, title, kind);
   const count = reactionCounts.get(key) || 0;
   const active = myReactions.has(key);
-  const label = kind === "good" ? (compact ? "最高" : "最高だった") : (compact ? "聴きたい" : "聴きたかった");
   return `<button type="button" class="react-btn${active ? " active" : ""}" ` +
     `data-show="${showDate}" data-title="${title}" data-kind="${kind}">` +
-    `${label} <span class="react-count">${count || ""}</span></button>`;
+    `最高 <span class="react-count">${count || ""}</span></button>`;
 }
 function refreshAllReactionButtons(){
   document.querySelectorAll(".react-btn").forEach(btn => {
@@ -502,7 +534,7 @@ shows.forEach((show) => {
     const tr = document.createElement("tr");
     tr.innerHTML = `<td class="n">${n}</td><td class="title">${title}</td>` +
       `<td class="freq ${cls}"><span class="dot ${cls}"></span>${labelFor(cls)}</td>` +
-      `<td class="react-cell">${reactBtnHTML(show.date, title, "good", true)}</td>`;
+      `<td class="react-cell">${reactBtnHTML(show.date, title, "good")}</td>`;
     tbody.appendChild(tr);
   });
   table.appendChild(tbody);
@@ -562,7 +594,7 @@ function buildMatrix(){
           reactBtnHTML(show.date, title, "good");
       } else {
         chip.className = "show-chip notplayed";
-        chip.innerHTML = `<span>${show.label}</span>` + reactBtnHTML(show.date, title, "wanted");
+        chip.innerHTML = `<span>${show.label}</span>` + reactBtnHTML(show.date, title, "good");
       }
       chips.appendChild(chip);
     });
@@ -644,6 +676,8 @@ function activateView(view){
     btn.setAttribute("aria-selected", String(key === view));
   });
   if (view === "table") requestAnimationFrame(fitAllTable);
+  const target = view === "board" ? boardView : view === "matrix" ? matrixView : tableView;
+  target.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 btnBoard.addEventListener("click", () => activateView("board"));
 btnMatrix.addEventListener("click", () => activateView("matrix"));
@@ -933,9 +967,43 @@ async function initShowComments(showId, detailsEl){
   refresh();
 }
 
-initShowComments("general", document.getElementById("generalTalk"));
+const generalTalkEl = document.getElementById("generalTalk");
+generalTalkEl.addEventListener("toggle", () => {
+  if (generalTalkEl.open) initShowComments("general", generalTalkEl);
+}, { once: false });
 
 loadReactions().then(refreshAllReactionButtons);
+
+/* ---- hamburger nav menu ---- */
+const menuToggle = document.getElementById("menuToggle");
+const navMenu = document.getElementById("navMenu");
+menuToggle.addEventListener("click", () => {
+  const willOpen = navMenu.hasAttribute("hidden");
+  if (willOpen) navMenu.removeAttribute("hidden"); else navMenu.setAttribute("hidden", "");
+  menuToggle.setAttribute("aria-expanded", String(willOpen));
+});
+document.addEventListener("click", (e) => {
+  if (navMenu.hasAttribute("hidden")) return;
+  if (navMenu.contains(e.target) || menuToggle.contains(e.target)) return;
+  navMenu.setAttribute("hidden", "");
+  menuToggle.setAttribute("aria-expanded", "false");
+});
+function closeNavMenu(){
+  navMenu.setAttribute("hidden", "");
+  menuToggle.setAttribute("aria-expanded", "false");
+}
+navMenu.querySelectorAll("button[data-view]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    activateView(btn.dataset.view);
+    closeNavMenu();
+  });
+});
+document.getElementById("navToTalk").addEventListener("click", () => {
+  generalTalkEl.open = true;
+  generalTalkEl.dispatchEvent(new Event("toggle"));
+  generalTalkEl.scrollIntoView({ behavior: "smooth", block: "start" });
+  closeNavMenu();
+});
 
 /* ---- 3D tilt on show cards (works on any current or future .board-item) ---- */
 (function initTilt(){
