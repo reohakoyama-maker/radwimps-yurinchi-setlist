@@ -647,6 +647,51 @@
     .eve-strip{flex-wrap:wrap;gap:6px 10px;}
     .eve-strip .es-go{margin-left:0;}
   }
+
+  /* ---------- v5: スマホでセトリ予想しやすく ---------- */
+  .chip.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:700;}
+  .chip.on small{color:inherit;opacity:.7;}
+  .chip .pos{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 5px;border-radius:10px;
+    background:var(--accent-ink);color:var(--accent);font-size:11px;margin:0 6px 0 -6px;vertical-align:1px;}
+  .maker-next{display:flex;align-items:center;gap:6px;flex-wrap:nowrap;white-space:nowrap;margin:0 0 10px;padding:9px 12px;border-radius:10px;
+    background:var(--accent-soft);border:1px solid var(--accent);font-size:13px;color:var(--ink);}
+  .maker-next b{font-family:var(--font-display);font-weight:400;font-size:18px;color:var(--accent);}
+  @media (max-width:600px){ .maker-next > span:first-child{display:none;} .maker-next > b::before{content:"次は ";font-family:var(--font-body);font-size:13px;color:var(--ink);} }
+  .maker-next .mn-of{font-size:12px;color:var(--ink-soft);}
+  .maker-next .mn-sw{margin-left:auto;display:inline-flex;border:1px solid var(--line);border-radius:100px;overflow:hidden;background:var(--bg);}
+  .maker-next .mn-sw button{font-size:12px;border:0;background:transparent;color:var(--ink-soft);padding:5px 11px;cursor:pointer;}
+  .maker-next .mn-sw button.on{background:var(--ink);color:var(--bg);font-weight:700;}
+  .eve-cta{display:inline-flex;align-items:center;gap:8px;margin-top:14px;font-size:15px;font-weight:700;border:0;border-radius:100px;
+    padding:12px 22px;background:linear-gradient(90deg,#ffb26b,#ff6a3d);color:#1c0f05;cursor:pointer;box-shadow:0 8px 24px -8px rgba(255,106,61,.7);}
+  .maker-dock{display:none;}
+  .maker-toast{position:fixed;left:50%;bottom:118px;transform:translate(-50%,10px);opacity:0;pointer-events:none;z-index:60;
+    background:#171411;color:#f3ede2;border:1px solid var(--accent);border-radius:100px;padding:8px 16px;font-size:13px;white-space:nowrap;
+    max-width:92vw;overflow:hidden;text-overflow:ellipsis;transition:opacity .2s,transform .2s;}
+  .maker-toast.show{opacity:1;transform:translate(-50%,0);}
+  .maker-toast b{color:var(--accent);}
+  @media (max-width:820px){
+    .maker{padding:14px 12px 12px;}
+    .maker-head{margin-bottom:10px;}
+    .maker-head p{display:none;}
+    .maker-songs{max-height:46vh;max-height:46svh;}
+    .chip{font-size:13.5px;padding:6px 13px;}
+    .maker-dock{display:block;position:fixed;left:0;right:0;bottom:0;z-index:55;padding:8px 10px calc(8px + env(safe-area-inset-bottom));
+      background:rgba(14,12,10,.96);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-top:2px solid var(--accent);
+      transform:translateY(110%);transition:transform .25s;color:#f2ede4;}
+    .maker-dock.show{transform:none;}
+    .md-top{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:#c9c1b4;}
+    .md-top b{white-space:nowrap;font-family:var(--font-display);font-weight:400;font-size:13px;letter-spacing:.06em;color:#ff8a3d;}
+    .md-top .md-n{font-variant-numeric:tabular-nums;}
+    .md-top button{white-space:nowrap;margin-left:auto;font-size:12px;font-weight:700;border:1px solid #ff8a3d;background:transparent;color:#ff8a3d;border-radius:100px;padding:4px 12px;cursor:pointer;}
+    .md-strip{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
+    .md-strip::-webkit-scrollbar{display:none;}
+    .md-strip span{flex:none;font-size:12.5px;background:#f4eee4;color:#171411;border-radius:6px;padding:4px 9px;white-space:nowrap;max-width:62vw;overflow:hidden;text-overflow:ellipsis;}
+    .md-strip span i{font-style:normal;font-family:var(--font-display);font-size:10.5px;color:#cf530a;margin-right:5px;}
+    .md-strip span.en{background:#3a2416;color:#ffd9bd;} .md-strip span.en i{color:#ff8a3d;}
+    .md-strip span.new{animation:mdpop .5s ease;}
+    .md-strip .md-empty{background:transparent;color:#948b7e;padding-left:0;}
+    @keyframes mdpop{0%{transform:scale(.6);background:#ff8a3d;}100%{transform:none;}}
+  }
   @media (prefers-reduced-motion: reduce){
     *{animation:none !important;transition:none !important;}
     .reveal{opacity:1 !important;translate:none !important;}
@@ -737,6 +782,7 @@
             <h2 class="eve-title" id="eveTitle"><span class="et-en">YOKOHAMA OKAWARI</span>横浜<span class="et-hot">前夜</span>トーク</h2>
             <p class="eve-lead">通常公演をふまえたセトリ予想も感想も、Xだとまだ書けない話はここで。前夜・前々夜の「楽しみ！」も、今回は行けない人の「念」も、ぜんぶ置いていってください。</p>
             <p class="eve-count">投稿 <span data-role="count">-</span></p>
+            <button type="button" class="eve-cta" id="eveCta">🎤 セトリ予想をつくる</button>
           </div>
           <div class="stub" id="eveCountdown"></div>
         </div>
@@ -759,6 +805,7 @@
               <button type="button" data-pool="tour" class="active">ユーリンチーで演奏<small data-role="n-tour"></small></button>
               <button type="button" data-pool="all">RADの全曲<small data-role="n-all"></small></button>
             </div>
+            <div class="maker-next" data-role="next"></div>
             <input type="search" data-role="q" placeholder="曲名でさがす" autocomplete="off">
             <div class="maker-songs" data-role="songs"></div>
             <div class="maker-row">
@@ -785,6 +832,11 @@
             <p class="form-msg" data-role="maker-msg"></p>
           </div>
         </div>
+        <div class="maker-dock" data-role="dock" aria-live="polite">
+          <div class="md-top"><b>MY SETLIST</b><span class="md-n" data-role="dock-n"></span><button type="button" data-dock-go>並べかえ・投稿 ↓</button></div>
+          <div class="md-strip" data-role="dock-strip"></div>
+        </div>
+        <div class="maker-toast" data-role="toast"></div>
       </div>
 
       <div class="eve-grid">
@@ -2084,14 +2136,47 @@ function renderMaker(){
   makerEl.querySelector('[data-role="status"]').textContent = total
     ? `本編${maker.main.length}曲` + (maker.en.length ? ` + EN${maker.en.length}曲` : "") : "";
   renderMakerSongs();
+  renderMakerExtras();
+}
+let makerAdded = null;
+function renderMakerExtras(){
+  const next = makerEl.querySelector('[data-role="next"]');
+  const n = maker[maker.target].length + 1;
+  next.innerHTML = `<span>次にタップした曲が</span> <b>${maker.target === "main" ? n + "曲目" : "EN" + n}</b>` +
+    `<span class="mn-of">に入ります</span><span class="mn-sw"><button type="button" data-target="main" class="${maker.target === "main" ? "on" : ""}">本編</button>` +
+    `<button type="button" data-target="en" class="${maker.target === "en" ? "on" : ""}">アンコール</button></span>`;
+  const items = maker.main.map((t, i) => ({ t, no: String(i + 1), en: false }))
+    .concat(maker.en.map((t, i) => ({ t, no: "EN" + (i + 1), en: true })));
+  document.querySelector('[data-role="dock-n"]').textContent = `本編${maker.main.length}曲` + (maker.en.length ? ` + EN${maker.en.length}` : "") +
+"";
+  const strip = document.querySelector('[data-role="dock-strip"]');
+  strip.innerHTML = items.length
+    ? items.map(x => `<span class="${x.en ? "en" : ""}${makerAdded && makerAdded === x.no ? " new" : ""}"><i>${x.no}</i>${escapeHtml(x.t)}</span>`).join("")
+    : `<span class="md-empty">上の曲をタップすると、ここに1曲目から並びます</span>`;
+  if (makerAdded) {
+    const el = strip.querySelector(".new");
+    if (el) strip.scrollLeft = el.offsetLeft - strip.clientWidth + el.offsetWidth + 20;
+  }
+  makerAdded = null;
+}
+let toastTimer = null;
+function makerToast(html){
+  const el = document.querySelector('[data-role="toast"]');
+  el.innerHTML = html; el.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove("show"), 1400);
 }
 function toggleSong(title){
   const t = cleanTitle(title).slice(0, 40);
   if (!t) return;
   const where = inSetlist(t);
   makerSel = null;
-  if (where) maker[where.sec].splice(where.i, 1);
-  else { maker[maker.target].push(t); makerJust = { sec: maker.target, i: maker[maker.target].length - 1 }; }
+  if (where) { maker[where.sec].splice(where.i, 1); makerToast(`「${escapeHtml(t)}」を外しました`); }
+  else {
+    maker[maker.target].push(t); makerJust = { sec: maker.target, i: maker[maker.target].length - 1 };
+    const no = maker.target === "main" ? String(maker.main.length) : "EN" + maker.en.length;
+    makerAdded = no;
+    makerToast(`<b>${maker.target === "main" ? no + "曲目" : no}</b> に「${escapeHtml(t)}」`);
+  }
   makerMsg("");
   saveMaker(); renderMaker();
 }
@@ -2142,6 +2227,27 @@ makerEl.addEventListener("click", (e) => {
     return;
   }
   if (e.target.closest("[data-maker-insert]")) insertPrediction();
+});
+/* スマホ: 曲を選んでいる間だけ下にMY SETLISTを出す */
+(() => {
+  const dock = makerEl.querySelector('[data-role="dock"]');
+  // 親要素のtransformの影響を受けないよう body 直下へ
+  document.body.appendChild(dock); document.body.appendChild(makerEl.querySelector('[data-role="toast"]'));
+  dock.addEventListener("click", (e) => { if (e.target.closest("[data-dock-go]")) makerEl.querySelector(".maker-paper").scrollIntoView({ behavior: "smooth", block: "start" }); });
+  const pick = makerEl.querySelector(".maker-pick"), paper = makerEl.querySelector(".maker-paper");
+  let pickVis = false, paperVis = false;
+  const upd = () => dock.classList.toggle("show", pickVis && !paperVis && !makerEl.classList.contains("collapsed"));
+  if (!("IntersectionObserver" in window)) return;
+  new IntersectionObserver(es => { es.forEach(e => { if (e.target === pick) pickVis = e.isIntersecting; else paperVis = e.intersectionRatio > 0.25; }); upd(); },
+    { threshold: [0, 0.25] }).observe(pick);
+  const io2 = new IntersectionObserver(es => { es.forEach(e => { paperVis = e.intersectionRatio > 0.25; }); upd(); }, { threshold: [0, 0.25] });
+  io2.observe(paper);
+  makerEl.addEventListener("click", () => setTimeout(upd, 0));
+})();
+document.getElementById("eveCta").addEventListener("click", () => {
+  const m = document.getElementById("eveMaker");
+  if (m.classList.contains("collapsed")) m.querySelector("[data-maker-toggle]").click();
+  m.scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
 /* ドラッグで並べ替え(マウス・指どちらも) */
