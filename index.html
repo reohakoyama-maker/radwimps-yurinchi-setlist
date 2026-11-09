@@ -3,383 +3,841 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#f2ede6">
-<title>ユーリンチー セトリまとめ(非公式)</title>
+<meta name="theme-color" content="#0b0a09">
+<title>ユーリンチー セトリまとめ(非公式)| 横浜おかわり前夜トーク</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Yusei+Magic&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
 <script data-goatcounter="https://reohakoyama-maker.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
+  /* 基本は「暗転したライブハウス」。客電ON(ライト)も選べる */
   :root{
-    --bg:#f2ede6;
-    --paper:#faf7f2;
+    --bg:#0b0a09;
+    --surface:#161411;
+    --surface2:#1f1c18;
+    --ink:#f2ede4;
+    --ink-soft:#c2baad;
+    --ash:#8b8377;
+    --line:#2d2924;
+    --line-strong:#f2ede4;
+    --accent:#ff8a3d;
+    --accent-ink:#1c0f05;
+    --accent-soft:rgba(255,138,61,.15);
+    --rare:#ff6b5e;
+    --live:#e5383b;
+    --focus:#ff8a3d;
+    --paper:#f3ede2;
+    --paper-ink:#171411;
+    --tape:rgba(232,224,203,.78);
+    --spot:rgba(255,196,130,.10);
+    --shadow:0 18px 36px -22px rgba(0,0,0,.9);
+    --font-body:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif;
+    --font-display:"Dela Gothic One","Zen Kaku Gothic New",sans-serif;
+    --font-hand:"Yusei Magic","Zen Kaku Gothic New",sans-serif;
+    color-scheme:dark;
+  }
+  :root[data-theme="light"]{
+    --bg:#efe9df;
+    --surface:#faf7f1;
+    --surface2:#f2ece2;
     --ink:#161412;
     --ink-soft:#4a453f;
-    --ash:#8c8478;
-    --line:#e2dbcf;
+    --ash:#857d71;
+    --line:#ddd4c6;
     --line-strong:#161412;
-    --accent:#e8590c;
-    --accent-soft:#f6d9c4;
-    --rare:#b23a48;
-    --rare-soft:#f3d9dc;
-    --focus:#e8590c;
-    --font-body:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif;
-    --font-display:var(--font-body);
-    --font-num:var(--font-body);
-  }
-
-  :root[data-theme="dark"]{
-    --bg:#17150f;
-    --paper:#1f1c15;
-    --ink:#efe9de;
-    --ink-soft:#c4bcac;
-    --ash:#847c6c;
-    --line:#332f24;
-    --line-strong:#efe9de;
-    --accent:#ff7a2e;
-    --accent-soft:#3a2a19;
-    --rare:#e8707d;
-    --rare-soft:#3a2024;
-  }
-
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]){
-      --bg:#17150f;
-      --paper:#1f1c15;
-      --ink:#efe9de;
-      --ink-soft:#c4bcac;
-      --ash:#847c6c;
-      --line:#332f24;
-      --line-strong:#efe9de;
-      --accent:#ff7a2e;
-      --accent-soft:#3a2a19;
-      --rare:#e8707d;
-      --rare-soft:#3a2024;
-    }
+    --accent:#de5d0c;
+    --accent-ink:#fff;
+    --accent-soft:#fbe2cf;
+    --rare:#c9372c;
+    --paper:#fffdf8;
+    --tape:rgba(214,203,176,.8);
+    --spot:rgba(255,170,90,.12);
+    --shadow:0 14px 30px -20px rgba(60,40,20,.45);
+    color-scheme:light;
   }
 
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
-    font-family:var(--font-body);font-weight:400;font-size:15px;line-height:1.75;
-    -webkit-font-smoothing:antialiased;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.75;
+    -webkit-font-smoothing:antialiased;min-height:100vh;}
+  .spot{position:fixed;inset:0 0 auto 0;height:560px;pointer-events:none;z-index:0;
+    background:radial-gradient(900px 460px at 50% -140px, var(--spot), transparent 70%);}
   a{color:inherit;}
   :focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
-  ::selection{background:var(--accent-soft);color:var(--ink);}
+  ::selection{background:var(--accent);color:var(--accent-ink);}
+  button{font-family:var(--font-body);}
 
-  .wrap{max-width:1120px;margin:0 auto;padding:48px 22px 100px;}
+  .wrap{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:30px 20px 140px;}
 
   /* ---------- header ---------- */
-  .masthead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;
-    margin-bottom:22px;flex-wrap:wrap;position:relative;}
-  .masthead-left{display:flex;align-items:center;gap:14px;}
-  .menu-toggle{flex:none;width:34px;height:34px;border:1px solid var(--line);border-radius:6px;
-    background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;
-    justify-content:center;gap:5px;}
+  .masthead{display:flex;justify-content:space-between;align-items:center;gap:16px;position:relative;}
+  .masthead-left{display:flex;align-items:center;gap:14px;min-width:0;}
+  .menu-toggle{flex:none;width:38px;height:38px;border:1px solid var(--line);border-radius:6px;background:var(--surface);
+    cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;}
   .menu-toggle span{display:block;width:16px;height:1.5px;background:var(--ink-soft);}
   .menu-toggle:hover{border-color:var(--ink-soft);}
-  .nav-menu{position:absolute;top:calc(100% + 8px);left:0;background:var(--paper);
-    border:1px solid var(--line);border-radius:8px;box-shadow:0 10px 24px -12px rgba(20,15,5,.3);
-    display:flex;flex-direction:column;min-width:180px;overflow:hidden;z-index:10;}
+  .nav-menu{position:absolute;top:calc(100% + 8px);left:0;background:var(--surface);border:1px solid var(--line);
+    border-radius:8px;box-shadow:var(--shadow);display:flex;flex-direction:column;min-width:210px;overflow:hidden;z-index:30;}
   .nav-menu[hidden]{display:none;}
-  .nav-menu button{font-family:var(--font-body);font-size:13px;color:var(--ink-soft);
-    background:none;border:none;text-align:left;padding:11px 16px;cursor:pointer;
-    border-bottom:1px solid var(--line);}
+  .nav-menu button{font-size:13px;color:var(--ink-soft);background:none;border:none;text-align:left;
+    padding:12px 16px;cursor:pointer;border-bottom:1px solid var(--line);}
   .nav-menu button:last-child{border-bottom:none;}
   .nav-menu button:hover{background:var(--accent-soft);color:var(--ink);}
-  .site-eyebrow{font-size:11px;color:var(--ash);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;}
-  .site-title{font-family:var(--font-display);font-size:32px;font-weight:700;margin:0;
-    text-wrap:balance;letter-spacing:0.01em;}
-  .theme-toggle{font-family:var(--font-body);font-size:11px;letter-spacing:0.06em;color:var(--ash);
-    background:none;border:1px solid var(--line);border-radius:100px;padding:6px 14px;cursor:pointer;
-    transition:border-color .15s ease, color .15s ease;}
-  .theme-toggle:hover{border-color:var(--ink-soft);color:var(--ink);}
-  hr{border:none;border-top:1px solid var(--line-strong);margin:0 0 34px;}
+  .nav-menu .nav-sep{font-size:10.5px;color:var(--ash);padding:8px 16px 4px;letter-spacing:.08em;}
 
-  /* ---------- gate ---------- */
-  #gate{padding:60px 0 30px;text-align:center;
-    opacity:1;transform:translateY(0);transition:opacity .45s ease, transform .45s ease;}
+  .brand-eyebrow{font-size:11.5px;color:var(--ash);letter-spacing:.06em;}
+  .brand-title{font-family:var(--font-display);font-weight:400;font-size:40px;line-height:1.15;margin:2px 0 2px;
+    letter-spacing:.02em;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .okawari{font-family:var(--font-body);font-weight:900;font-size:13px;color:var(--accent-ink);background:var(--accent);
+    padding:3px 10px 4px;border-radius:3px;transform:rotate(-4deg);display:inline-block;letter-spacing:.04em;}
+  .brand-sub{font-size:12px;color:var(--ash);}
+  .theme-toggle{flex:none;font-size:12px;color:var(--ink-soft);background:var(--surface);border:1px solid var(--line);
+    border-radius:100px;padding:7px 14px;cursor:pointer;white-space:nowrap;}
+  .theme-toggle:hover{border-color:var(--ink-soft);color:var(--ink);}
+
+  .quicklinks{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0 0;}
+  .quicklinks a{font-size:12px;text-decoration:none;color:var(--ink-soft);border:1px solid var(--line);
+    border-radius:100px;padding:4px 12px;background:var(--surface);}
+  .quicklinks a:hover{color:var(--ink);border-color:var(--ink-soft);}
+  .head-rule{border:none;border-top:1px solid var(--line);margin:22px 0 30px;}
+
+  /* ---------- gate (ticket) ---------- */
+  #gate{padding:20px 0 30px;transition:opacity .45s ease, transform .45s ease;}
   #gate.leaving{opacity:0;transform:translateY(-14px);pointer-events:none;}
-  .gate-text{font-size:16px;line-height:2.15;max-width:480px;margin:0 auto 22px;}
-  .gate-text b{color:var(--accent);font-weight:700;}
-  .gate-note2{font-size:13px;color:var(--ash);max-width:440px;margin:0 auto 36px;line-height:2;}
-  .btn{
-    font-family:var(--font-body);font-size:14px;font-weight:700;color:var(--paper);
-    background:var(--ink);border:1px solid var(--ink);border-radius:2px;
-    padding:14px 38px;cursor:pointer;letter-spacing:0.04em;
-    transition:transform .2s ease, background .2s ease;}
-  .btn:hover{background:var(--accent);border-color:var(--accent);transform:translateY(-1px);}
-  .btn:active{transform:translateY(0);}
+  .ticket{display:flex;max-width:760px;margin:0 auto;background:var(--paper);color:var(--paper-ink);
+    border-radius:10px;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+  .ticket-main{flex:1;padding:30px 30px 26px;}
+  .ticket-kicker{font-family:var(--font-display);font-size:13px;letter-spacing:.08em;color:#c24c06;margin-bottom:10px;}
+  .ticket-main h2{font-family:var(--font-display);font-weight:400;font-size:26px;margin:0 0 12px;line-height:1.3;}
+  .gate-text{font-size:14.5px;line-height:2;margin:0 0 10px;}
+  .gate-text b{color:#c24c06;}
+  .gate-note2{font-size:12.5px;color:#6b645a;line-height:2;margin:0;}
+  .ticket-stub{flex:0 0 220px;border-left:2px dashed #cfc6b6;padding:26px 22px;display:flex;flex-direction:column;
+    justify-content:center;gap:10px;position:relative;}
+  .ticket-stub::before,.ticket-stub::after{content:"";position:absolute;left:-13px;width:24px;height:24px;border-radius:50%;background:var(--bg);}
+  .ticket-stub::before{top:-12px;} .ticket-stub::after{bottom:-12px;}
+  .stub-label{font-family:var(--font-display);font-size:12px;letter-spacing:.12em;color:#8b8377;text-align:center;}
+  .btn{font-size:14px;font-weight:700;color:var(--accent-ink);background:var(--accent);border:1px solid var(--accent);
+    border-radius:4px;padding:13px 18px;cursor:pointer;letter-spacing:.03em;transition:transform .15s ease, filter .15s ease;}
+  .btn:hover{filter:brightness(1.08);transform:translateY(-1px);}
+  .btn.ghost{background:transparent;color:var(--paper-ink);border-color:var(--paper-ink);}
+  .ticket .btn{color:#1c0f05;background:#ff8a3d;border-color:#ff8a3d;}
+  .ticket .btn.ghost{background:transparent;color:#171411;border-color:#171411;}
 
   /* ---------- content ---------- */
-  #content{display:none;opacity:0;transform:translateY(10px);
-    transition:opacity .5s ease, transform .5s ease;}
+  #content{display:none;opacity:0;transform:translateY(10px);transition:opacity .5s ease, transform .5s ease;}
   #content.visible{display:block;}
-  #content.fade-in{opacity:1;transform:translateY(0);}
+  #content.fade-in{opacity:1;transform:none;}
 
-  h2.section-title{font-family:var(--font-display);font-size:21px;font-weight:700;margin:0 0 4px;}
-  .section-sub{font-size:12.5px;color:var(--ash);margin:0 0 22px;}
+  .sec-kicker{font-family:var(--font-display);font-size:12px;letter-spacing:.14em;color:var(--accent);margin:0 0 2px;}
+  h2.section-title{font-family:var(--font-display);font-weight:400;font-size:28px;margin:0 0 4px;line-height:1.3;}
+  .section-sub{font-size:12.5px;color:var(--ash);margin:0 0 20px;}
 
-  /* view switch */
-  .viewswitch{display:inline-flex;border:1px solid var(--line-strong);border-radius:3px;
-    overflow:hidden;margin-bottom:26px;}
-  .viewswitch button{font-family:var(--font-body);font-size:12.5px;letter-spacing:0.03em;
-    background:transparent;color:var(--ink-soft);border:none;padding:9px 20px;cursor:pointer;
-    transition:background .15s ease, color .15s ease;}
-  .viewswitch button + button{border-left:1px solid var(--line-strong);}
-  .viewswitch button.active{background:var(--ink);color:var(--paper);}
-  .viewswitch button:hover:not(.active){background:var(--line);}
+  .viewswitch{display:inline-flex;border:1px solid var(--line);border-radius:100px;overflow:hidden;margin-bottom:22px;background:var(--surface);}
+  .viewswitch button{font-size:12.5px;background:transparent;color:var(--ink-soft);border:none;padding:9px 18px;cursor:pointer;}
+  .viewswitch button.active{background:var(--ink);color:var(--bg);}
+  .viewswitch button:hover:not(.active){color:var(--ink);}
 
-  .legend{font-size:12.5px;color:var(--ash);margin-bottom:26px;display:flex;flex-wrap:wrap;gap:18px;}
+  .legend{font-size:12.5px;color:var(--ash);margin-bottom:12px;display:flex;flex-wrap:wrap;gap:16px;}
   .legend .chip{display:inline-flex;align-items:center;gap:6px;}
-  .legend .dot{width:8px;height:8px;border-radius:50%;display:inline-block;}
-  .dot.fixed{background:var(--paper);border:1.5px solid var(--ink-soft);}
+  .dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none;}
+  .dot.fixed{background:transparent;border:1.5px solid var(--ink-soft);}
   .dot.sometimes{background:var(--ash);}
   .dot.rare{background:var(--accent);}
   .dot.unknown{background:transparent;border:1.5px dashed var(--ash);}
-
-  .summary-line{font-size:13px;color:var(--ash);margin-bottom:38px;font-variant-numeric:tabular-nums;}
+  .summary-line{font-size:13px;color:var(--ash);margin-bottom:28px;font-variant-numeric:tabular-nums;}
   .summary-line b{color:var(--ink);font-weight:700;}
+  .play-hint{font-size:12px;color:var(--ash);margin:-18px 0 26px;}
+  .play-hint b{color:var(--accent);font-weight:700;}
 
-  /* ---------- per-show board: floating 3D cards ---------- */
-  .board{display:flex;gap:26px;flex-wrap:wrap;perspective:1400px;}
+  /* ---------- setlist paper (show cards) ---------- */
+  .board{display:flex;gap:30px 22px;flex-wrap:wrap;padding-top:12px;}
   .board-item{
-    flex:1 1 210px;min-width:210px;background:var(--paper);border:1px solid var(--line);
-    border-radius:10px;padding:16px 16px 10px;position:relative;
-    transform-style:preserve-3d;will-change:transform;
-    transform:perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0) scale(1);
-    box-shadow:0 1px 2px rgba(20,15,5,.05), 0 10px 24px -16px rgba(20,15,5,.25);
-    transition:transform .5s cubic-bezier(.22,1,.36,1), box-shadow .5s cubic-bezier(.22,1,.36,1);
+    /* 紙の上だけ色を差し替え */
+    --ink:var(--paper-ink); --ink-soft:#4a443c; --ash:#867e72; --line:#e2d9ca; --line-strong:#2b2620;
+    --surface:#fffdf8; --surface2:#efe7da; --bg:#ebe3d5; --accent:#cf530a; --accent-ink:#fff; --accent-soft:#fde0c9; --rare:#c9372c;
+    color-scheme:light;
+    flex:1 1 310px;min-width:280px;max-width:100%;background:var(--paper);color:var(--paper-ink);
+    border-radius:2px;padding:26px 16px 10px;position:relative;box-shadow:var(--shadow);
   }
-  .board-item .tilt-layer{transition:transform .5s cubic-bezier(.22,1,.36,1);}
-  .show-date{font-family:var(--font-num);font-size:17px;font-weight:500;font-variant-numeric:tabular-nums;}
-  .show-city{font-size:11px;color:var(--ash);letter-spacing:0.09em;margin-bottom:12px;}
-  .update-badge{display:inline-block;margin-left:6px;padding:1px 7px;font-size:10px;letter-spacing:0.05em;
-    color:var(--accent);border:1px solid var(--accent);border-radius:999px;vertical-align:middle;}
-  .draft-note{font-size:11.5px;color:var(--ash);line-height:1.6;margin:-4px 0 12px;padding:8px 10px;
-    border:1px dashed var(--line);border-radius:6px;}
+  .board-item:nth-child(3n+1){rotate:-.35deg;}
+  .board-item:nth-child(3n+2){rotate:.3deg;}
+  .board-item::before{content:"";position:absolute;top:-11px;left:50%;width:96px;height:24px;
+    transform:translateX(-50%) rotate(-2.5deg);background:var(--tape);
+    box-shadow:0 1px 2px rgba(0,0,0,.12);}
+  .board-item.is-placeholder{align-self:flex-start;background:repeating-linear-gradient(0deg, var(--paper) 0 27px, #e9e1d3 27px 28px);}
+  .show-date{font-family:var(--font-display);font-size:24px;line-height:1.2;font-variant-numeric:tabular-nums;}
+  .show-city{font-size:12px;color:var(--ash);margin-bottom:12px;}
+  .update-badge{display:inline-block;margin-left:6px;padding:0 8px;font-size:10.5px;font-weight:700;
+    color:#fff;background:var(--accent);border-radius:3px;vertical-align:1px;}
+  .draft-note{font-family:var(--font-hand);font-size:14px;color:#4a443c;line-height:1.9;margin:4px 0 14px;}
+  .draft-note a{color:var(--accent);}
 
   table{width:100%;border-collapse:collapse;font-size:12.5px;}
   th,td{text-align:left;padding:6px 4px;border-bottom:1px solid var(--line);}
-  th{font-weight:400;color:var(--ash);font-size:10px;letter-spacing:0.04em;
-    border-bottom:1px solid var(--line-strong);}
-  td.n{color:var(--ash);width:24px;font-family:var(--font-num);font-size:11px;font-variant-numeric:tabular-nums;}
-  td.freq{white-space:nowrap;}
+  th{font-weight:400;color:var(--ash);font-size:10px;letter-spacing:.04em;border-bottom:1.5px solid var(--line-strong);}
+  td.n{color:var(--ash);width:30px;font-family:var(--font-display);font-size:11px;font-variant-numeric:tabular-nums;}
+  tr.en td.n{color:var(--accent);}
+  td.title{font-family:var(--font-hand);font-size:14.5px;line-height:1.45;}
+  .song-btn{font:inherit;color:inherit;background:none;border:none;padding:0;text-align:left;cursor:pointer;}
+  .song-btn:hover{color:var(--accent);text-decoration:underline;text-underline-offset:3px;}
+  .song-btn .has-video{display:inline-block;font-family:var(--font-body);font-size:9px;font-weight:700;color:#fff;background:var(--live);
+    border-radius:2px;padding:0 4px;margin-left:5px;vertical-align:2px;letter-spacing:.04em;}
+  td.freq{white-space:nowrap;font-size:11.5px;}
   .freq .dot{margin-right:5px;}
   .freq.fixed{color:var(--ink-soft);}
   .freq.sometimes{color:var(--ash);}
-  .freq.rare{color:var(--accent);font-weight:600;}
+  .freq.rare{color:var(--accent);font-weight:700;}
 
-  .react-btn{font-family:var(--font-body);font-size:10px;letter-spacing:0.02em;color:var(--ash);
-    background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:2px 8px;
-    cursor:pointer;white-space:nowrap;
-    transition:border-color .15s ease, color .15s ease, background .15s ease;}
+  .react-btn{font-size:10px;color:var(--ash);background:transparent;border:1px solid var(--line);border-radius:999px;
+    padding:2px 8px;cursor:pointer;white-space:nowrap;}
   .react-btn:hover{border-color:var(--ink-soft);color:var(--ink);}
   .react-btn.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);}
   .react-count{font-variant-numeric:tabular-nums;}
-  td.react-cell{white-space:nowrap;}
+  td.react-cell{white-space:nowrap;text-align:right;}
 
-  @media (hover:hover) and (pointer:fine){
-    .board-item:hover{box-shadow:0 2px 4px rgba(20,15,5,.06), 0 30px 40px -20px rgba(20,15,5,.35);}
-  }
-
-  /* ---------- matrix (comparison) view: responsive song list, no horizontal scroll ---------- */
-  #matrixView{display:none;}
-  #matrixView.active{display:block;}
+  /* ---------- matrix ---------- */
+  #matrixView{display:none;} #matrixView.active{display:block;}
   #boardView.hidden{display:none;}
-
   .song-list{display:flex;flex-direction:column;gap:10px;}
-  .song-row{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px 14px;}
-  .song-row-head{display:flex;align-items:center;gap:7px;margin-bottom:9px;font-size:13.5px;font-weight:600;}
-  .song-row-head .dot{flex:none;}
+  .song-row{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px;}
+  .song-row-head{display:flex;align-items:center;gap:8px;margin-bottom:9px;font-size:14px;font-weight:700;}
   .show-chips{display:flex;flex-wrap:wrap;gap:6px;}
   .show-chip{display:inline-flex;align-items:center;gap:7px;font-size:11px;border:1px solid var(--line);
     border-radius:5px;padding:3px 9px;color:var(--ash);white-space:nowrap;background:var(--bg);}
-  .show-chip .pos{font-family:var(--font-num);color:var(--ink);font-weight:700;
-    font-variant-numeric:tabular-nums;margin-right:5px;}
+  .show-chip .pos{font-family:var(--font-display);color:var(--ink);font-variant-numeric:tabular-nums;margin-right:4px;}
   .show-chip.encore{border-color:var(--accent);}
   .show-chip.encore .pos{color:var(--accent);}
-  .show-chip.notplayed{color:var(--ash);}
+  .show-chip.notplayed{opacity:.6;}
   .show-chip.notplayed .pos{display:none;}
-  .show-chip.notplayed{opacity:.7;}
-  .show-chip.notplayed .react-btn{opacity:1;}
 
-  /* ---------- full table view: all shows side by side (needs horizontal scroll on narrow screens) ---------- */
-  #tableView{display:none;}
-  #tableView.active{display:block;}
-  .matrix-fit{border:1px solid var(--line);border-radius:4px;background:var(--paper);overflow:hidden;}
+  #tableView{display:none;} #tableView.active{display:block;}
+  .matrix-fit{border:1px solid var(--line);border-radius:6px;background:var(--surface);overflow:hidden;}
   table.matrix{border-collapse:collapse;font-size:12px;transform-origin:top left;}
   table.matrix th, table.matrix td{padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap;}
-  table.matrix thead th{position:sticky;top:0;background:var(--paper);z-index:2;
-    font-weight:500;font-size:11px;color:var(--ink-soft);border-bottom:1px solid var(--line-strong);
-    text-align:center;}
-  table.matrix thead th.songcol{text-align:left;position:sticky;left:0;z-index:3;}
-  table.matrix tbody th{position:sticky;left:0;background:var(--paper);text-align:left;
-    font-weight:400;white-space:normal;max-width:180px;border-right:1px solid var(--line);z-index:1;}
+  table.matrix thead th{background:var(--surface);font-weight:500;font-size:11px;color:var(--ink-soft);
+    border-bottom:1px solid var(--line-strong);text-align:center;}
+  table.matrix thead th.songcol{text-align:left;}
+  table.matrix tbody th{background:var(--surface);text-align:left;font-weight:400;white-space:normal;max-width:180px;border-right:1px solid var(--line);}
   table.matrix tbody th .dot{margin-right:6px;}
-  table.matrix td{text-align:center;font-family:var(--font-num);font-variant-numeric:tabular-nums;
-    color:var(--ash);}
-  table.matrix td.played{color:var(--ink);font-weight:600;}
-  table.matrix td.encore{color:var(--accent);font-weight:700;}
+  table.matrix td{text-align:center;font-variant-numeric:tabular-nums;color:var(--ash);}
+  table.matrix td.played{color:var(--ink);font-weight:700;}
+  table.matrix td.encore{color:var(--accent);}
   table.matrix tbody tr:hover td, table.matrix tbody tr:hover th{background:var(--accent-soft);}
   table.matrix tbody tr.row-rare th{color:var(--accent);}
 
-  .footnote{margin-top:54px;padding-top:26px;border-top:1px solid var(--line);
-    font-size:12px;color:var(--ash);line-height:2;}
+  .footnote{margin-top:54px;padding-top:24px;border-top:1px solid var(--line);font-size:12px;color:var(--ash);line-height:2;}
   .footnote .handle{color:var(--ink);}
+  .maker-credit{margin:28px auto 8px;max-width:420px;display:flex;align-items:center;gap:14px;padding:14px 18px;border:1px solid var(--line);border-radius:18px;background:var(--surface);color:var(--ink);text-decoration:none;transition:transform .2s,border-color .2s;}
+  .maker-credit:hover{transform:translateY(-2px);border-color:var(--accent);}
+  .maker-credit img{width:56px;height:56px;border-radius:50%;flex:none;background:#efe9df;}
+  .maker-credit small{display:block;font-size:11px;color:var(--ash);letter-spacing:.08em;}
+  .maker-credit b{display:block;font-size:15px;margin:2px 0;}
+  .maker-credit span{display:block;font-size:12px;color:var(--ink-soft);}
+  .maker-credit em{font-style:normal;color:var(--accent);}
 
   /* ---------- comments ---------- */
   .comments{margin-top:14px;border-top:1px solid var(--line);padding-top:10px;}
-  .comments-toggle{cursor:pointer;font-size:11.5px;color:var(--ash);letter-spacing:0.03em;
-    list-style:none;display:flex;align-items:center;gap:6px;}
+  .comments-toggle{cursor:pointer;font-size:12px;color:var(--ash);list-style:none;display:flex;align-items:center;gap:6px;}
   .comments-toggle::-webkit-details-marker{display:none;}
-  .comments-toggle::before{content:"talk";font-size:9.5px;border:1px solid var(--line);border-radius:3px;
-    padding:1px 5px;color:var(--ink-soft);}
+  .comments-toggle::before{content:"";width:6px;height:6px;border-right:1.5px solid var(--ash);border-bottom:1.5px solid var(--ash);
+    transform:rotate(-45deg);transition:transform .2s ease;}
+  .comments[open] .comments-toggle::before{transform:rotate(45deg);}
   .comments-toggle .count{color:var(--ink-soft);}
   .comments-body{margin-top:10px;}
   .comment-list{display:flex;flex-direction:column;gap:10px;margin-bottom:12px;}
-  .comment{display:flex;gap:8px;}
+  .comment{display:flex;gap:9px;}
   .comment.reply{margin-left:26px;}
-  .comment .avatar{width:26px;height:26px;border-radius:50%;background:var(--line);flex:none;
-    object-fit:cover;border:1px solid var(--line);}
+  .comment .avatar{width:28px;height:28px;border-radius:50%;background:var(--line);flex:none;object-fit:cover;border:1px solid var(--line);}
   .comment .body-col{flex:1;min-width:0;}
   .comment .meta{font-size:11px;color:var(--ash);display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;}
-  .comment .meta .name{color:var(--ink);font-weight:600;}
-  .comment .text{font-size:12.5px;color:var(--ink-soft);line-height:1.7;margin:3px 0 4px;
-    overflow-wrap:anywhere;}
-  .comment .actions{display:flex;gap:12px;align-items:center;}
-  .like-btn{border:none;background:none;cursor:pointer;font-size:12px;color:var(--ash);
-    display:inline-flex;align-items:center;gap:4px;padding:0;}
+  .comment .meta .name{color:var(--ink);font-weight:700;}
+  .comment .text{font-size:13px;color:var(--ink-soft);line-height:1.75;margin:3px 0 4px;overflow-wrap:anywhere;white-space:pre-wrap;}
+  .comment .actions{display:flex;gap:14px;align-items:center;}
+  .like-btn{border:none;background:none;cursor:pointer;font-size:12px;color:var(--ash);display:inline-flex;align-items:center;gap:4px;padding:0;}
   .like-btn .heart{font-size:13px;}
   .like-btn.liked{color:var(--accent);}
-  .like-btn.liked .heart{filter:none;}
   .like-btn:not(.liked) .heart{filter:grayscale(1) opacity(.6);}
   .reply-btn{border:none;background:none;cursor:pointer;font-size:11.5px;color:var(--ash);padding:0;}
   .reply-btn:hover, .like-btn:hover{color:var(--ink);}
   .like-names{font-size:10.5px;color:var(--ash);margin-top:2px;}
 
-  .comment-form{display:flex;flex-direction:column;gap:6px;}
+  .comment-form{display:flex;flex-direction:column;gap:7px;}
   .comment-form.reply-form{margin:8px 0 0 26px;}
   .comment-form .row{display:flex;gap:8px;align-items:center;}
-  .comment-form input[type="text"], .comment-form textarea{
-    font-family:var(--font-body);font-size:12.5px;background:var(--bg);color:var(--ink);
-    border:1px solid var(--line);border-radius:4px;padding:8px 10px;width:100%;}
+  .comment-form input[type="text"], .comment-form textarea, .maker input{
+    font-family:var(--font-body);font-size:13px;background:var(--bg);color:var(--ink);
+    border:1px solid var(--line);border-radius:6px;padding:9px 11px;width:100%;}
   .comment-form input[type="text"]{flex:1;}
-  .comment-form textarea{resize:vertical;min-height:52px;}
-  .avatar-picker{position:relative;flex:none;width:38px;height:38px;}
-  .avatar-picker .avatar-preview{width:38px;height:38px;border-radius:50%;object-fit:cover;
-    border:1.5px dashed var(--line-strong);background:var(--bg);display:block;}
-  .avatar-picker.has-image .avatar-preview{border-style:solid;border-color:var(--line);}
-  .avatar-picker input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-  .avatar-picker .uploading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-    font-size:9px;color:var(--ash);background:rgba(0,0,0,.05);border-radius:50%;}
-  .comment-form button{align-self:flex-end;font-family:var(--font-body);font-size:12px;font-weight:700;
-    color:var(--paper);background:var(--ink);border:1px solid var(--ink);border-radius:4px;
-    padding:7px 18px;cursor:pointer;}
-  .comment-form button:hover{background:var(--accent);border-color:var(--accent);}
-  .comment-empty{font-size:12px;color:var(--ash);}
+  .comment-form textarea{resize:vertical;min-height:56px;line-height:1.7;}
+  .comment-form button[type="submit"]{align-self:flex-end;font-size:13px;font-weight:700;color:var(--accent-ink);
+    background:var(--accent);border:1px solid var(--accent);border-radius:100px;padding:8px 22px;cursor:pointer;}
+  .comment-form button[type="submit"]:hover{filter:brightness(1.08);}
+  .comment-form button[type="submit"]:disabled{opacity:.5;cursor:default;}
+  .comment-empty{font-size:12.5px;color:var(--ash);}
+  .form-msg{font-size:12px;color:var(--rare);margin:0;}
+  .form-msg:empty{display:none;}
 
-  .general-talk{background:var(--paper);border:1px solid var(--line);border-radius:10px;
-    padding:16px 18px;margin-bottom:34px;
-    box-shadow:0 1px 2px rgba(20,15,5,.05), 0 10px 24px -16px rgba(20,15,5,.25);}
-  .general-talk-summary{cursor:pointer;font-family:var(--font-display);font-size:16px;font-weight:700;
-    list-style:none;display:flex;align-items:center;gap:8px;}
+  .general-talk{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:34px;}
+  .general-talk-summary{cursor:pointer;font-family:var(--font-display);font-size:17px;list-style:none;display:flex;align-items:center;gap:8px;}
   .general-talk-summary::-webkit-details-marker{display:none;}
-  .general-talk-summary .count{font-size:12px;color:var(--ash);font-weight:400;}
-  .general-talk-summary:after{content:"";width:7px;height:7px;border-right:1.5px solid var(--ash);
-    border-bottom:1.5px solid var(--ash);transform:rotate(-45deg);margin-left:auto;transition:transform .2s ease;}
+  .general-talk-summary .count{font-family:var(--font-body);font-size:12px;color:var(--ash);}
+  .general-talk-summary:after{content:"";width:7px;height:7px;border-right:1.5px solid var(--ash);border-bottom:1.5px solid var(--ash);
+    transform:rotate(-45deg);margin-left:auto;transition:transform .2s ease;}
   .general-talk[open] .general-talk-summary:after{transform:rotate(45deg);}
   .general-talk .section-sub{margin:10px 0 16px;}
-  .general-talk .comments{border-top:none;padding-top:0;margin-top:0;}
 
-  @media (prefers-reduced-motion: reduce){
-    #gate,#content,.btn,.theme-toggle,.viewswitch button{transition:none !important;}
+  /* ---------- 横浜 前夜トーク ---------- */
+  .eve{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:26px 24px 22px;margin-bottom:56px;
+    scroll-margin-top:12px;position:relative;overflow:hidden;}
+  .eve::before{content:"";position:absolute;inset:0 0 auto 0;height:220px;pointer-events:none;
+    background:radial-gradient(520px 200px at 20% -60px, var(--spot), transparent 70%);}
+  .eve > *{position:relative;}
+  .eve-head{display:flex;justify-content:space-between;gap:20px 28px;flex-wrap:wrap;align-items:flex-start;margin-bottom:20px;}
+  .eve-intro{flex:1 1 360px;}
+  .eve-kicker{font-size:12px;color:var(--ash);margin:0 0 4px;}
+  .eve-title{font-family:var(--font-display);font-weight:400;font-size:32px;line-height:1.25;margin:0 0 8px;
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  .live-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-body);font-size:11px;font-weight:900;
+    letter-spacing:.1em;color:#fff;background:var(--live);border-radius:3px;padding:2px 8px 2px 7px;}
+  .live-badge i{width:7px;height:7px;border-radius:50%;background:#fff;animation:pulse 1.6s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.25;}}
+  .eve-lead{font-size:13.5px;color:var(--ink-soft);margin:0;line-height:1.95;max-width:560px;}
+  .eve-count{font-size:12px;color:var(--ash);margin-top:6px;}
+
+  .stub{flex:0 1 290px;background:var(--paper);color:var(--paper-ink);border-radius:8px;padding:14px 18px 14px 22px;
+    position:relative;box-shadow:var(--shadow);border-left:2px dashed #cfc6b6;}
+  .stub::before,.stub::after{content:"";position:absolute;left:-12px;width:22px;height:22px;border-radius:50%;background:var(--surface);}
+  .stub::before{top:-11px;} .stub::after{bottom:-11px;}
+  .stub-top{display:flex;justify-content:space-between;align-items:center;font-size:10.5px;letter-spacing:.12em;color:#8b8377;}
+  .stub-badge{font-size:11px;font-weight:900;letter-spacing:.06em;color:#fff;background:#d9560a;border-radius:3px;padding:1px 8px;}
+  .stub-date{font-family:var(--font-display);font-size:24px;line-height:1.25;margin-top:4px;}
+  .stub-meta{font-size:11.5px;color:#5b554c;}
+  .stub-time{font-family:var(--font-display);font-size:30px;line-height:1.2;font-variant-numeric:tabular-nums;margin-top:6px;}
+  .stub-time small{font-family:var(--font-body);font-size:13px;font-weight:700;margin:0 2px;}
+  .stub-time.word{font-size:20px;}
+
+  .eve-tabs{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap;}
+  .eve-tabs button{font-size:13px;border:1px solid var(--line);background:var(--bg);color:var(--ink-soft);
+    border-radius:100px;padding:7px 16px;cursor:pointer;}
+  .eve-tabs button:hover{border-color:var(--ink-soft);color:var(--ink);}
+  .eve-tabs button.active{background:var(--ink);color:var(--bg);border-color:var(--ink);}
+  .eve-tabs button .n{font-size:11px;opacity:.65;margin-left:6px;}
+
+  /* セトリ予想メーカー */
+  .maker{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:18px 18px 16px;margin-bottom:22px;}
+  .maker-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px;}
+  .maker-head h3{font-family:var(--font-display);font-weight:400;font-size:20px;margin:0;}
+  .maker-head p{font-size:12.5px;color:var(--ash);margin:2px 0 0;}
+  .maker.collapsed .maker-body{display:none;}
+  .maker-body{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:18px;align-items:start;}
+  .pick-tabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;}
+  .pick-tabs button{font-size:12.5px;border:1px solid var(--line);background:var(--bg);color:var(--ink-soft);border-radius:100px;padding:5px 14px;cursor:pointer;}
+  .pick-tabs button.active{background:var(--ink);color:var(--bg);border-color:var(--ink);}
+  .pick-tabs small{opacity:.65;margin-left:4px;}
+  .maker input[type="search"]{margin-bottom:10px;}
+  .maker-songs{display:flex;flex-wrap:wrap;gap:6px;max-height:300px;overflow:auto;padding:2px 2px 4px;}
+  .maker-songs .empty{font-size:12px;color:var(--ash);}
+  .chip{font-family:var(--font-body);font-size:12.5px;border:1px solid var(--line);background:var(--bg);color:var(--ink-soft);
+    border-radius:100px;padding:4px 12px;cursor:pointer;line-height:1.6;}
+  .chip:hover{border-color:var(--ink-soft);color:var(--ink);}
+  .chip small{color:var(--ash);margin-left:5px;font-size:10px;}
+  .chip.on{border-color:var(--accent);color:var(--accent);background:var(--accent-soft);}
+  .chip .pos{font-family:var(--font-display);font-size:10px;margin-right:4px;}
+  .maker-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px;font-size:12px;}
+  .maker-row input{flex:1;min-width:150px;width:auto;}
+
+  .maker-paper{
+    --ink:var(--paper-ink); --ink-soft:#4a443c; --ash:#867e72; --line:#e2d9ca; --accent:#cf530a; --accent-soft:#fde0c9; --bg:#efe7da;
+    background:var(--paper);color:var(--paper-ink);border-radius:2px;padding:22px 16px 14px;position:relative;box-shadow:var(--shadow);}
+  .maker-paper::before{content:"";position:absolute;top:-10px;left:50%;width:90px;height:22px;transform:translateX(-50%) rotate(2deg);background:var(--tape);}
+  .paper-head{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--font-display);font-size:15px;
+    border-bottom:1.5px solid #2b2620;padding-bottom:6px;margin-bottom:8px;}
+  .paper-head span:last-child{font-family:var(--font-body);font-size:11.5px;color:#867e72;}
+  .add-target{display:flex;align-items:center;gap:6px;font-size:11.5px;color:#867e72;margin-bottom:6px;}
+  .add-target button{font-size:12px;border:1px solid #d8cfbf;background:transparent;color:#4a443c;border-radius:100px;padding:3px 12px;cursor:pointer;}
+  .add-target button.on{background:#171411;color:#f3ede2;border-color:#171411;}
+  .paper-list{list-style:none;margin:0;padding:0;}
+  .paper-list li{display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid #e6ddcf;}
+  .paper-list .no{width:34px;flex:none;font-family:var(--font-display);font-size:11px;color:#867e72;}
+  .paper-list.en .no{color:#cf530a;}
+  .paper-list .t{flex:1;min-width:0;font-family:var(--font-hand);font-size:15px;line-height:1.4;}
+  .paper-list .ops{display:flex;gap:3px;flex:none;}
+  .paper-list .ops button{border:1px solid #ddd3c3;background:#faf6ee;color:#5b554c;border-radius:4px;font-size:11px;
+    min-width:24px;height:24px;padding:0 5px;cursor:pointer;}
+  .paper-list .ops button:hover{border-color:#867e72;color:#171411;}
+  .paper-list li.empty{font-family:var(--font-hand);font-size:13.5px;color:#a49b8d;border-bottom:1px dashed #e0d7c8;}
+  .paper-en-label{font-family:var(--font-display);font-size:12px;letter-spacing:.12em;color:#cf530a;margin:12px 0 2px;}
+  .paper-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;align-items:center;}
+  .paper-actions .spacer{flex:1;}
+  .btn-sm{font-size:12.5px;font-weight:700;border:1px solid #171411;background:#171411;color:#f3ede2;border-radius:100px;padding:7px 16px;cursor:pointer;}
+  .btn-sm:hover{background:#cf530a;border-color:#cf530a;color:#fff;}
+  .btn-sm.ghost{background:transparent;color:#171411;font-weight:500;border-color:#cfc6b6;}
+  .btn-sm.ghost:hover{border-color:#171411;background:transparent;color:#171411;}
+  .linklike{font-size:12.5px;border:none;background:none;color:var(--accent);cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:3px;white-space:nowrap;}
+
+  .eve-grid{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:12px 26px;grid-template-areas:"composer side" "timeline side";align-items:start;}
+  .eve-composer{grid-area:composer;} .eve-timeline{grid-area:timeline;} .eve-side{grid-area:side;display:flex;flex-direction:column;gap:14px;}
+  .composer{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--bg);gap:9px;}
+  .composer textarea{min-height:92px;background:var(--surface);font-size:14px;}
+  .composer input[type="text"]{background:var(--surface);}
+  .chip-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
+  .chip-label{font-size:11px;color:var(--ash);min-width:3em;}
+  .composer-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;}
+
+  .filter-bar{font-size:12.5px;color:var(--ink-soft);margin:16px 0 4px;display:flex;gap:10px;align-items:center;}
+  .filter-bar:empty{display:none;}
+  .timeline{gap:0;}
+  .timeline > .comment{padding:14px 2px;border-bottom:1px solid var(--line);}
+  .timeline > .comment > .avatar{width:38px;height:38px;}
+  .timeline > .comment .text{font-size:14px;color:var(--ink);}
+  .timeline .comment-list{margin:8px 0 0;}
+  button.tag{border:none;background:none;padding:0;font:inherit;color:var(--accent);cursor:pointer;}
+  button.tag:hover{text-decoration:underline;}
+  .hit{font-size:12px;color:var(--accent);font-weight:700;margin:2px 0 4px;}
+
+  .side-card{border:1px solid var(--line);border-radius:12px;padding:14px 15px;background:var(--bg);}
+  .side-card h4{margin:0 0 2px;font-family:var(--font-display);font-weight:400;font-size:15px;}
+  .side-card .sub{font-size:11.5px;color:var(--ash);margin:0 0 10px;line-height:1.7;}
+  .rank{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;}
+  .rank li{font-size:12.5px;}
+  .rank .row1{display:flex;justify-content:space-between;gap:8px;}
+  .rank .row1 span:last-child{color:var(--ash);font-variant-numeric:tabular-nums;flex:none;}
+  .rank .bar{height:4px;background:var(--line);border-radius:2px;margin-top:3px;overflow:hidden;}
+  .rank .bar i{display:block;height:100%;background:var(--accent);}
+  .rank .played{color:var(--accent);font-weight:700;}
+  .rank-extra{font-size:12px;color:var(--ink-soft);margin-top:10px;border-top:1px solid var(--line);padding-top:8px;line-height:1.9;}
+
+  /* ---------- links ---------- */
+  .links{margin-top:64px;padding-top:30px;border-top:1px solid var(--line);scroll-margin-top:12px;}
+  .links-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:14px;}
+  .link-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 16px 14px;}
+  .lc-role{font-size:10.5px;letter-spacing:.1em;color:var(--ash);}
+  .lc-name{font-family:var(--font-display);font-size:20px;line-height:1.3;margin:2px 0 10px;}
+  .lc-links{display:flex;flex-wrap:wrap;gap:6px;}
+  .lc-links a{font-size:12.5px;text-decoration:none;color:var(--ink);border:1px solid var(--line);border-radius:100px;padding:4px 12px;background:var(--bg);}
+  .lc-links a:hover{border-color:var(--accent);color:var(--accent);}
+  .links-note{font-size:11.5px;color:var(--ash);margin-top:12px;}
+
+  /* ---------- player ---------- */
+  .player{position:fixed;right:16px;bottom:16px;width:400px;max-width:calc(100vw - 16px);z-index:50;
+    background:#111;color:#f2ede4;border:1px solid #2d2924;border-radius:12px;box-shadow:0 20px 50px -20px rgba(0,0,0,.9);overflow:hidden;}
+  .player[hidden]{display:none;}
+  .player-head{display:flex;align-items:center;gap:10px;padding:10px 12px;}
+  .player-eq{display:flex;align-items:flex-end;gap:2px;height:14px;flex:none;}
+  .player-eq i{width:3px;background:#ff8a3d;animation:eq 1s ease-in-out infinite;}
+  .player-eq i:nth-child(1){height:60%;} .player-eq i:nth-child(2){height:100%;animation-delay:.2s;} .player-eq i:nth-child(3){height:40%;animation-delay:.4s;}
+  @keyframes eq{0%,100%{transform:scaleY(.4);}50%{transform:scaleY(1);}}
+  .player-eq i{transform-origin:bottom;}
+  .player-title{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.35;}
+  .player-title b{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .player-title small{font-size:11px;color:#8b8377;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .player-close{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid #2d2924;background:transparent;color:#c2baad;cursor:pointer;font-size:15px;}
+  .player-close:hover{color:#fff;border-color:#8b8377;}
+  .player-video{position:relative;width:100%;aspect-ratio:16/9;background:#000;}
+  .player-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+  .player-links{display:flex;flex-wrap:wrap;gap:6px;padding:10px 12px 12px;}
+  .player-links a{font-size:12px;text-decoration:none;color:#f2ede4;border:1px solid #3a352f;border-radius:100px;padding:5px 12px;}
+  .player-links a:hover{border-color:#ff8a3d;color:#ff8a3d;}
+  .player-links a.primary{background:#ff8a3d;border-color:#ff8a3d;color:#1c0f05;font-weight:700;}
+  .player-note{font-size:12px;color:#a59d90;margin:0;padding:0 12px;line-height:1.8;}
+
+  @media (max-width:820px){
+    .eve-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"composer" "side" "timeline";}
+    .maker-body{grid-template-columns:minmax(0,1fr);}
   }
+  @media (max-width:600px){
+    .wrap{padding:22px 14px 140px;}
+    .brand-title{font-size:30px;}
+    .ticket{flex-direction:column;}
+    .ticket-main{padding:24px 20px 18px;}
+    .ticket-stub{flex:none;border-left:none;border-top:2px dashed #cfc6b6;padding:20px;}
+    .ticket-stub::before,.ticket-stub::after{top:-13px;left:auto;bottom:auto;}
+    .ticket-stub::before{left:-12px;} .ticket-stub::after{right:-12px;}
+    .eve{padding:20px 14px 16px;border-radius:12px;}
+    .eve-title{font-size:26px;}
+    .stub{flex:1 1 100%;}
+    .maker{padding:14px 12px;}
+    .player{right:8px;left:8px;bottom:8px;width:auto;}
+    .board-item{rotate:0deg !important;}
+  }
+  /* ---------- v3: 動き ---------- */
+  .spot{height:100vh;overflow:hidden;}
+  .beam{position:absolute;top:-60px;width:240px;height:760px;transform-origin:50% 0;pointer-events:none;
+    background:linear-gradient(to bottom, rgba(255,205,150,.17), rgba(255,205,150,0) 78%);
+    clip-path:polygon(46% 0,54% 0,100% 100%,0 100%);filter:blur(5px);animation:sway 10s ease-in-out infinite;}
+  .beam.b1{left:6%;--a:-16deg;}
+  .beam.b2{left:44%;--a:7deg;animation-duration:12.5s;animation-delay:-3s;background:linear-gradient(to bottom, rgba(255,138,61,.14), rgba(255,138,61,0) 75%);}
+  .beam.b3{left:80%;--a:18deg;animation-duration:14s;animation-delay:-6s;}
+  :root[data-theme="light"] .beam{opacity:.45;}
+  @keyframes sway{0%,100%{transform:rotate(var(--a));}50%{transform:rotate(calc(var(--a) * -1));}}
+  .brand-title{animation:flicker 1.8s ease-out 1 both;}
+  @keyframes flicker{0%{opacity:0;}8%{opacity:.9;}11%{opacity:.15;}18%{opacity:1;}22%{opacity:.45;}28%,100%{opacity:1;}}
+  .okawari{animation:stamp .5s cubic-bezier(.2,1.6,.4,1) .9s both;}
+  @keyframes stamp{0%{transform:rotate(-4deg) scale(2.2);opacity:0;}100%{transform:rotate(-4deg) scale(1);opacity:1;}}
+  .reveal{opacity:0;translate:0 22px;transition:opacity .7s ease, translate .7s cubic-bezier(.2,.7,.2,1);}
+  .reveal.in{opacity:1;translate:0 0;}
+  .ticket{transition:transform .3s ease;}
+  .ticket:hover{transform:translateY(-2px);}
+  .ticket .ticket-stub{transition:transform .55s cubic-bezier(.3,.7,.3,1), opacity .55s ease;}
+  .ticket.torn .ticket-stub{transform:translate(36px,18px) rotate(10deg);opacity:0;}
+  .eve::before{background-size:200% 100%;animation:glow 9s ease-in-out infinite alternate;}
+  @keyframes glow{from{background-position:0% 0;}to{background-position:100% 0;}}
+  .board-item{transition:opacity .7s ease, translate .5s cubic-bezier(.2,.7,.2,1), box-shadow .3s ease;}
+  .board-item.in:hover{translate:0 -5px;}
+  .link-card{transition:opacity .7s ease, translate .5s cubic-bezier(.2,.7,.2,1), border-color .2s ease;}
+  .link-card.in:hover{translate:0 -3px;border-color:var(--accent);}
+  .stub-time{animation:none;}
+  .player{transform:translateY(16px);opacity:0;transition:transform .35s cubic-bezier(.2,.8,.2,1), opacity .35s ease;}
+  .player.show{transform:none;opacity:1;}
 
-  @media (max-width:560px){
-    .site-title{font-size:26px;}
+  /* 曲名タップ */
+  .song-btn .play-ico{display:inline-block;font-family:var(--font-body);font-size:8px;color:var(--accent);margin-left:6px;
+    vertical-align:2px;opacity:0;transform:translateX(-3px);transition:opacity .2s ease, transform .2s ease;}
+  .song-btn:hover .play-ico, .song-btn:focus-visible .play-ico{opacity:1;transform:none;}
+  @media (hover:none){ .song-btn .play-ico{opacity:.45;transform:none;} }
+
+  /* プレイヤー */
+  .player-tabs{display:flex;gap:6px;padding:0 12px 10px;}
+  .player-tabs button{font-size:12px;border:1px solid #3a352f;background:transparent;color:#c2baad;border-radius:100px;padding:4px 12px;cursor:pointer;}
+  .player-tabs button.on{background:#ff8a3d;border-color:#ff8a3d;color:#1c0f05;font-weight:700;}
+  .player-spotify{display:block;width:calc(100% - 24px);margin:8px 12px 0;border:0;border-radius:12px;}
+  .player-empty{padding:4px 12px 2px;}
+  .big-play{display:flex;align-items:center;gap:12px;text-decoration:none;color:#1c0f05;background:#ff8a3d;border-radius:10px;
+    padding:14px 16px;font-weight:700;font-size:14px;}
+  .big-play:hover{filter:brightness(1.08);}
+  .big-play-ico{width:34px;height:34px;border-radius:50%;background:#1c0f05;color:#ff8a3d;display:flex;align-items:center;justify-content:center;font-size:12px;flex:none;}
+  .player-sub{font-size:11px;color:#8b8377;margin:0;padding:0 12px 12px;line-height:1.7;}
+  .player-links{padding-bottom:6px;}
+
+  /* セトリ紙の並べ替え */
+  .paper-hint{font-size:11.5px;color:#867e72;margin:0 0 6px;line-height:1.6;min-height:1.6em;}
+  .paper-hint.on{color:#cf530a;}
+  .paper-list li.item{cursor:pointer;position:relative;border-radius:3px;transition:background .15s ease;}
+  .paper-list li.item:hover{background:rgba(207,83,10,.05);}
+  .paper-list li.sel{background:#fde0c9;box-shadow:inset 3px 0 0 #cf530a;}
+  .paper-list li.just{animation:slidein .45s cubic-bezier(.2,.8,.2,1);}
+  @keyframes slidein{from{transform:translateX(-14px);background:#fde0c9;opacity:.2;}to{transform:none;opacity:1;}}
+  .paper-list li.dragging{opacity:.9;background:#fffaf2;box-shadow:0 10px 22px -10px rgba(0,0,0,.5);z-index:5;pointer-events:none;transition:none;}
+  .paper-list li.drop-before{box-shadow:inset 0 3px 0 #cf530a;}
+  .paper-list li.drop-after{box-shadow:inset 0 -3px 0 #cf530a;}
+  .drop-into{outline:2px dashed #cf530a;outline-offset:2px;}
+  .grip{flex:none;width:18px;height:28px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3px;
+    cursor:grab;touch-action:none;border-radius:3px;}
+  .grip i{display:block;width:12px;height:2px;border-radius:1px;background:#b9ae9c;}
+  .grip:hover i{background:#4a443c;}
+  .grip:active{cursor:grabbing;}
+  .paper-list .no{width:30px;}
+  .paper-list .ops button{min-width:28px;}
+
+  /* アイコン画像 */
+  .avatar-picker{position:relative;flex:none;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;width:54px;}
+  .avatar-circle{position:relative;width:44px;height:44px;display:block;}
+  .avatar-picker .avatar-preview{width:44px;height:44px;border-radius:50%;object-fit:cover;border:1.5px solid var(--line);background:var(--bg);display:block;}
+  .avatar-picker .avatar-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;border-radius:50%;
+    background:var(--surface2);border:1.5px dashed var(--accent);color:var(--accent);pointer-events:none;}
+  .avatar-icon svg{width:21px;height:21px;}
+  .avatar-plus{position:absolute;right:-3px;bottom:-2px;width:18px;height:18px;border-radius:50%;background:var(--accent);color:var(--accent-ink);
+    font-size:14px;font-weight:900;line-height:18px;text-align:center;pointer-events:none;}
+  .avatar-picker.has-image .avatar-icon{display:none;}
+  .avatar-picker.has-image .avatar-plus{font-size:10px;}
+  .avatar-cap{font-size:10.5px;color:var(--ink-soft);line-height:1.2;white-space:nowrap;}
+  .avatar-picker:hover .avatar-icon{background:var(--accent-soft);}
+  .avatar-picker input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+  .avatar-picker .uploading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-size:9px;color:#fff;background:rgba(0,0,0,.45);border-radius:50%;}
+
+  /* メンバー・サポート */
+  .links-sub{font-family:var(--font-display);font-size:12px;letter-spacing:.14em;color:var(--ash);margin:28px 0 0;}
+  .links-sub small{font-family:var(--font-body);letter-spacing:0;margin-left:8px;font-size:11.5px;}
+  .rest-divider{display:flex;align-items:center;gap:12px;margin:18px 0 0;font-size:11.5px;color:var(--ash);}
+  .rest-divider::before,.rest-divider::after{content:"";flex:1;border-top:1px dashed var(--line);}
+  .link-card.resting{border-style:dashed;background:transparent;}
+  .link-card.resting .lc-name{color:var(--ink-soft);}
+  .lc-desc{font-size:12px;color:var(--ash);margin:-4px 0 10px;line-height:1.7;}
+  .links-grid.support .lc-name{font-size:17px;}
+  .footnote{margin-top:48px;}
+
+  @media (max-width:600px){
+    .ticket.torn .ticket-stub{transform:translate(0,40px) rotate(-5deg);}
+    .beam{width:160px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;transition:none !important;}
+    .reveal{opacity:1 !important;translate:none !important;}
   }
 </style>
+
 </head>
 <body>
+<div class="spot" aria-hidden="true"><i class="beam b1"></i><i class="beam b2"></i><i class="beam b3"></i></div>
 <div class="wrap">
 
-  <div class="masthead">
+  <header class="masthead">
     <div class="masthead-left">
       <button class="menu-toggle" id="menuToggle" type="button" aria-label="メニュー" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
-      <div>
-        <div class="site-eyebrow">RADWIMPS Official Fan Club Tour 2026 “ユーリンチー” — 非公式まとめ</div>
-        <h1 class="site-title">セットリスト比較</h1>
+      <div class="brand">
+        <div class="brand-eyebrow">RADWIMPS Official Fan Club Tour 2026</div>
+        <h1 class="brand-title">ユーリンチー <span class="okawari">おかわり！</span></h1>
+        <div class="brand-sub">非公式セトリまとめ ・ フッサフッサのベイビー/Leo</div>
       </div>
     </div>
-    <button class="theme-toggle" id="themeToggle" type="button">ライト / ダーク</button>
+    <button class="theme-toggle" id="themeToggle" type="button">客電をつける</button>
     <nav class="nav-menu" id="navMenu" hidden>
+      <div class="nav-sep">SETLIST</div>
       <button type="button" data-view="board">公演別</button>
       <button type="button" data-view="matrix">曲目比較</button>
       <button type="button" data-view="table">全公演一覧表</button>
-      <button type="button" id="navToTalk">全体トークルームへ</button>
+      <div class="nav-sep">TALK</div>
+      <button type="button" id="navToEve">横浜 前夜トーク</button>
+      <button type="button" id="navToTalk">全体トークルーム</button>
+      <div class="nav-sep">LINKS</div>
+      <button type="button" id="navToLinks">公式・メンバーのSNS</button>
     </nav>
-  </div>
-  <hr>
+  </header>
+
+  <nav class="quicklinks" aria-label="公式リンク">
+    <a href="https://radwimps.jp/yurinchi/" target="_blank" rel="noopener">ユーリンチー公式 ↗</a>
+    <a href="https://radwimps.jp/" target="_blank" rel="noopener">RADWIMPS.jp ↗</a>
+    <a href="https://bokunchi.radwimps.jp/" target="_blank" rel="noopener">ボクンチ ↗</a>
+    <a href="#links">メンバーのSNS ↓</a>
+  </nav>
+  <hr class="head-rule">
 
   <section id="gate">
-    <p class="gate-text">このページには全公演分のセットリストを掲載しています。<br><b>ネタバレを含みます。</b>まだ知りたくない方はここで戻ってください。</p>
-    <p class="gate-note2">なお、まだ見たくない方もいます。曲順やアンコールの本数なども、多くの人が見る場では話さないようにお願いします。<br>愛あるwimperのみなさん、見た者同士で楽しみましょう。</p>
-    <button class="btn" id="revealBtn">セトリを見る</button>
+    <div class="ticket">
+      <div class="ticket-main">
+        <div class="ticket-kicker">ADMIT ONE ・ SPOILER ALERT</div>
+        <h2>ここから先はネタバレです</h2>
+        <p class="gate-text">このページには全公演分のセットリストを掲載しています。<br><b>ネタバレを含みます。</b>まだ知りたくない方はここで戻ってください。</p>
+        <p class="gate-note2">なお、まだ見たくない方もいます。曲順やアンコールの本数なども、多くの人が見る場では話さないようにお願いします。<br>愛あるwimperのみなさん、見た者同士で楽しみましょう。<br>横浜公演に向けた前夜トークも作りました！</p>
+      </div>
+      <div class="ticket-stub">
+        <div class="stub-label">ENTRANCE</div>
+        <button class="btn" id="revealBtn" type="button">セトリを見る</button>
+        <button class="btn ghost" id="eveBtn" type="button">横浜 前夜トークへ</button>
+      </div>
+    </div>
   </section>
 
   <main id="content">
-    <h2 class="section-title">公演セトリ比較</h2>
-    <p class="section-sub" id="sectionSub"></p>
-
-    <div class="viewswitch" role="tablist" aria-label="表示切り替え">
-      <button type="button" id="btnBoard" class="active" role="tab" aria-selected="true">公演別</button>
-      <button type="button" id="btnMatrix" role="tab" aria-selected="false">曲目比較</button>
-      <button type="button" id="btnTable" role="tab" aria-selected="false">全公演一覧表</button>
-    </div>
-
-    <div class="legend">
-      <span class="chip"><span class="dot fixed"></span>固定 = 全公演で演奏</span>
-      <span class="chip"><span class="dot sometimes"></span>たまに = 一部の公演で演奏</span>
-      <span class="chip"><span class="dot rare"></span>限定 = 1公演のみ</span>
-    </div>
-
-    <div class="summary-line" id="summary"></div>
-
-    <details class="general-talk" id="generalTalk">
-      <summary class="general-talk-summary">全体トークルーム <span class="count" data-role="count"></span></summary>
-      <p class="section-sub">次のセトリ予想、感想戦、雑談などはこちらへ。公演ごとのネタバレコメントは各カード下のコメント欄へどうぞ。</p>
-      <div class="comments-body">
-        <div class="comment-list" data-role="list"><p class="comment-empty">読み込み中...</p></div>
+    <section class="eve" id="eveRoom" aria-labelledby="eveTitle">
+      <div class="eve-head">
+        <div class="eve-intro">
+          <p class="eve-kicker">おかわり公演 ・ ぴあアリーナMM ・ 11/10(火)・11/11(水)</p>
+          <h2 class="eve-title" id="eveTitle">横浜 前夜トーク <span class="live-badge" title="新しい投稿は自動で表示されます"><i></i>LIVE</span></h2>
+          <p class="eve-lead">通常公演をふまえたセトリ予想も感想も、Xだとまだ書けない話はここで。前夜・前々夜の「楽しみ！」も、今回は行けない人の「念」も、ぜんぶ置いていってください。</p>
+          <p class="eve-count">投稿 <span data-role="count">-</span></p>
+        </div>
+        <div class="stub" id="eveCountdown"></div>
       </div>
-    </details>
 
-    <div id="boardView">
-      <div class="board" id="board"></div>
-    </div>
+      <div class="eve-tabs" id="eveTabs" role="tablist" aria-label="参戦日でしぼる"></div>
 
-    <div id="matrixView">
-      <div id="matrixTable"></div>
-    </div>
-
-    <div id="tableView">
-      <div class="matrix-fit" id="matrixFit">
-        <table class="matrix" id="allTable"></table>
+      <div class="maker" id="eveMaker">
+        <div class="maker-head">
+          <div>
+            <h3>セトリ予想メーカー</h3>
+            <p>曲をタップすると1曲目から順に並びます。1曲だけでも、アンコール何曲でもOK。</p>
+          </div>
+          <button type="button" class="linklike" data-maker-toggle>たたむ</button>
+        </div>
+        <div class="maker-body">
+          <div class="maker-pick">
+            <div class="pick-tabs" role="tablist">
+              <button type="button" data-pool="tour" class="active">ユーリンチーで演奏<small data-role="n-tour"></small></button>
+              <button type="button" data-pool="all">RADの全曲<small data-role="n-all"></small></button>
+            </div>
+            <input type="search" data-role="q" placeholder="曲名でさがす" autocomplete="off">
+            <div class="maker-songs" data-role="songs"></div>
+            <div class="maker-row">
+              <input type="text" data-role="free" placeholder="リストにない曲(新曲など)" maxlength="40">
+              <button type="button" class="chip" data-maker-add>追加</button>
+            </div>
+          </div>
+          <div class="maker-paper">
+            <div class="paper-head"><span>MY SETLIST</span><span data-role="status"></span></div>
+            <p class="paper-hint" data-role="hint"></p>
+            <div class="add-target">タップした曲の追加先
+              <button type="button" data-target="main" class="on">本編</button>
+              <button type="button" data-target="en">アンコール</button>
+            </div>
+            <ol class="paper-list" data-role="mmain"></ol>
+            <div class="paper-en-label" data-drop-sec="en">ENCORE</div>
+            <ol class="paper-list en" data-role="men"></ol>
+            <div class="paper-actions">
+              <button type="button" class="btn-sm ghost" data-maker-base></button>
+              <button type="button" class="btn-sm ghost" data-maker-clear>全部消す</button>
+              <span class="spacer"></span>
+              <button type="button" class="btn-sm" data-maker-insert>投稿欄に入れる</button>
+            </div>
+            <p class="form-msg" data-role="maker-msg"></p>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <p class="footnote">
-      参戦メモを元にした個人まとめ(非公式)です。<br>
-      誤りがあれば下記アカウントまでご連絡ください。<br>
-      <span class="handle">フッサフッサのベイビー/Leo &nbsp;@w_w_wimper2002</span><br>
-      このページは見たくない人には見せず、見た者同士で楽しんでください。<br>
-      EN = アンコール<br><br>
-      毎回公演後、随時更新予定です。YouTubeやSpotifyのリンクなども今後追加していくかもしれません。少しずつ改善していきます。
-    </p>
+      <div class="eve-grid">
+        <div class="eve-composer"><div data-role="composer"></div></div>
+        <aside class="eve-side">
+          <div class="side-card" id="eveRanking"></div>
+          <div class="side-card" id="eveTagCard"></div>
+        </aside>
+        <div class="eve-timeline">
+          <div class="filter-bar" id="eveFilterBar"></div>
+          <div class="comment-list timeline" data-role="list"><p class="comment-empty">読み込み中...</p></div>
+        </div>
+      </div>
+    </section>
+    <section class="setlists" id="setlists">
+      <p class="sec-kicker">SETLIST</p>
+      <h2 class="section-title">公演セトリ比較</h2>
+      <p class="section-sub" id="sectionSub"></p>
+
+      <div class="viewswitch" role="tablist" aria-label="表示切り替え">
+        <button type="button" id="btnBoard" class="active" role="tab" aria-selected="true">公演別</button>
+        <button type="button" id="btnMatrix" role="tab" aria-selected="false">曲目比較</button>
+        <button type="button" id="btnTable" role="tab" aria-selected="false">全公演一覧表</button>
+      </div>
+
+      <div class="legend">
+        <span class="chip"><span class="dot fixed"></span>固定 = 全公演で演奏</span>
+        <span class="chip"><span class="dot sometimes"></span>たまに = 一部の公演で演奏</span>
+        <span class="chip"><span class="dot rare"></span>限定 = 1公演のみ</span>
+      </div>
+      <div class="summary-line" id="summary"></div>
+      <p class="play-hint">曲名をタップすると再生できます。ライブ映像・ライブ音源がある曲は、このページの中でそのまま流れます。</p>
+
+      <details class="general-talk" id="generalTalk">
+        <summary class="general-talk-summary">全体トークルーム <span class="count" data-role="count"></span></summary>
+        <p class="section-sub">感想戦や雑談はこちらへ。横浜公演に向けた話は上の前夜トークへ、公演ごとのネタバレコメントは各カード下のコメント欄へどうぞ。</p>
+        <div class="comments-body">
+          <div class="comment-list" data-role="list"><p class="comment-empty">読み込み中...</p></div>
+        </div>
+      </details>
+
+      <div id="boardView">
+        <div class="board" id="board"></div>
+      </div>
+      <div id="matrixView">
+        <div id="matrixTable"></div>
+      </div>
+      <div id="tableView">
+        <div class="matrix-fit" id="matrixFit">
+          <table class="matrix" id="allTable"></table>
+        </div>
+      </div>
+    </section>
+
   </main>
 
+  <section class="links" id="links">
+    <p class="sec-kicker">OFFICIAL &amp; MEMBERS</p>
+    <h2 class="section-title">公式・メンバーのSNS</h2>
+    <div class="links-grid">
+      <div class="link-card">
+        <div class="lc-role">TOUR</div>
+        <div class="lc-name">ユーリンチー</div>
+        <div class="lc-links">
+          <a href="https://radwimps.jp/yurinchi/" target="_blank" rel="noopener">特設サイト ↗</a>
+          <a href="https://bokunchi.radwimps.jp/" target="_blank" rel="noopener">ボクンチ ↗</a>
+          <a href="https://radwimps-store.radwimps.jp/" target="_blank" rel="noopener">RADWIMPS SHOP ↗</a>
+        </div>
+      </div>
+      <div class="link-card">
+        <div class="lc-role">BAND</div>
+        <div class="lc-name">RADWIMPS</div>
+        <div class="lc-links">
+          <a href="https://radwimps.jp/" target="_blank" rel="noopener">公式サイト ↗</a>
+          <a href="https://radwimps.jp/music/" target="_blank" rel="noopener">ディスコグラフィ ↗</a>
+          <a href="https://twitter.com/RADWIMPS" target="_blank" rel="noopener">X ↗</a>
+          <a href="https://www.instagram.com/radwimps_jp/" target="_blank" rel="noopener">Instagram ↗</a>
+          <a href="https://www.youtube.com/channel/UCIVqvhyo8ttjYOmMJuhq_YQ" target="_blank" rel="noopener">YouTube ↗</a>
+          <a href="https://open.spotify.com/artist/1EowJ1WwkMzkCkRomFhui7" target="_blank" rel="noopener">Spotify ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <p class="links-sub">MEMBERS</p>
+    <div class="links-grid">
+      <div class="link-card">
+        <div class="lc-role">VOCAL / GUITAR / PIANO</div>
+        <div class="lc-name">野田洋次郎</div>
+        <div class="lc-links">
+          <a href="https://twitter.com/YojiNoda1" target="_blank" rel="noopener">X ↗</a>
+          <a href="https://www.instagram.com/yoji_noda/" target="_blank" rel="noopener">Instagram ↗</a>
+        </div>
+      </div>
+      <div class="link-card">
+        <div class="lc-role">BASS</div>
+        <div class="lc-name">武田祐介</div>
+        <div class="lc-links">
+          <a href="https://www.instagram.com/yusuke_takeda_/" target="_blank" rel="noopener">Instagram ↗</a>
+        </div>
+      </div>
+    </div>
+    <div class="rest-divider">活動休止中</div>
+    <div class="links-grid" style="margin-top:12px;">
+      <div class="link-card resting">
+        <div class="lc-role">DRUMS</div>
+        <div class="lc-name">山口智史</div>
+        <p class="lc-desc">2025.12.27 有明アリーナで「25コ目の染色体」を一緒に演奏。</p>
+        <div class="lc-links">
+          <a href="https://www.instagram.com/explore/search/keyword/?q=%E5%B1%B1%E5%8F%A3%E6%99%BA%E5%8F%B2" target="_blank" rel="noopener">Instagramで探す ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <p class="links-sub">SUPPORT<small>ライブを支えるサポートメンバー</small></p>
+    <div class="links-grid support">
+      <div class="link-card">
+        <div class="lc-role">GUITAR</div>
+        <div class="lc-name">白川詢</div>
+        <div class="lc-links"><a href="https://www.instagram.com/explore/search/keyword/?q=%E7%99%BD%E5%B7%9D%E8%A9%A2" target="_blank" rel="noopener">Instagramで探す ↗</a></div>
+      </div>
+      <div class="link-card">
+        <div class="lc-role">DRUMS</div>
+        <div class="lc-name">森瑞希</div>
+        <div class="lc-links"><a href="https://www.instagram.com/explore/search/keyword/?q=%E6%A3%AE%E7%91%9E%E5%B8%8C" target="_blank" rel="noopener">Instagramで探す ↗</a></div>
+      </div>
+      <div class="link-card">
+        <div class="lc-role">DRUMS</div>
+        <div class="lc-name">エノマサフミ</div>
+        <div class="lc-links"><a href="https://www.instagram.com/explore/search/keyword/?q=%E3%82%A8%E3%83%8E%E3%83%9E%E3%82%B5%E3%83%95%E3%83%9F" target="_blank" rel="noopener">Instagramで探す ↗</a></div>
+      </div>
+    </div>
+    <p class="links-note">メンバーのリンクは RADWIMPS 公式サイトのプロフィール掲載のアカウントです。山口智史さんとサポートメンバーは公式に載っているアカウントが確認できなかったため、Instagram内の検索に飛びます。</p>
+  </section>
+
+  <p class="footnote">
+    参戦メモを元にした個人まとめ(非公式)です。<br>
+    誤りがあれば下記アカウントまでご連絡ください。<br>
+    <span class="handle">フッサフッサのベイビー/Leo &nbsp;@w_w_wimper2002</span><br>
+    このページは見たくない人には見せず、見た者同士で楽しんでください。<br>
+    EN = アンコール<br><br>
+    毎回公演後、随時更新予定です。少しずつ改善していきます。
+  </p>
+
+  <a class="maker-credit" href="https://hakoyama-leo.pages.dev" target="_blank" rel="noopener">
+    <img src="lumo.webp" alt="LUMO" width="56" height="56" loading="lazy">
+    <div>
+      <small>このページをつくった人</small>
+      <b>箱山 蓮旺（Leo）<em> ↗</em></b>
+      <span>LUMOといっしょに遊べる3Dサイト「LUMO MUSEUM」</span>
+    </div>
+  </a>
+
+</div>
+
+<div class="player" id="player" hidden role="dialog" aria-label="曲を再生">
+  <div class="player-head">
+    <span class="player-eq" aria-hidden="true"><i></i><i></i><i></i></span>
+    <div class="player-title"><b data-role="ptitle"></b><small data-role="psrc"></small></div>
+    <button class="player-close" type="button" data-player-close aria-label="閉じる">×</button>
+  </div>
+  <div data-role="pbody"></div>
 </div>
 
 <script>
@@ -452,11 +910,18 @@ const shows = [
     ["10","DADA"],["11","億万笑者"],["12","俺色スカイ"],["13","MOUNTAIN VANILLA"],
     ["14","37458"],["15","叫べ"],["16","最後の歌"],["17","ララバイ"],
     ["EN1","もしも"],["EN2","有心論"]
-  ]}
+  ]},
 
-  // 追加公演:
-  // { label:"横浜（追加公演）", date:"?/??", songs:[] },
+  // 横浜 おかわり公演(ぴあアリーナMM)。セトリが出たら songs を埋めて、placeholder と draftNote の行を消す。
+  // label と date は変えないこと(カードのコメント欄と、前夜トークの予想の答え合わせがこの2つでつながっています)
+  { label:"横浜 1日目", date:"11/10", note:"おかわり公演", placeholder:true,
+    draftNote:'11/10(火) ぴあアリーナMM。公演後にセトリを更新します。<br>それまでは<a href="#eveRoom">前夜トーク</a>へどうぞ。',
+    songs:[] },
+  { label:"横浜 2日目", date:"11/11", note:"おかわり公演", placeholder:true,
+    draftNote:'11/11(水) ぴあアリーナMM。公演後にセトリを更新します。<br>それまでは<a href="#eveRoom">前夜トーク</a>へどうぞ。',
+    songs:[] }
 ];
+const realShows = shows.filter(s => !s.placeholder);
 
 const totalShows = shows.filter(s => !s.placeholder).length;
 
@@ -489,6 +954,105 @@ function labelFor(cls){
   return cls === "fixed" ? "固定" : cls === "sometimes" ? "たまに" : "限定";
 }
 
+/* ---- 曲を流す(プレイヤー) ---- */
+// ページ内で再生できる映像・音源。ライブ映像 → ライブ音源 → MV の順で出します。
+// 追加するときは "曲名": [{ yt: "動画ID(11文字)", kind: "ライブ映像", label: "説明" }] の形で足すだけ
+const MEDIA = {
+  "DADA": [{ yt: "eTJQbTYNU-I", kind: "ライブ映像", label: "絶体延命ツアー(2011)" }],
+  "有心論": [{ yt: "c2y8Ba3WwPY", kind: "MV", label: "Official Music Video" }],
+  "正解": [{ yt: "ow5FBOBAdhU", kind: "ライブ映像", label: "ANTI ANTI GENERATION TOUR 2019" }],
+  "グランドエスケープ": [{ yt: "epQGR34yiTY", kind: "ライブ映像", label: "15th Anniversary Special Concert" }],
+  "トレモロ": [{ yt: "fdMVCpKfAVQ", kind: "ライブ映像", label: "15th Anniversary Special Concert" }],
+  "ハイパーベンチレイション": [{ yt: "tJKtccXD-Rk", kind: "ライブ映像", label: "BACK TO THE LIVE HOUSE TOUR 2023" }],
+  "賜物": [{ yt: "sQOqgRtnRXg", kind: "ライブ映像", label: "20th ANNIVERSARY LIVE TOUR" }],
+  "トアルハルノヒ": [{ yt: "ypgtn5aFmN0", kind: "ライブ映像", label: "20th ANNIVERSARY LIVE TOUR" }]
+};
+// 公式ライブ音源『BACK TO THE LIVE HOUSE TOUR 2023 (Live)』(Spotify)。曲名: トラック番号
+const LIVE_ALBUM = {
+  spotify: "5c5avcxzlfGIUm9rUVZYYW",
+  title: "BACK TO THE LIVE HOUSE TOUR 2023",
+  tracks: { "ココロノナカ": 2, "なんちって": 3, "ソクラティックラブ": 4, "ます。": 5, "ハイパーベンチレイション": 6,
+    "指切りげんまん": 7, "me me she": 8, "かたわれ時": 9, "そっけない": 10, "ヒキコモリロリン": 12, "俺色スカイ": 13,
+    "遠恋": 14, "Tamaki": 15, "オーダーメイド": 16, "05410-(ん)": 17, "有心論": 18, "会心の一撃": 19,
+    "大団円 feat.ZORN": 20, "いいんですか？": 21, "君と羊と青": 22, "DADA": 23, "すずめ feat.十明": 24,
+    "KANASHIBARI feat.ao": 25, "ものもらい": 26 }
+};
+// 公式ディスコグラフィ(radwimps.jp/music/番号)。サブスクにない曲はここからCD・配信をたどれます
+const DISCO = {"祈跡": "7955", "僕チン": "7955", "何十年後かに「君」と出会っていなかったアナタに向けた歌": "7955", "そこにある": "7955", "愛し": "7879", "なんちって": "7879", "そりゃ君が好きだから": "7879", "夢見月に何想ふ": "7879", "ノットビコズ": "7879", "ヒキコモリロリン": "7879", "俺色スカイ": "7879", "音の葉": "7879", "シリメツレツ": "7879", "ララバイ": "7879", "へっくしゅん": "7961", "25コ目の染色体": "7965", "アンチクロン": "7965", "イディピ": "7969", "ささくれ": "7969", "4645": "7895", "セプテンバさん": "7895", "閉じた光": "7895", "揶揄": "7895", "螢": "7895", "おとぎ": "7895", "最大公約数": "7895", "トレモロ": "7895", "最後の歌": "7895", "ふたりごと": "7973", "ラバボ": "7973", "有心論": "7977", "ジェニファ山田さん": "7977", "セツナレンサ": "7981", "バイマイサイ": "7981", "ギミギミック": "7909", "05410": "7909", "memeshe": "7909", "遠恋": "7909", "いいんですか?": "7909", "指切りげんまん": "7909", "傘拍子": "7909", "ます": "7909", "夢番地": "7909", "バグッバイ": "7909", "オダメイド": "7985", "グの音": "7985", "タユタ": "7924", "おしゃかしゃま": "7924", "バグパイプ": "7924", "謎謎": "7924", "七ノ歌": "7924", "onemanlive": "7924", "ソクラティックラブ": "7924", "メルヘンとグレテル": "7924", "雨音子": "7924", "魔法鏡": "7924", "叫べ": "7924", "37458": "7924", "携帯電話": "7989", "ハイパベンチレイション": "7989", "マニフェスト": "7993", "やどかり": "7993"};
+const mediaByKey = new Map(Object.entries(MEDIA).map(([t, v]) => [normTitle(t), v]));
+const liveTrackByKey = new Map(Object.entries(LIVE_ALBUM.tracks).map(([t, n]) => [normTitle(t), n]));
+function sourcesFor(title){
+  const k = normTitle(title);
+  const list = (mediaByKey.get(k) || []).slice();
+  const tr = liveTrackByKey.get(k);
+  if (tr) list.push({ sp: LIVE_ALBUM.spotify, kind: "ライブ音源", label: `${LIVE_ALBUM.title} ・ ${tr}曲目`, track: tr });
+  const order = { "ライブ映像": 0, "ライブ音源": 1, "MV": 2 };
+  return list.sort((a, b) => (order[a.kind] ?? 9) - (order[b.kind] ?? 9));
+}
+function discoUrl(title){
+  const id = DISCO[normTitle(title)];
+  return id ? `https://radwimps.jp/music/${id}/` : "https://radwimps.jp/music/";
+}
+function songButtonHTML(title){
+  return `<button type="button" class="song-btn" data-play="${escapeHtml(title)}" aria-label="${escapeHtml(title)} を再生">` +
+    `${escapeHtml(title)}<span class="play-ico" aria-hidden="true">▶</span></button>`;
+}
+const playerEl = document.getElementById("player");
+let playerTitle = "";
+function sourceHTML(src, title){
+  if (src.yt) {
+    if (location.protocol === "file:") {
+      return `<p class="player-note">PCでファイルを直接開いている間は、YouTubeがページ内再生を許可しません。公開したページで開くと、ここでそのまま流れます。</p>`;
+    }
+    return `<div class="player-video"><iframe src="https://www.youtube.com/embed/${encodeURIComponent(src.yt)}?autoplay=1&playsinline=1&rel=0" ` +
+      `title="${escapeHtml(title)}" referrerpolicy="strict-origin-when-cross-origin" ` +
+      `allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>`;
+  }
+  return `<p class="player-note">${src.track}曲目が「${escapeHtml(title)}」です。曲名を押すとここで流れます。</p>` +
+    `<iframe class="player-spotify" src="https://open.spotify.com/embed/album/${encodeURIComponent(src.sp)}?theme=0" height="352" ` +
+    `allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="${escapeHtml(LIVE_ALBUM.title)}"></iframe>`;
+}
+function openPlayer(title, idx = 0){
+  const clean = cleanTitle(title);
+  playerTitle = clean;
+  const srcs = sourcesFor(clean);
+  const cur = srcs[idx];
+  const q = encodeURIComponent(clean);
+  playerEl.querySelector('[data-role="ptitle"]').textContent = clean;
+  playerEl.querySelector('[data-role="psrc"]').textContent = cur ? `${cur.kind} ・ ${cur.label}` : "外部サービスで再生";
+  const tabs = srcs.length > 1
+    ? `<div class="player-tabs">${srcs.map((s, j) => `<button type="button" data-src="${j}" class="${j === idx ? "on" : ""}">${s.kind}</button>`).join("")}</div>`
+    : "";
+  const main = cur
+    ? tabs + sourceHTML(cur, clean)
+    : `<div class="player-empty"><a class="big-play" href="https://www.youtube.com/results?search_query=${q}" target="_blank" rel="noopener">` +
+      `<span class="big-play-ico">▶</span>YouTubeで「${escapeHtml(clean)}」を再生</a></div>`;
+  const links =
+    (cur ? `<a href="https://www.youtube.com/results?search_query=${q}" target="_blank" rel="noopener">YouTube ↗</a>` : "") +
+    `<a href="https://open.spotify.com/search/${q}" target="_blank" rel="noopener">Spotify ↗</a>` +
+    `<a href="https://music.apple.com/jp/search?term=${q}" target="_blank" rel="noopener">Apple Music ↗</a>` +
+    `<a href="${discoUrl(clean)}" target="_blank" rel="noopener">公式ディスコグラフィ ↗</a>` +
+    `<a href="https://radwimps-store.radwimps.jp/" target="_blank" rel="noopener">RADWIMPS SHOP ↗</a>`;
+  playerEl.querySelector('[data-role="pbody"]').innerHTML = main +
+    `<div class="player-links">${links}</div>` +
+    `<p class="player-sub">サブスクにない曲は、公式ディスコグラフィやRADWIMPS SHOPからCD・配信をチェック。</p>`;
+  playerEl.hidden = false;
+  requestAnimationFrame(() => playerEl.classList.add("show"));
+}
+function closePlayer(){
+  playerEl.classList.remove("show");
+  playerEl.hidden = true;
+  playerEl.querySelector('[data-role="pbody"]').innerHTML = "";
+}
+document.addEventListener("click", (e) => {
+  const b = e.target.closest("[data-play]");
+  if (b) { openPlayer(b.dataset.play); return; }
+  const s = e.target.closest("#player [data-src]");
+  if (s) { openPlayer(playerTitle, Number(s.dataset.src)); return; }
+  if (e.target.closest("[data-player-close]")) closePlayer();
+});
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !playerEl.hidden) closePlayer(); });
+
 /* ---- song reactions (良かった / 聴きたかった) ---- */
 const reactionCounts = new Map();
 const myReactions = new Set();
@@ -511,16 +1075,16 @@ function refreshAllReactionButtons(){
   });
 }
 
-document.getElementById("sectionSub").textContent = shows.map(s => `${s.label}(${s.date})`).join("・");
+document.getElementById("sectionSub").textContent = shows.map(s => `${s.label}(${s.date}${s.placeholder ? "・公演前" : ""})`).join("・");
 
 /* ---- per-show board ---- */
 const board = document.getElementById("board");
 shows.forEach((show) => {
   const item = document.createElement("div");
-  item.className = "board-item";
+  item.className = "board-item" + (show.placeholder ? " is-placeholder" : "");
 
   const inner = document.createElement("div");
-  inner.className = "tilt-layer";
+  inner.className = "card-head";
   const badge = show.note ? `<span class="update-badge">${show.note}</span>` : "";
   inner.innerHTML = `<div class="show-date">${show.date}</div><div class="show-city">${show.label}${badge}</div>` +
     (show.draftNote ? `<p class="draft-note">${show.draftNote}</p>` : "");
@@ -532,13 +1096,14 @@ shows.forEach((show) => {
   show.songs.forEach(([n, title]) => {
     const cls = classFor(title);
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td class="n">${n}</td><td class="title">${title}</td>` +
+    if (/^EN/.test(n)) tr.className = "en";
+    tr.innerHTML = `<td class="n">${n}</td><td class="title">${songButtonHTML(title)}</td>` +
       `<td class="freq ${cls}"><span class="dot ${cls}"></span>${labelFor(cls)}</td>` +
       `<td class="react-cell">${reactBtnHTML(show.date, title, "good")}</td>`;
     tbody.appendChild(tr);
   });
   table.appendChild(tbody);
-  item.appendChild(table);
+  if (show.songs.length) item.appendChild(table);
 
   const showId = `${show.date}_${show.label}`;
   const comments = document.createElement("details");
@@ -579,12 +1144,12 @@ function buildMatrix(){
 
     const head = document.createElement("div");
     head.className = "song-row-head";
-    head.innerHTML = `<span class="dot ${cls}"></span>${title}`;
+    head.innerHTML = `<span class="dot ${cls}"></span>${songButtonHTML(title)}`;
     row.appendChild(head);
 
     const chips = document.createElement("div");
     chips.className = "show-chips";
-    shows.forEach(show => {
+    realShows.forEach(show => {
       const found = show.songs.find(([, t]) => t === title);
       const chip = document.createElement("span");
       if (found) {
@@ -612,7 +1177,7 @@ function buildAllTable(){
   const thead = document.createElement("thead");
   const htr = document.createElement("tr");
   htr.innerHTML = `<th class="songcol">曲目</th>` +
-    shows.map(s => `<th>${s.label}<br><span style="font-weight:400;color:var(--ash);">${s.date}</span></th>`).join("");
+    realShows.map(s => `<th>${s.label}<br><span style="font-weight:400;color:var(--ash);">${s.date}</span></th>`).join("");
   thead.appendChild(htr);
 
   const tbody = document.createElement("tbody");
@@ -623,7 +1188,7 @@ function buildAllTable(){
     const th = document.createElement("th");
     th.innerHTML = `<span class="dot ${cls}"></span>${title}`;
     tr.appendChild(th);
-    shows.forEach(show => {
+    realShows.forEach(show => {
       const found = show.songs.find(([, t]) => t === title);
       const td = document.createElement("td");
       if (found) {
@@ -683,18 +1248,22 @@ btnBoard.addEventListener("click", () => activateView("board"));
 btnMatrix.addEventListener("click", () => activateView("matrix"));
 btnTable.addEventListener("click", () => activateView("table"));
 
-/* ---- theme toggle (defaults to system preference) ---- */
+/* ---- 照明(暗転 / 客電) ---- */
 const themeToggle = document.getElementById("themeToggle");
 const root = document.documentElement;
-let stored = null;
-try { stored = localStorage.getItem("seturi-theme"); } catch (e) {}
-if (stored) root.setAttribute("data-theme", stored);
+function applyTheme(t){
+  if (t === "light") root.setAttribute("data-theme", "light"); else root.removeAttribute("data-theme");
+  themeToggle.textContent = t === "light" ? "暗転する" : "客電をつける";
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.content = t === "light" ? "#efe9df" : "#0b0a09";
+}
+let theme = "dark";
+try { if (localStorage.getItem("seturi-theme") === "light") theme = "light"; } catch (e) {}
+applyTheme(theme);
 themeToggle.addEventListener("click", () => {
-  const current = root.getAttribute("data-theme") ||
-    (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-  const next = current === "dark" ? "light" : "dark";
-  root.setAttribute("data-theme", next);
-  try { localStorage.setItem("seturi-theme", next); } catch (e) {}
+  theme = theme === "light" ? "dark" : "light";
+  applyTheme(theme);
+  try { localStorage.setItem("seturi-theme", theme); } catch (e) {}
 });
 
 /* ---- comments (Supabase) ---- */
@@ -703,6 +1272,314 @@ const supabaseClient = window.supabase.createClient(
   "sb_publishable_NTfVCrq9IPPNseTWcwBWgw_M75o7syP"
 );
 
+// localStorage が使えない環境(プライベートモード等)でも落ちないように
+const store = {
+  get(k){ try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v){ try { localStorage.setItem(k, v); } catch (e) {} }
+};
+let memDeviceId = null;
+function getDeviceId(){
+  let id = store.get("seturi-device-id") || memDeviceId;
+  if (!id) {
+    id = crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(36).slice(2);
+    memDeviceId = id;
+    store.set("seturi-device-id", id);
+  }
+  return id;
+}
+function getSavedProfile(){
+  return { name: store.get("seturi-name") || "", avatar: store.get("seturi-avatar") || "" };
+}
+function saveProfile(name, avatar){
+  store.set("seturi-name", name);
+  store.set("seturi-avatar", avatar || "");
+}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+}
+function linkifyTags(raw){
+  return String(raw).split(/([#＃][^\s#＃]+)/).map((part, i) => {
+    if (i % 2 === 0) return escapeHtml(part);
+    const tag = "#" + part.slice(1);
+    return `<button type="button" class="tag" data-tag="${escapeHtml(tag)}">${escapeHtml(part)}</button>`;
+  }).join("");
+}
+function timeAgo(iso){
+  const t = new Date(iso).getTime();
+  const diff = (Date.now() - t) / 1000;
+  if (diff < 60) return "たった今";
+  if (diff < 3600) return Math.floor(diff / 60) + "分前";
+  if (diff < 86400) return Math.floor(diff / 3600) + "時間前";
+  if (diff < 86400 * 7) return Math.floor(diff / 86400) + "日前";
+  return new Date(t).toLocaleDateString("ja-JP", { timeZone: "Asia/Tokyo", month: "numeric", day: "numeric" });
+}
+
+const CAMERA_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-2.5h6L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.6"/></svg>';
+function avatarRowHTML(){
+  const p = getSavedProfile();
+  const hasImage = !!p.avatar;
+  return `<div class="row">` +
+    `<label class="avatar-picker${hasImage ? " has-image" : ""}" title="アイコン画像を選ぶ">` +
+      `<span class="avatar-circle">` +
+        `<img class="avatar-preview" ${hasImage ? `src="${escapeHtml(p.avatar)}"` : ""} alt="" ` +
+          `onerror="this.style.visibility='hidden'" style="${hasImage ? "" : "visibility:hidden;"}">` +
+        `<span class="avatar-icon">${CAMERA_SVG}</span><span class="avatar-plus">+</span>` +
+      `</span>` +
+      `<span class="avatar-cap">${hasImage ? "変更" : "アイコン"}</span>` +
+      `<input type="file" accept="image/*" class="avatar-file">` +
+      `<input type="hidden" name="avatar" value="${escapeHtml(p.avatar)}">` +
+    `</label>` +
+    `<input type="text" name="name" placeholder="名前" value="${escapeHtml(p.name)}" required maxlength="24">` +
+  `</div>`;
+}
+function commentFormHTML(isReply){
+  return `<form class="comment-form${isReply ? " reply-form" : ""}">` +
+    avatarRowHTML() +
+    `<textarea name="body" placeholder="${isReply ? "返信を書く" : "感想やコメントを書く"}" required maxlength="500"></textarea>` +
+    `<p class="form-msg" data-role="msg"></p>` +
+    `<button type="submit">投稿</button>` +
+  `</form>`;
+}
+function setFormMsg(formEl, text){
+  const el = formEl.querySelector('[data-role="msg"]');
+  if (el) el.textContent = text || "";
+}
+
+async function uploadAvatar(file){
+  const ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+  const path = `${getDeviceId()}-${Date.now()}.${ext}`;
+  const { error } = await supabaseClient.storage.from("avatars").upload(path, file, { upsert: true });
+  if (error) return { error };
+  const { data } = supabaseClient.storage.from("avatars").getPublicUrl(path);
+  return { url: data.publicUrl };
+}
+
+function wireAvatarPicker(formEl){
+  const picker = formEl.querySelector(".avatar-picker");
+  const fileInput = picker.querySelector(".avatar-file");
+  const preview = picker.querySelector(".avatar-preview");
+  const hidden = picker.querySelector('input[name="avatar"]');
+
+  fileInput.addEventListener("change", async () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+    preview.src = URL.createObjectURL(file);
+    preview.style.visibility = "visible";
+    const badge = document.createElement("div");
+    badge.className = "uploading";
+    badge.textContent = "…";
+    picker.querySelector(".avatar-circle").appendChild(badge);
+    const { url, error } = await uploadAvatar(file);
+    badge.remove();
+    if (error) { setFormMsg(formEl, "アイコン画像をアップロードできませんでした。"); return; }
+    setFormMsg(formEl, "");
+    hidden.value = url;
+    picker.classList.add("has-image");
+    const cap = picker.querySelector(".avatar-cap");
+    if (cap) cap.textContent = "変更";
+  });
+}
+
+/*
+  コメント欄(部屋)を1つ立ち上げる。show_id ごとに部屋が分かれる。
+  opts: order("asc"|"desc"), filter(row), renderBody(row), extraFor(row),
+        emptyText, filteredEmptyText, composerHTML(), onComposer(form), onData(rows)
+*/
+function initShowComments(showId, hostEl, opts = {}){
+  if (hostEl._room) return hostEl._room;
+
+  const listEl = hostEl.querySelector('[data-role="list"]');
+  const countEl = hostEl.querySelector('[data-role="count"]');
+  const room = { rows: [], likes: [], ids: new Set(), rerender: render, refresh };
+  hostEl._room = room;
+
+  let timer = null;
+  function scheduleRefresh(){ clearTimeout(timer); timer = setTimeout(refresh, 250); }
+
+  async function refresh(){
+    const { data: rows, error } = await supabaseClient
+      .from("comments")
+      .select("*")
+      .eq("show_id", showId)
+      .order("created_at", { ascending: true });
+    if (error) {
+      listEl.innerHTML = `<p class="comment-empty">読み込みに失敗しました。少し時間をおいて再読み込みしてください。</p>`;
+      return;
+    }
+    const ids = rows.map(r => r.id);
+    let likes = [];
+    if (ids.length) {
+      const { data: likeRows } = await supabaseClient
+        .from("comment_likes")
+        .select("comment_id, liker_name, device_id")
+        .in("comment_id", ids);
+      likes = likeRows || [];
+    }
+    room.rows = rows;
+    room.likes = likes;
+    room.ids = new Set(ids);
+    render();
+    if (opts.onData) opts.onData(rows);
+  }
+
+  function render(){
+    const rows = room.rows;
+    const deviceId = getDeviceId();
+    const likesByComment = new Map();
+    room.likes.forEach(l => {
+      if (!likesByComment.has(l.comment_id)) likesByComment.set(l.comment_id, []);
+      likesByComment.get(l.comment_id).push(l);
+    });
+
+    if (countEl) countEl.textContent = rows.length ? `(${rows.length})` : "";
+
+    // 書きかけの返信フォームは再描画しても消えないように退避
+    const openReply = listEl.querySelector(".reply-slot form");
+    const openReplyFor = openReply ? openReply.closest(".reply-slot").dataset.slotFor : null;
+    if (openReply) openReply.remove();
+
+    let topLevel = rows.filter(r => !r.parent_id);
+    if (opts.filter) topLevel = topLevel.filter(opts.filter);
+    if (opts.order === "desc") topLevel = topLevel.slice().reverse();
+
+    if (!rows.length) {
+      listEl.innerHTML = `<p class="comment-empty">${opts.emptyText || "まだコメントはありません。最初の一言をどうぞ。"}</p>`;
+      return;
+    }
+    if (!topLevel.length) {
+      listEl.innerHTML = `<p class="comment-empty">${opts.filteredEmptyText || "該当する投稿はありません。"}</p>`;
+      return;
+    }
+
+    const byParent = new Map();
+    rows.filter(r => r.parent_id).forEach(r => {
+      if (!byParent.has(r.parent_id)) byParent.set(r.parent_id, []);
+      byParent.get(r.parent_id).push(r);
+    });
+
+    function commentHTML(c, isReply){
+      const ls = likesByComment.get(c.id) || [];
+      const liked = ls.some(l => l.device_id === deviceId);
+      const avatar = c.avatar_url
+        ? `<img class="avatar" src="${escapeHtml(c.avatar_url)}" alt="" onerror="this.removeAttribute('src')">`
+        : `<div class="avatar"></div>`;
+      const namesLine = ls.length
+        ? `<div class="like-names">${ls.map(l => escapeHtml(l.liker_name)).join("、")} がいいね</div>` : "";
+      const bodyHTML = opts.renderBody ? opts.renderBody(c) : escapeHtml(c.body);
+      return `<div class="comment${isReply ? " reply" : ""}" data-id="${c.id}">` +
+        avatar +
+        `<div class="body-col">` +
+          `<div class="meta"><span class="name">${escapeHtml(c.name)}</span><span>${timeAgo(c.created_at)}</span></div>` +
+          `<div class="text">${bodyHTML}</div>` +
+          (opts.extraFor ? opts.extraFor(c) : "") +
+          `<div class="actions">` +
+            `<button type="button" class="like-btn${liked ? " liked" : ""}" data-id="${c.id}" data-liked="${liked ? 1 : 0}" aria-label="いいね">` +
+              `<span class="heart">💙</span><span>${ls.length || ""}</span></button>` +
+            (isReply ? "" : `<button type="button" class="reply-btn" data-id="${c.id}">返信</button>`) +
+          `</div>` +
+          namesLine +
+          `<div class="reply-slot" data-slot-for="${c.id}"></div>` +
+        `</div>` +
+      `</div>`;
+    }
+
+    listEl.innerHTML = topLevel.map(c => {
+      const replies = (byParent.get(c.id) || []).map(r => commentHTML(r, true)).join("");
+      return commentHTML(c, false) +
+        (replies ? `<div class="comment-list" style="margin-left:26px;">${replies}</div>` : "");
+    }).join("");
+
+    if (openReply) {
+      const slot = listEl.querySelector(`.reply-slot[data-slot-for="${openReplyFor}"]`);
+      if (slot) slot.appendChild(openReply);
+    }
+  }
+
+  // クリックは一括で受ける(再描画のたびに付け直さない)
+  listEl.addEventListener("click", (e) => {
+    const likeBtn = e.target.closest(".like-btn");
+    if (likeBtn) { toggleLike(Number(likeBtn.dataset.id), likeBtn.dataset.liked === "1"); return; }
+    const replyBtn = e.target.closest(".reply-btn");
+    if (replyBtn) {
+      const slot = listEl.querySelector(`.reply-slot[data-slot-for="${replyBtn.dataset.id}"]`);
+      if (slot.querySelector("form")) { slot.innerHTML = ""; return; }
+      slot.innerHTML = commentFormHTML(true);
+      const replyForm = slot.querySelector("form");
+      wireAvatarPicker(replyForm);
+      wireForm(replyForm, Number(replyBtn.dataset.id));
+      replyForm.querySelector("textarea").focus();
+    }
+  });
+
+  async function toggleLike(commentId, liked){
+    const deviceId = getDeviceId();
+    if (liked) {
+      await supabaseClient.from("comment_likes").delete().eq("comment_id", commentId).eq("device_id", deviceId);
+    } else {
+      const likerName = getSavedProfile().name || "wimperさん";
+      const { error } = await supabaseClient
+        .from("comment_likes")
+        .insert({ comment_id: commentId, liker_name: likerName, device_id: deviceId });
+      if (error && /duplicate|unique/i.test(error.message || "")) {
+        await supabaseClient.from("comment_likes").delete().eq("comment_id", commentId).eq("device_id", deviceId);
+      }
+    }
+    refresh();
+  }
+
+  function wireForm(formEl, parentId){
+    formEl.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const fd = new FormData(formEl);
+      const name = (fd.get("name") || "").toString().trim().slice(0, 24) || "wimperさん";
+      const avatar = (fd.get("avatar") || "").toString().trim();
+      const body = (fd.get("body") || "").toString().trim();
+      if (!body) return;
+      saveProfile(name, avatar);
+      const submitBtn = formEl.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      setFormMsg(formEl, "");
+      const { error } = await supabaseClient.from("comments").insert({
+        show_id: showId, parent_id: parentId, name, avatar_url: avatar || null, body
+      });
+      submitBtn.disabled = false;
+      if (error) {
+        setFormMsg(formEl, "投稿できませんでした。通信状況を確認して、もう一度お試しください。");
+        return;
+      }
+      if (parentId) {
+        formEl.remove();
+      } else {
+        formEl.querySelector("textarea").value = "";
+        formEl.dispatchEvent(new Event("posted"));
+      }
+      refresh();
+    });
+  }
+
+  const composerHost = hostEl.querySelector('[data-role="composer"]') ||
+    hostEl.querySelector(":scope > .comments-body");
+  composerHost.insertAdjacentHTML("beforeend", opts.composerHTML ? opts.composerHTML() : commentFormHTML(false));
+  const rootForm = composerHost.querySelector(".comment-form");
+  wireAvatarPicker(rootForm);
+  wireForm(rootForm, null);
+  if (opts.onComposer) opts.onComposer(rootForm);
+
+  supabaseClient
+    .channel(`comments-${showId}`)
+    .on("postgres_changes", { event: "*", schema: "public", table: "comments", filter: `show_id=eq.${showId}` }, scheduleRefresh)
+    .on("postgres_changes", { event: "*", schema: "public", table: "comment_likes" }, (payload) => {
+      // 他の部屋のいいねでは再読み込みしない
+      const cid = (payload.new && payload.new.comment_id) || (payload.old && payload.old.comment_id);
+      if (cid == null || room.ids.has(cid)) scheduleRefresh();
+    })
+    .subscribe();
+
+  refresh();
+  return room;
+}
+
+/* ---- song reactions (Supabase) ---- */
 async function loadReactions(){
   const { data, error } = await supabaseClient
     .from("song_reactions")
@@ -744,235 +1621,504 @@ document.addEventListener("click", (e) => {
   toggleReaction(btn.dataset.show, btn.dataset.title, btn.dataset.kind);
 });
 
-function getDeviceId(){
-  let id = localStorage.getItem("seturi-device-id");
-  if (!id) {
-    id = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random());
-    localStorage.setItem("seturi-device-id", id);
-  }
-  return id;
-}
-function getSavedProfile(){
-  return {
-    name: localStorage.getItem("seturi-name") || "",
-    avatar: localStorage.getItem("seturi-avatar") || ""
-  };
-}
-function saveProfile(name, avatar){
-  localStorage.setItem("seturi-name", name);
-  localStorage.setItem("seturi-avatar", avatar || "");
-}
-function escapeHtml(s){
-  return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
-}
-function timeAgo(iso){
-  const diff = (Date.now() - new Date(iso).getTime()) / 1000;
-  if (diff < 60) return "たった今";
-  if (diff < 3600) return Math.floor(diff / 60) + "分前";
-  if (diff < 86400) return Math.floor(diff / 3600) + "時間前";
-  return Math.floor(diff / 86400) + "日前";
-}
-function commentFormHTML(isReply){
-  const p = getSavedProfile();
-  const hasImage = !!p.avatar;
-  return `<form class="comment-form${isReply ? " reply-form" : ""}">` +
-    `<div class="row">` +
-      `<div class="avatar-picker${hasImage ? " has-image" : ""}">` +
-        `<img class="avatar-preview" src="${escapeHtml(p.avatar)}" ` +
-          `onerror="this.style.visibility='hidden'" style="${hasImage ? "" : "visibility:hidden;"}">` +
-        `<input type="file" accept="image/*" class="avatar-file" title="アイコン画像を選ぶ">` +
-        `<input type="hidden" name="avatar" value="${escapeHtml(p.avatar)}">` +
-      `</div>` +
-      `<input type="text" name="name" placeholder="名前" value="${escapeHtml(p.name)}" required maxlength="24">` +
-    `</div>` +
-    `<textarea name="body" placeholder="感想やコメントを書く" required maxlength="500"></textarea>` +
-    `<button type="submit">投稿</button>` +
-  `</form>`;
-}
-
-async function uploadAvatar(file){
-  const ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
-  const path = `${getDeviceId()}-${Date.now()}.${ext}`;
-  const { error } = await supabaseClient.storage.from("avatars").upload(path, file, { upsert: true });
-  if (error) { alert("画像のアップロードに失敗しました: " + error.message); return null; }
-  const { data } = supabaseClient.storage.from("avatars").getPublicUrl(path);
-  return data.publicUrl;
-}
-
-function wireAvatarPicker(formEl){
-  const picker = formEl.querySelector(".avatar-picker");
-  const fileInput = picker.querySelector(".avatar-file");
-  const preview = picker.querySelector(".avatar-preview");
-  const hidden = picker.querySelector('input[name="avatar"]');
-
-  fileInput.addEventListener("change", async () => {
-    const file = fileInput.files[0];
-    if (!file) return;
-    preview.src = URL.createObjectURL(file);
-    preview.style.visibility = "visible";
-    const badge = document.createElement("div");
-    badge.className = "uploading";
-    badge.textContent = "…";
-    picker.appendChild(badge);
-    const url = await uploadAvatar(file);
-    badge.remove();
-    if (url) {
-      hidden.value = url;
-      picker.classList.add("has-image");
-    }
-  });
-}
-
-async function initShowComments(showId, detailsEl){
-  if (detailsEl.dataset.inited) return;
-  detailsEl.dataset.inited = "1";
-
-  const listEl = detailsEl.querySelector('[data-role="list"]');
-  const countEl = detailsEl.querySelector('[data-role="count"]');
-
-  async function refresh(){
-    const { data: rows, error } = await supabaseClient
-      .from("comments")
-      .select("*")
-      .eq("show_id", showId)
-      .order("created_at", { ascending: true });
-    if (error) { listEl.innerHTML = `<p class="comment-empty">読み込みに失敗しました</p>`; return; }
-
-    const ids = rows.map(r => r.id);
-    let likes = [];
-    if (ids.length) {
-      const { data: likeRows } = await supabaseClient
-        .from("comment_likes")
-        .select("comment_id, liker_name, device_id")
-        .in("comment_id", ids);
-      likes = likeRows || [];
-    }
-    render(rows, likes);
-  }
-
-  function render(rows, likes){
-    const deviceId = getDeviceId();
-    const likesByComment = new Map();
-    likes.forEach(l => {
-      if (!likesByComment.has(l.comment_id)) likesByComment.set(l.comment_id, []);
-      likesByComment.get(l.comment_id).push(l);
-    });
-
-    countEl.textContent = rows.length ? `(${rows.length})` : "";
-    if (!rows.length) {
-      listEl.innerHTML = `<p class="comment-empty">まだコメントはありません。最初の一言をどうぞ。</p>`;
-      return;
-    }
-
-    const topLevel = rows.filter(r => !r.parent_id);
-    const byParent = new Map();
-    rows.filter(r => r.parent_id).forEach(r => {
-      if (!byParent.has(r.parent_id)) byParent.set(r.parent_id, []);
-      byParent.get(r.parent_id).push(r);
-    });
-
-    function commentHTML(c, isReply){
-      const ls = likesByComment.get(c.id) || [];
-      const liked = ls.some(l => l.device_id === deviceId);
-      const avatar = c.avatar_url
-        ? `<img class="avatar" src="${escapeHtml(c.avatar_url)}" alt="">`
-        : `<div class="avatar"></div>`;
-      const namesLine = ls.length
-        ? `<div class="like-names">${ls.map(l => escapeHtml(l.liker_name)).join("、")} がいいね</div>` : "";
-      return `<div class="comment${isReply ? " reply" : ""}" data-id="${c.id}">` +
-        avatar +
-        `<div class="body-col">` +
-          `<div class="meta"><span class="name">${escapeHtml(c.name)}</span><span>${timeAgo(c.created_at)}</span></div>` +
-          `<div class="text">${escapeHtml(c.body)}</div>` +
-          `<div class="actions">` +
-            `<button type="button" class="like-btn${liked ? " liked" : ""}" data-id="${c.id}">` +
-              `<span class="heart">💙</span><span>${ls.length || ""}</span></button>` +
-            (isReply ? "" : `<button type="button" class="reply-btn" data-id="${c.id}">返信</button>`) +
-          `</div>` +
-          namesLine +
-          `<div class="reply-slot" data-slot-for="${c.id}"></div>` +
-        `</div>` +
-      `</div>`;
-    }
-
-    listEl.innerHTML = topLevel.map(c => {
-      const replies = (byParent.get(c.id) || []).map(r => commentHTML(r, true)).join("");
-      return commentHTML(c, false) +
-        (replies ? `<div class="comment-list" style="margin-left:26px;">${replies}</div>` : "");
-    }).join("");
-
-    listEl.querySelectorAll(".like-btn").forEach(btn => {
-      btn.addEventListener("click", () => toggleLike(Number(btn.dataset.id), refresh));
-    });
-    listEl.querySelectorAll(".reply-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const slot = listEl.querySelector(`.reply-slot[data-slot-for="${btn.dataset.id}"]`);
-        if (slot.querySelector("form")) { slot.innerHTML = ""; return; }
-        slot.innerHTML = commentFormHTML(true);
-        const replyForm = slot.querySelector("form");
-        wireAvatarPicker(replyForm);
-        wireForm(replyForm, Number(btn.dataset.id), refresh);
-      });
-    });
-  }
-
-  async function toggleLike(commentId, cb){
-    const deviceId = getDeviceId();
-    const profile = getSavedProfile();
-    const likerName = profile.name || "wimperさん";
-    const { error: insertError } = await supabaseClient
-      .from("comment_likes")
-      .insert({ comment_id: commentId, liker_name: likerName, device_id: deviceId });
-    if (insertError) {
-      await supabaseClient.from("comment_likes").delete()
-        .eq("comment_id", commentId).eq("device_id", deviceId);
-    }
-    cb();
-  }
-
-  function wireForm(formEl, parentId, cb){
-    formEl.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const fd = new FormData(formEl);
-      const name = (fd.get("name") || "").toString().trim().slice(0, 24) || "wimperさん";
-      const avatar = (fd.get("avatar") || "").toString().trim();
-      const body = (fd.get("body") || "").toString().trim();
-      if (!body) return;
-      saveProfile(name, avatar);
-      const submitBtn = formEl.querySelector("button");
-      submitBtn.disabled = true;
-      await supabaseClient.from("comments").insert({
-        show_id: showId, parent_id: parentId, name, avatar_url: avatar || null, body
-      });
-      formEl.reset();
-      formEl.querySelector('[name="name"]').value = name;
-      formEl.querySelector('[name="avatar"]').value = avatar;
-      submitBtn.disabled = false;
-      cb();
-    });
-  }
-
-  const formHost = detailsEl.querySelector(":scope > .comments-body");
-  formHost.insertAdjacentHTML("beforeend", commentFormHTML());
-  const rootForm = formHost.querySelector(".comment-form");
-  wireAvatarPicker(rootForm);
-  wireForm(rootForm, null, refresh);
-
-  supabaseClient
-    .channel(`comments-${showId}`)
-    .on("postgres_changes", { event: "*", schema: "public", table: "comments", filter: `show_id=eq.${showId}` }, refresh)
-    .on("postgres_changes", { event: "*", schema: "public", table: "comment_likes" }, refresh)
-    .subscribe();
-
-  refresh();
-}
-
 const generalTalkEl = document.getElementById("generalTalk");
 generalTalkEl.addEventListener("toggle", () => {
   if (generalTalkEl.open) initShowComments("general", generalTalkEl);
-}, { once: false });
+});
 
 loadReactions().then(refreshAllReactionButtons);
+
+/* ---- 横浜 前夜トーク ---- */
+const EVE = {
+  showId: "yokohama-pre",
+  // 開演時刻は LiveFans 掲載の 19:00。変更があればここを直す
+  shows: [
+    { key: "11/10", tag: "#10日", label: "横浜 1日目", day: "11/10(火)", stub: "11.10 TUE", venue: "ぴあアリーナMM", start: "2026-11-10T19:00:00+09:00" },
+    { key: "11/11", tag: "#11日", label: "横浜 2日目", day: "11/11(水)", stub: "11.11 WED", venue: "ぴあアリーナMM", start: "2026-11-11T19:00:00+09:00" }
+  ],
+  away: { key: "away", tag: "#行けない組", label: "行けない組", day: "今回は行けない組" },
+  moods: ["#楽しみ", "#セトリ予想", "#グッズ", "#遠征", "#ひとりごと"],
+  showHours: 3
+};
+EVE.groups = EVE.shows.concat([EVE.away]);
+const PREDICT_TAG = "#セトリ予想";
+const eveState = { date: "all", tag: null };
+const eveEl = document.getElementById("eveRoom");
+
+function escRe(s){ return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+function hasTag(text, tag){ return new RegExp("(^|\\s)" + escRe(tag) + "(?=\\s|$)").test(text || ""); }
+function groupOf(key){ return EVE.groups.find(g => g.key === key); }
+function normTitle(t){
+  return String(t).normalize("NFKC").toLowerCase().replace(/[（(][^）)]*[）)]/g, "").replace(/[\s・\-ー−〜~.。…]/g, "");
+}
+function cleanTitle(t){ return String(t).replace(/（[^）]*）/g, "").trim(); }
+
+/* カウントダウン(チケットの半券風) */
+function jstDay(t){ return Math.floor((t + 9 * 3600e3) / 864e5); }
+function pad2(n){ return String(n).padStart(2, "0"); }
+function renderCountdown(){
+  const el = document.getElementById("eveCountdown");
+  const now = Date.now();
+  const next = EVE.shows.find(s => now < new Date(s.start).getTime() + EVE.showHours * 3600e3);
+  if (!next) {
+    el.innerHTML = `<div class="stub-top"><span>YOKOHAMA 2DAYS</span></div>` +
+      `<div class="stub-time word">おつかれさまでした</div><div class="stub-meta">感想は各公演カードのコメント欄へ</div>`;
+    return;
+  }
+  const start = new Date(next.start).getTime();
+  const hm = new Date(start).toLocaleTimeString("ja-JP", { timeZone: "Asia/Tokyo", hour: "2-digit", minute: "2-digit" });
+  const head = `<div class="stub-date">${next.stub}</div><div class="stub-meta">${next.label} ・ ${next.venue} ・ START ${hm}</div>`;
+  const diff = start - now;
+  if (diff <= 0) {
+    el.innerHTML = `<div class="stub-top"><span>ADMISSION</span><span class="stub-badge">ON STAGE</span></div>` + head +
+      `<div class="stub-time word">いってらっしゃい</div>`;
+    return;
+  }
+  const dd = jstDay(start) - jstDay(now);
+  const badge = dd === 0 ? "当日" : dd === 1 ? "前夜" : dd === 2 ? "前々夜" : `あと${dd}日`;
+  const s = Math.floor(diff / 1000);
+  const d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60), sec = s % 60;
+  el.innerHTML = `<div class="stub-top"><span>ADMISSION</span><span class="stub-badge">${badge}</span></div>` + head +
+    `<div class="stub-time">${d ? `${d}<small>日</small>` : ""}${pad2(h)}:${pad2(m)}:${pad2(sec)}</div>`;
+}
+renderCountdown();
+setInterval(renderCountdown, 1000);
+
+/* セトリ予想の読み取りと答え合わせ */
+function parsePrediction(body){
+  if (!body || !body.includes(PREDICT_TAG)) return null;
+  const items = [];
+  body.split(/\r?\n/).forEach(line => {
+    const m = line.match(/^\s*((?:EN|ＥＮ)\s*\d+|\d+)(?:\s*[.．、:：)）]\s*|\s+)(.+?)\s*$/i);
+    if (m && !/^[#＃]/.test(m[2])) items.push({ no: m[1].replace(/\s/g, "").replace("ＥＮ", "EN").toUpperCase(), title: m[2] });
+  });
+  return items.length ? items : null;
+}
+function actualFor(key){
+  const s = shows.find(x => x.date === key && !x.placeholder);
+  return s && s.songs.length ? s : null;
+}
+function judgeHTML(c){
+  const pred = parsePrediction(c.body);
+  if (!pred) return "";
+  const results = EVE.shows.filter(s => hasTag(c.body, s.tag)).map(s => {
+    const act = actualFor(s.key);
+    if (!act) return null;
+    const actual = new Map(act.songs.map(([n, t]) => [normTitle(t), String(n).toUpperCase()]));
+    let hit = 0, exact = 0;
+    const seen = new Set();
+    pred.forEach(p => {
+      const k = normTitle(p.title);
+      if (seen.has(k)) return;
+      seen.add(k);
+      if (actual.has(k)) { hit++; if (actual.get(k) === p.no) exact++; }
+    });
+    return `${s.label} ${hit}/${act.songs.length}曲的中` + (exact ? `(曲順ピタリ${exact}曲)` : "");
+  }).filter(Boolean);
+  return results.length ? `<div class="hit">答え合わせ:${results.join(" / ")}</div>` : "";
+}
+
+/* しぼり込み */
+function eveFilter(r){
+  if (eveState.date !== "all" && !hasTag(r.body, groupOf(eveState.date).tag)) return false;
+  if (eveState.tag && !hasTag(r.body, eveState.tag)) return false;
+  return true;
+}
+function applyEveFilter(){
+  eveRoom.rerender();
+  renderEveSide(eveRoom.rows);
+}
+
+function renderEveSide(rows){
+  const top = rows.filter(r => !r.parent_id);
+
+  document.getElementById("eveTabs").innerHTML =
+    [{ key: "all", text: "すべて", n: top.length }]
+      .concat(EVE.groups.map(g => ({ key: g.key, text: g.day, n: top.filter(r => hasTag(r.body, g.tag)).length })))
+      .map(t => `<button type="button" role="tab" data-date-tab="${t.key}" class="${eveState.date === t.key ? "active" : ""}" ` +
+        `aria-selected="${eveState.date === t.key}">${t.text}<span class="n">${t.n}</span></button>`).join("");
+
+  document.getElementById("eveTagCard").innerHTML =
+    `<h4>タグでしぼる</h4><p class="sub">投稿の中のタグを押しても、しぼり込めます。</p><div class="chip-row">` +
+    EVE.moods.map(t => `<button type="button" class="chip${eveState.tag === t ? " on" : ""}" data-filter-tag="${t}">` +
+      `${t}<small>${top.filter(r => hasTag(r.body, t)).length}</small></button>`).join("") +
+    `</div>`;
+
+  const bar = document.getElementById("eveFilterBar");
+  bar.innerHTML = eveState.tag
+    ? `<span>${escapeHtml(eveState.tag)} の投稿だけ表示中</span><button type="button" class="linklike" data-clear-tag>解除</button>`
+    : "";
+
+  renderRanking(top);
+}
+
+function renderRanking(top){
+  const box = document.getElementById("eveRanking");
+  const g = eveState.date === "all" ? null : groupOf(eveState.date);
+  const scope = g ? g.label : "全体";
+  const preds = top.filter(r => !g || hasTag(r.body, g.tag)).map(r => parsePrediction(r.body)).filter(Boolean);
+  if (!preds.length) {
+    box.innerHTML = `<h4>みんなのセトリ予想</h4><p class="sub" style="margin:0;">${scope}の予想はまだありません。上のメーカーで作って、一番乗りをどうぞ。</p>`;
+    return;
+  }
+  const count = new Map(), label = new Map(), firsts = new Map(), lasts = new Map();
+  const bump = (m, k) => m.set(k, (m.get(k) || 0) + 1);
+  preds.forEach(items => {
+    const seen = new Set();
+    items.forEach(it => {
+      const k = normTitle(it.title);
+      if (!k || seen.has(k)) return;
+      seen.add(k);
+      bump(count, k);
+      if (!label.has(k)) label.set(k, it.title);
+    });
+    bump(firsts, normTitle(items[0].title));
+    bump(lasts, normTitle(items[items.length - 1].title));
+  });
+  const played = new Set();
+  EVE.shows.filter(s => !g || s === g).forEach(s => {
+    const act = actualFor(s.key);
+    if (act) act.songs.forEach(([, t]) => played.add(normTitle(t)));
+  });
+  const best = m => {
+    const e = [...m.entries()].sort((a, b) => b[1] - a[1])[0];
+    return e ? `${escapeHtml(label.get(e[0]) || e[0])}(${e[1]}人)` : "—";
+  };
+  const rank = [...count.entries()].sort((a, b) => b[1] - a[1]).slice(0, 12);
+  box.innerHTML = `<h4>みんなのセトリ予想</h4><p class="sub">${scope}・予想${preds.length}件から集計</p>` +
+    `<ol class="rank">` + rank.map(([k, n], i) => {
+      const hit = played.has(k);
+      return `<li><div class="row1"><span class="${hit ? "played" : ""}">${i + 1}. ${escapeHtml(label.get(k))}${hit ? " ✓" : ""}</span>` +
+        `<span>${n}/${preds.length}</span></div><div class="bar"><i style="width:${Math.round(n / preds.length * 100)}%"></i></div></li>`;
+    }).join("") + `</ol>` +
+    `<div class="rank-extra">1曲目の予想トップ:${best(firsts)}<br>ラストの予想トップ:${best(lasts)}` +
+    (played.size ? `<br>✓ = 実際に演奏された曲` : "") + `</div>`;
+}
+
+eveEl.addEventListener("click", (e) => {
+  const tab = e.target.closest("[data-date-tab]");
+  if (tab) { eveState.date = tab.dataset.dateTab; applyEveFilter(); return; }
+  const ft = e.target.closest("[data-filter-tag]");
+  if (ft) { eveState.tag = eveState.tag === ft.dataset.filterTag ? null : ft.dataset.filterTag; applyEveFilter(); return; }
+  if (e.target.closest("[data-clear-tag]")) { eveState.tag = null; applyEveFilter(); return; }
+  const tl = e.target.closest("button.tag");
+  if (tl) {
+    const g = EVE.groups.find(x => x.tag === tl.dataset.tag);
+    if (g) eveState.date = g.key; else eveState.tag = tl.dataset.tag;
+    applyEveFilter();
+    document.getElementById("eveTabs").scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }
+});
+
+/* 投稿欄 */
+function eveComposerHTML(){
+  return `<form class="comment-form composer">` +
+    avatarRowHTML() +
+    `<textarea name="body" placeholder="前夜の「楽しみ！」をここに。行けない人の「念」も大歓迎" required maxlength="500"></textarea>` +
+    `<div class="chip-row"><span class="chip-label">参戦</span>` +
+      EVE.groups.map(g => `<button type="button" class="chip" data-insert-tag="${g.tag}">${g.tag}</button>`).join("") +
+    `</div>` +
+    `<div class="chip-row"><span class="chip-label">タグ</span>` +
+      EVE.moods.filter(t => t !== PREDICT_TAG).map(t => `<button type="button" class="chip" data-insert-tag="${t}">${t}</button>`).join("") +
+    `</div>` +
+    `<p class="form-msg" data-role="msg"></p>` +
+    `<div class="composer-foot">` +
+      `<button type="button" class="linklike" data-open-maker>セトリ予想を作る ↑</button>` +
+      `<button type="submit">投稿</button>` +
+    `</div>` +
+  `</form>`;
+}
+let eveForm = null;
+function syncChips(){
+  const ta = eveForm.querySelector("textarea");
+  eveForm.querySelectorAll("[data-insert-tag]").forEach(b => b.classList.toggle("on", hasTag(ta.value, b.dataset.insertTag)));
+}
+function toggleTagInText(tag){
+  const ta = eveForm.querySelector("textarea");
+  if (hasTag(ta.value, tag)) {
+    ta.value = ta.value.replace(new RegExp("(^|[ \\t]*)" + escRe(tag) + "(?=\\s|$)"), "").replace(/^[ \t]+/, "");
+  } else {
+    const v = ta.value.replace(/[ \t]+$/, "");
+    ta.value = v + (v && !/\n$/.test(v) ? " " : "") + tag;
+  }
+  syncChips();
+  ta.focus();
+}
+function wireEveComposer(form){
+  eveForm = form;
+  form.addEventListener("click", (e) => {
+    const chip = e.target.closest("[data-insert-tag]");
+    if (chip) { toggleTagInText(chip.dataset.insertTag); return; }
+    if (e.target.closest("[data-open-maker]")) {
+      makerEl.classList.remove("collapsed");
+      makerEl.querySelector("[data-maker-toggle]").textContent = "たたむ";
+      makerEl.scrollIntoView({ block: "start", behavior: "smooth" });
+    }
+  });
+  form.querySelector("textarea").addEventListener("input", syncChips);
+  form.addEventListener("posted", syncChips);
+}
+
+/* ---- セトリ予想メーカー ---- */
+// RADの曲リスト(公式ディスコグラフィをもとに、映画のBGM・別バージョン・スキットを除いたもの)。足りない曲は「リストにない曲」から追加
+const RAD_CATALOG = ["人生出会い", "自暴自棄自己中心的(思春期)自己依存症の少年", "心臓", "もしも", "さみしい僕", "コンドーム", "青い春", "「ぼく」と「僕」", "あいまい", "嫌ん", "「ずっと大好きだよ」「ほんと？・・・」", "愛へ", "あいラブユー", "祈跡", "僕チン", "何十年後かに「君」と出会っていなかったアナタに向けた歌", "そこにある", "なんちって", "そりゃ君が好きだから", "夢見月に何想ふ", "ノットビコーズ", "愛し", "ヒキコモリロリン", "俺色スカイ", "音の葉", "シリメツレツ", "ララバイ", "へっくしゅん", "25コ目の染色体", "アンチクローン", "イーディーピー ～飛んで火に入る夏の君～", "ささくれ", "4645", "セプテンバーさん", "閉じた光", "揶揄", "螢", "おとぎ", "最大公約数", "トレモロ", "最後の歌", "ふたりごと", "ラバボー", "有心論", "ジェニファー山田さん", "セツナレンサ", "バイ・マイ・サイ", "ギミギミック", "05410-(ん)", "me me she", "遠恋", "いいんですか？", "指切りげんまん", "傘拍子", "ます。", "夢番地", "バグッバイ", "オーダーメイド", "グーの音", "タユタ", "おしゃかしゃま", "バグパイプ", "謎謎", "七ノ歌", "One man live", "ソクラティックラブ", "メルヘンとグレーテル", "雨音子", "魔法鏡", "叫べ", "37458", "携帯電話", "ハイパーベンチレイション", "マニフェスト", "やどかり", "DADA", "縷々", "狭心症", "寿限夢", "透明人間18号", "君と羊と青", "だいだらぼっち", "学芸会", "グラウンドゼロ", "π", "G行為", "DUGOUT", "ものもらい", "億万笑者", "救世主", "キズもの", "ブレス", "シュプレヒコール", "独白", "22:20:12:5:14:2012", "ドリーマーズ・ハイ", "シザースタンド", "五月の蝿", "ラストバージン", "にっぽんぽん", "いえない", "実況中継", "アイアンバイブル", "リユニオン", "DARMA GRAND PRIX", "最後の晩餐", "夕霧", "パーフェクトベイビー", "会心の一撃", "Tummy", "針と棘", "ピクニック", "ラブラドール", "ブリキ", "記号として", "‘I’ Novel", "お風呂あがりの", "夢灯籠", "前前前世", "かたわれ時", "スパークル", "なんでもないや", "Lights go out", "光", "AADAAKOODAA", "トアルハルノヒ", "アメノヒニキク", "週刊少年ジャンプ", "棒人間", "ヒトボシ", "Bring me the morning", "O&O", "告白", "サイハテアイニ", "洗脳", "Mountain Top", "Shape Of Miracle", "カタルシスト", "HINOMARU", "tazuna", "NEVER EVER ENDER", "IKIJIBIKI feat.Taka", "そっけない", "PAPARAZZI～＊この物語はフィクションです～", "HOCUSPOCUS", "万歳千唱", "I I U", "泣き出しそうだよ feat.あいみょん", "TIE TONGUE feat.Miyachi, Tabu Zombie", "正解", "風たちの声", "祝祭 feat.三浦透子", "愛にできることはまだあるかい", "グランドエスケープ", "大丈夫", "夏のせい", "猫じゃらし", "Light The Light", "新世界", "ココロノナカ", "白日", "カイコ", "あいとわ", "春灯", "空窓", "夜の淵", "世界の果て", "かくれんぼ", "あいたい", "海馬", "SHIWAKUCHA feat.Awich", "匿名希望", "TWILIGHT", "桃源郷", "Tokyo feat.iri", "うたかた歌 feat.菅田将暉", "犬じゃらし", "かたわれ", "鋼の羽根", "SUMMER DAZE 2021", "うるうびと", "人間ごっこ", "カナタハルカ", "すずめ feat.十明", "すずめの涙", "MAKAFUKA", "KANASHIBARI feat.ao", "大団円 feat.ZORN", "Tamaki", "賜物", "命題", "まーふぁか", "ワールドエンドガールフレンド", "DASAI DAZAI", "なんていう", "MOUNTAIN VANILLA", "Odakyu Line", "筆舌", "ピリオド。", "成れの果てで鳴れ", "ピアフ", "夕星-ゆうづつ-", "汝、星のごとく", "娑婆堕罵 -Shabadaba-", "おっぱい", "泣きたい夜ってこんな感じ", "ツクツク法師"];
+
+const maker = { main: [], en: [], target: "main", pool: "tour", q: "" };
+try {
+  const saved = JSON.parse(store.get("eve-maker-v2") || "null");
+  if (saved && Array.isArray(saved.main) && Array.isArray(saved.en)) {
+    maker.main = saved.main.slice(0, 40); maker.en = saved.en.slice(0, 20);
+  }
+} catch (e) {}
+function saveMaker(){ store.set("eve-maker-v2", JSON.stringify({ main: maker.main, en: maker.en })); }
+
+const tourPool = (() => {
+  const m = new Map();
+  shows.filter(s => !s.placeholder).forEach(s => s.songs.forEach(([, t]) => {
+    if (t === "？？？") return;
+    const title = cleanTitle(t);
+    const k = normTitle(title);
+    if (!m.has(k)) m.set(k, { title, shows: new Set() });
+    m.get(k).shows.add(s.label + s.date);
+  }));
+  return [...m.values()].map(x => ({ title: x.title, n: x.shows.size })).sort((a, b) => b.n - a.n);
+})();
+const allPool = (() => {
+  const m = new Map();
+  tourPool.forEach(s => m.set(normTitle(s.title), s));
+  RAD_CATALOG.forEach(t => { const k = normTitle(t); if (!m.has(k)) m.set(k, { title: t, n: 0 }); });
+  return [...m.values()].sort((a, b) => a.title.localeCompare(b.title, "ja"));
+})();
+const lastShow = shows.filter(s => !s.placeholder && s.songs.length).slice(-1)[0];
+
+const makerEl = document.getElementById("eveMaker");
+function makerMsg(t){ makerEl.querySelector('[data-role="maker-msg"]').textContent = t || ""; }
+function inSetlist(title){
+  const k = normTitle(title);
+  const i = maker.main.findIndex(x => normTitle(x) === k);
+  if (i >= 0) return { sec: "main", i };
+  const j = maker.en.findIndex(x => normTitle(x) === k);
+  if (j >= 0) return { sec: "en", i: j };
+  return null;
+}
+function renderMakerSongs(){
+  const pool = maker.pool === "tour" ? tourPool : allPool;
+  const q = normTitle(maker.q);
+  const list = q ? pool.filter(s => normTitle(s.title).includes(q)) : pool;
+  makerEl.querySelector('[data-role="songs"]').innerHTML = list.length
+    ? list.map(s => {
+        const where = inSetlist(s.title);
+        const pos = where ? (where.sec === "main" ? String(where.i + 1) : "EN" + (where.i + 1)) : "";
+        return `<button type="button" class="chip${where ? " on" : ""}" data-song="${escapeHtml(s.title)}">` +
+          (pos ? `<span class="pos">${pos}</span>` : "") + escapeHtml(s.title) +
+          (s.n ? `<small>${s.n}/${totalShows}</small>` : "") + `</button>`;
+      }).join("")
+    : `<p class="empty">見つかりません。下の「リストにない曲」から追加できます。</p>`;
+}
+let makerSel = null;   // タップで選んでいる曲 { sec, i }
+let makerJust = null;  // 直前に動かした曲(アニメ用)
+let suppressClick = false;
+function paperItems(sec){
+  const arr = maker[sec];
+  if (!arr.length) {
+    return `<li class="empty" data-drop-sec="${sec}">${sec === "main" ? "ここに1曲目から並びます" : "アンコールなしでもOK"}</li>`;
+  }
+  return arr.map((t, i) => {
+    const no = sec === "main" ? String(i + 1) : "EN" + (i + 1);
+    const sel = makerSel && makerSel.sec === sec && makerSel.i === i;
+    const just = makerJust && makerJust.sec === sec && makerJust.i === i;
+    return `<li class="item${sel ? " sel" : ""}${just ? " just" : ""}" data-sec="${sec}" data-i="${i}">` +
+      `<span class="grip" data-grip title="つかんで並べ替え" aria-hidden="true"><i></i><i></i><i></i></span>` +
+      `<span class="no">${no}</span><span class="t">${escapeHtml(t)}</span><span class="ops">` +
+      `<button type="button" data-op="swap" data-sec="${sec}" data-i="${i}" title="${sec === "main" ? "アンコールへ移す" : "本編へ移す"}">${sec === "main" ? "→EN" : "→本編"}</button>` +
+      `<button type="button" data-op="rm" data-sec="${sec}" data-i="${i}" aria-label="外す">×</button>` +
+      `</span></li>`;
+  }).join("");
+}
+function makerHint(){
+  const el = makerEl.querySelector('[data-role="hint"]');
+  if (makerSel) {
+    const t = maker[makerSel.sec][makerSel.i];
+    el.innerHTML = `<b>「${escapeHtml(t)}」を選択中</b> → 移動したい場所の曲をタップ(もう一度タップで解除)`;
+    el.classList.add("on");
+  } else {
+    el.textContent = "曲をタップ → 移動先の曲をタップで入れ替え。左の ≡ をつかんでドラッグもOK";
+    el.classList.remove("on");
+  }
+}
+// ins = 元の配列での挿入位置
+function moveItem(from, toSec, ins){
+  const [t] = maker[from.sec].splice(from.i, 1);
+  if (from.sec === toSec && from.i < ins) ins--;
+  ins = Math.max(0, Math.min(ins, maker[toSec].length));
+  maker[toSec].splice(ins, 0, t);
+  makerSel = null;
+  makerJust = { sec: toSec, i: ins };
+  saveMaker(); renderMaker();
+}
+function renderMaker(){
+  makerEl.querySelector('[data-role="n-tour"]').textContent = tourPool.length;
+  makerEl.querySelector('[data-role="n-all"]').textContent = allPool.length;
+  makerEl.querySelectorAll("[data-pool]").forEach(b => b.classList.toggle("active", b.dataset.pool === maker.pool));
+  makerEl.querySelectorAll("[data-target]").forEach(b => b.classList.toggle("on", b.dataset.target === maker.target));
+  makerEl.querySelector("[data-maker-base]").textContent = `前回(${lastShow.label})を写す`;
+  makerEl.querySelector('[data-role="mmain"]').innerHTML = paperItems("main");
+  makerEl.querySelector('[data-role="men"]').innerHTML = paperItems("en");
+  makerHint();
+  makerJust = null;
+  const total = maker.main.length + maker.en.length;
+  makerEl.querySelector('[data-role="status"]').textContent = total
+    ? `本編${maker.main.length}曲` + (maker.en.length ? ` + EN${maker.en.length}曲` : "") : "";
+  renderMakerSongs();
+}
+function toggleSong(title){
+  const t = cleanTitle(title).slice(0, 40);
+  if (!t) return;
+  const where = inSetlist(t);
+  makerSel = null;
+  if (where) maker[where.sec].splice(where.i, 1);
+  else { maker[maker.target].push(t); makerJust = { sec: maker.target, i: maker[maker.target].length - 1 }; }
+  makerMsg("");
+  saveMaker(); renderMaker();
+}
+makerEl.addEventListener("click", (e) => {
+  if (suppressClick) { suppressClick = false; return; }
+  const song = e.target.closest("[data-song]");
+  if (song) { toggleSong(song.dataset.song); return; }
+  const pool = e.target.closest("[data-pool]");
+  if (pool) { maker.pool = pool.dataset.pool; renderMaker(); return; }
+  const target = e.target.closest("[data-target]");
+  if (target) { maker.target = target.dataset.target; renderMaker(); return; }
+  const op = e.target.closest("[data-op]");
+  if (op) {
+    const sec = op.dataset.sec, i = Number(op.dataset.i), arr = maker[sec];
+    makerSel = null;
+    if (op.dataset.op === "rm") arr.splice(i, 1);
+    if (op.dataset.op === "swap") {
+      const [t] = arr.splice(i, 1);
+      if (sec === "main") { maker.en.unshift(t); makerJust = { sec: "en", i: 0 }; }
+      else { maker.main.push(t); makerJust = { sec: "main", i: maker.main.length - 1 }; }
+    }
+    saveMaker(); renderMaker(); return;
+  }
+  const li = e.target.closest(".paper-list li.item");
+  if (li) {
+    const sec = li.dataset.sec, i = Number(li.dataset.i);
+    if (!makerSel) { makerSel = { sec, i }; renderMaker(); return; }
+    if (makerSel.sec === sec && makerSel.i === i) { makerSel = null; renderMaker(); return; }
+    const ins = (makerSel.sec === sec && makerSel.i < i) ? i + 1 : i;
+    moveItem(makerSel, sec, ins); return;
+  }
+  const drop = e.target.closest("[data-drop-sec]");
+  if (drop && makerSel) { moveItem(makerSel, drop.dataset.dropSec, maker[drop.dataset.dropSec].length); return; }
+  if (e.target.closest("[data-maker-add]")) {
+    const inp = makerEl.querySelector('[data-role="free"]');
+    if (inp.value.trim()) toggleSong(inp.value);
+    inp.value = ""; return;
+  }
+  if (e.target.closest("[data-maker-base]")) {
+    maker.main = lastShow.songs.filter(([n]) => !/^EN/i.test(n)).map(([, t]) => cleanTitle(t));
+    maker.en = lastShow.songs.filter(([n]) => /^EN/i.test(n)).map(([, t]) => cleanTitle(t));
+    makerSel = null; saveMaker(); renderMaker(); return;
+  }
+  if (e.target.closest("[data-maker-clear]")) { maker.main = []; maker.en = []; makerSel = null; saveMaker(); renderMaker(); return; }
+  if (e.target.closest("[data-maker-toggle]")) {
+    const c = makerEl.classList.toggle("collapsed");
+    e.target.textContent = c ? "ひらく" : "たたむ";
+    return;
+  }
+  if (e.target.closest("[data-maker-insert]")) insertPrediction();
+});
+
+/* ドラッグで並べ替え(マウス・指どちらも) */
+let drag = null;
+function clearDropMarks(){
+  makerEl.querySelectorAll(".drop-before,.drop-after,.drop-into").forEach(el => el.classList.remove("drop-before", "drop-after", "drop-into"));
+}
+makerEl.addEventListener("pointerdown", (e) => {
+  const grip = e.target.closest("[data-grip]");
+  if (!grip) return;
+  const li = grip.closest("li.item");
+  e.preventDefault();
+  try { grip.setPointerCapture(e.pointerId); } catch (err) {}
+  drag = { from: { sec: li.dataset.sec, i: Number(li.dataset.i) }, li, startY: e.clientY, moved: false, target: null };
+});
+makerEl.addEventListener("pointermove", (e) => {
+  if (!drag) return;
+  if (!drag.moved && Math.abs(e.clientY - drag.startY) < 4) return;
+  drag.moved = true;
+  drag.li.classList.add("dragging");
+  drag.li.style.transform = `translateY(${e.clientY - drag.startY}px)`;
+  clearDropMarks();
+  const el = document.elementFromPoint(e.clientX, e.clientY);
+  const over = el && el.closest(".paper-list li, .paper-en-label");
+  if (!over || over === drag.li) { drag.target = null; return; }
+  if (over.classList.contains("paper-en-label")) { over.classList.add("drop-into"); drag.target = { sec: "en", ins: 0 }; return; }
+  if (over.classList.contains("empty")) { over.classList.add("drop-into"); drag.target = { sec: over.dataset.dropSec, ins: 0 }; return; }
+  const r = over.getBoundingClientRect();
+  const after = e.clientY > r.top + r.height / 2;
+  over.classList.add(after ? "drop-after" : "drop-before");
+  const i = Number(over.dataset.i);
+  drag.target = { sec: over.dataset.sec, ins: after ? i + 1 : i };
+});
+function endDrag(){
+  if (!drag) return;
+  const d = drag; drag = null;
+  clearDropMarks();
+  d.li.classList.remove("dragging");
+  d.li.style.transform = "";
+  if (d.moved) {
+    suppressClick = true;
+    setTimeout(() => { suppressClick = false; }, 60);
+    if (d.target) moveItem(d.from, d.target.sec, d.target.ins);
+  }
+}
+makerEl.addEventListener("pointerup", endDrag);
+makerEl.addEventListener("pointercancel", endDrag);
+makerEl.querySelector('[data-role="q"]').addEventListener("input", (e) => { maker.q = e.target.value; renderMakerSongs(); });
+makerEl.querySelector('[data-role="free"]').addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.isComposing) {
+    e.preventDefault();
+    if (e.target.value.trim()) toggleSong(e.target.value);
+    e.target.value = "";
+  }
+});
+
+function insertPrediction(){
+  const total = maker.main.length + maker.en.length;
+  if (!total) { makerMsg("曲を1曲以上選んでください。"); return; }
+  const ta = eveForm.querySelector("textarea");
+  const groupTags = EVE.groups.map(g => g.tag).filter(t => hasTag(ta.value, t));
+  // 予想以外に書いていた文章は残す
+  let keep = ta.value.includes(PREDICT_TAG) ? "" : ta.value;
+  groupTags.forEach(t => { keep = keep.replace(new RegExp("(^|[ \\t]*)" + escRe(t) + "(?=\\s|$)", "g"), ""); });
+  keep = keep.trim();
+  const head = [PREDICT_TAG].concat(groupTags).join(" ");
+  const lines = maker.main.map((t, i) => `${i + 1}. ${t}`).concat(maker.en.map((t, i) => `EN${i + 1}. ${t}`));
+  const text = [head].concat(lines).join("\n") + (keep ? "\n\n" + keep : "");
+  if (text.length > 500) { makerMsg(`500字を超えています(${text.length}字)。曲数を減らすか、コメントを短くしてください。`); return; }
+  ta.value = text;
+  syncChips();
+  makerMsg("");
+  const dateTagged = EVE.shows.some(s => hasTag(text, s.tag));
+  setFormMsg(eveForm, dateTagged ? "" : "参戦日タグ(#10日 / #11日)を付けると、公演後に答え合わせが出ます。");
+  ta.scrollIntoView({ block: "center", behavior: "smooth" });
+  ta.focus();
+}
+renderMaker();
+
+const eveRoom = initShowComments(EVE.showId, eveEl, {
+  order: "desc",
+  filter: eveFilter,
+  renderBody: c => linkifyTags(c.body),
+  extraFor: judgeHTML,
+  emptyText: "まだ投稿はありません。最初の「楽しみ！」をどうぞ。",
+  filteredEmptyText: "この条件の投稿はまだありません。",
+  composerHTML: eveComposerHTML,
+  onComposer: wireEveComposer,
+  onData: renderEveSide
+});
+renderEveSide([]);
 
 /* ---- hamburger nav menu ---- */
 const menuToggle = document.getElementById("menuToggle");
@@ -998,6 +2144,15 @@ navMenu.querySelectorAll("button[data-view]").forEach(btn => {
     closeNavMenu();
   });
 });
+document.getElementById("navToLinks").addEventListener("click", () => {
+  document.getElementById("links").scrollIntoView({ behavior: "smooth", block: "start" });
+  closeNavMenu();
+});
+document.getElementById("navToEve").addEventListener("click", () => {
+  closeNavMenu();
+  if (!document.getElementById("content").classList.contains("visible")) { revealContent("eveRoom"); return; }
+  eveEl.scrollIntoView({ behavior: "smooth", block: "start" });
+});
 document.getElementById("navToTalk").addEventListener("click", () => {
   generalTalkEl.open = true;
   generalTalkEl.dispatchEvent(new Event("toggle"));
@@ -1005,79 +2160,46 @@ document.getElementById("navToTalk").addEventListener("click", () => {
   closeNavMenu();
 });
 
-/* ---- 3D tilt on show cards (works on any current or future .board-item) ---- */
-(function initTilt(){
-  const supportsHoverFine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (!supportsHoverFine || reduceMotion) return;
-
-  const MAX_TILT = 5;     // deg
-  const LIFT = 8;         // px
-  const SCALE = 1.03;
-  const INNER_DEPTH = 14; // px, parallax for the date/city block
-
-  const container = document.getElementById("board");
-
-  container.addEventListener("pointerenter", onEnter, true);
-  container.addEventListener("pointermove", onMove, true);
-  container.addEventListener("pointerleave", onLeave, true);
-
-  function onEnter(e){
-    const card = e.target.closest && e.target.closest(".board-item");
-    if (!card || !container.contains(card)) return;
-    card.style.transitionDuration = "60ms";
-    const inner = card.querySelector(".tilt-layer");
-    if (inner) inner.style.transitionDuration = "60ms";
-  }
-
-  function onMove(e){
-    const card = e.target.closest && e.target.closest(".board-item");
-    if (!card || !container.contains(card)) return;
-    const rect = card.getBoundingClientRect();
-    const px = (e.clientX - rect.left) / rect.width;   // 0..1
-    const py = (e.clientY - rect.top) / rect.height;    // 0..1
-    const rotateY = (px - 0.5) * (MAX_TILT * 2);
-    const rotateX = (0.5 - py) * (MAX_TILT * 2);
-
-    card.style.transform =
-      `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) ` +
-      `translateY(-${LIFT}px) scale(${SCALE})`;
-
-    const inner = card.querySelector(".tilt-layer");
-    if (inner) {
-      const ix = (px - 0.5) * INNER_DEPTH;
-      const iy = (py - 0.5) * INNER_DEPTH;
-      inner.style.transform = `translate3d(${ix}px, ${iy}px, 24px)`;
-    }
-  }
-
-  function onLeave(e){
-    const card = e.target.closest && e.target.closest(".board-item");
-    if (!card || !container.contains(card)) return;
-    card.style.transitionDuration = "500ms";
-    card.style.transform = "perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0) scale(1)";
-    const inner = card.querySelector(".tilt-layer");
-    if (inner) {
-      inner.style.transitionDuration = "500ms";
-      inner.style.transform = "translate3d(0, 0, 0)";
-    }
-  }
-})();
-
 /* ---- gate reveal ---- */
-const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-document.getElementById("revealBtn").addEventListener("click", () => {
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function revealContent(scrollTargetId){
   const gate = document.getElementById("gate");
   const content = document.getElementById("content");
-  const delay = prefersReducedMotion ? 0 : 420;
-  gate.classList.add("leaving");
+  const delay = prefersReducedMotion ? 0 : 820;
+  gate.querySelector(".ticket").classList.add("torn");
+  setTimeout(() => gate.classList.add("leaving"), prefersReducedMotion ? 0 : 380);
   setTimeout(() => {
     gate.style.display = "none";
     content.classList.add("visible");
-    requestAnimationFrame(() => content.classList.add("fade-in"));
+    requestAnimationFrame(() => {
+      content.classList.add("fade-in");
+      if (scrollTargetId) {
+        document.getElementById(scrollTargetId).scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth" });
+      }
+    });
   }, delay);
-});
+}
+document.getElementById("revealBtn").addEventListener("click", () => revealContent(null));
+
+/* ---- スクロールでふわっと出す ---- */
+(function initReveal(){
+  const targets = document.querySelectorAll(".eve, .setlists > .section-title, .general-talk, .board-item, .song-row, .link-card, .links .section-title");
+  targets.forEach((el, n) => {
+    el.classList.add("reveal");
+    if (el.classList.contains("board-item")) el.style.transitionDelay = `${(n % 3) * 90}ms`;
+  });
+  if (!("IntersectionObserver" in window)) { targets.forEach(el => el.classList.add("in")); return; }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(en => {
+      if (!en.isIntersecting) return;
+      en.target.classList.add("in");
+      setTimeout(() => { en.target.style.transitionDelay = ""; }, 900);
+      io.unobserve(en.target);
+    });
+  }, { rootMargin: "0px 0px -8% 0px" });
+  targets.forEach(el => io.observe(el));
+})();
+document.getElementById("eveBtn").addEventListener("click", () => revealContent("eveRoom"));
 </script>
 </body>
 </html>
-
