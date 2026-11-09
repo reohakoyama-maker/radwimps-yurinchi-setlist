@@ -470,7 +470,6 @@
   .beam.b1{left:6%;--a:-16deg;}
   .beam.b2{left:44%;--a:7deg;animation-duration:12.5s;animation-delay:-3s;background:linear-gradient(to bottom, rgba(255,138,61,.14), rgba(255,138,61,0) 75%);}
   .beam.b3{left:80%;--a:18deg;animation-duration:14s;animation-delay:-6s;}
-  :root[data-theme="light"] .beam{opacity:.45;}
   @keyframes sway{0%,100%{transform:rotate(var(--a));}50%{transform:rotate(calc(var(--a) * -1));}}
   .brand-title{animation:flicker 1.8s ease-out 1 both;}
   @keyframes flicker{0%{opacity:0;}8%{opacity:.9;}11%{opacity:.15;}18%{opacity:1;}22%{opacity:.45;}28%,100%{opacity:1;}}
@@ -563,6 +562,87 @@
     .ticket.torn .ticket-stub{transform:translate(0,40px) rotate(-5deg);}
     .beam{width:160px;}
   }
+  /* ---------- v4: ステージスクリーン ---------- */
+  .eve-strip{display:flex;align-items:center;gap:12px;width:100%;margin:18px 0 0;padding:12px 16px;border-radius:12px;cursor:pointer;
+    border:1px solid rgba(229,56,59,.55);background:linear-gradient(90deg, rgba(229,56,59,.18), rgba(255,138,61,.10) 60%, transparent);
+    color:var(--ink);font-family:var(--font-body);font-size:14px;text-align:left;position:relative;overflow:hidden;}
+  .eve-strip::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg, transparent 30%, rgba(255,255,255,.10) 50%, transparent 70%);
+    transform:translateX(-100%);animation:shine 3.6s ease-in-out infinite;pointer-events:none;}
+  @keyframes shine{0%,40%{transform:translateX(-100%);}100%{transform:translateX(100%);}}
+  .eve-strip:hover{border-color:#e5383b;}
+  .eve-strip .es-main b{font-family:var(--font-display);font-weight:400;font-size:17px;margin-right:6px;}
+  .eve-strip .es-count{font-size:12px;color:var(--ink-soft);font-variant-numeric:tabular-nums;}
+  .eve-strip .es-go{margin-left:auto;font-weight:700;color:var(--accent);white-space:nowrap;}
+
+  .stage{max-width:820px;margin:20px auto 0;}
+  .stage-screen{position:relative;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden;
+    border:6px solid #141210;box-shadow:0 0 0 1px #2d2924, 0 0 60px -10px rgba(255,138,61,.35), 0 30px 60px -30px rgba(0,0,0,.9);}
+  .stage-screen iframe, .stage-screen #stagePlayer{position:absolute;inset:0;width:100%;height:100%;border:0;}
+  .stage-fallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+    color:#c2baad;font-size:13px;text-align:center;padding:20px;background:radial-gradient(circle at 50% 40%, #2a1a0e, #000 70%);}
+  .stage-fallback b{font-family:var(--font-display);font-weight:400;font-size:22px;color:#f2ede4;}
+  .stage-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 4px 0;font-size:12px;color:var(--ash);}
+  .stage-now{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-display);font-size:11px;letter-spacing:.12em;color:var(--accent);}
+  .stage-now .rec{width:7px;height:7px;border-radius:50%;background:var(--live);animation:pulse 1.4s ease-in-out infinite;}
+  .stage-bar b{color:var(--ink);font-size:14px;}
+  .stage-bar .spacer{flex:1;}
+  .stage-btn{font-size:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);border-radius:100px;padding:6px 12px;cursor:pointer;}
+  .stage-btn:hover{border-color:var(--ink-soft);color:var(--ink);}
+  .stage-btn.sound{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:700;}
+  .stage-btn.sound.on{background:transparent;color:var(--accent);}
+
+  /* ---------- v4: 前夜トーク ヒーロー ---------- */
+  .eve{border-color:rgba(255,138,61,.45);box-shadow:0 0 0 1px rgba(255,138,61,.12), 0 40px 90px -50px rgba(255,138,61,.55);}
+  .eve::before{display:none;}
+  .eve-hero{
+    --ink:#f2ede4; --ink-soft:#c9c1b4; --ash:#948b7e; --line:#2d2924;
+    margin:-26px -24px 24px;padding:34px 28px 0;position:relative;overflow:hidden;color:var(--ink);
+    background:radial-gradient(700px 300px at 85% 0%, rgba(255,138,61,.30), transparent 60%),
+               radial-gradient(500px 260px at 10% 100%, rgba(229,56,59,.22), transparent 65%), #070605;
+    border-bottom:1px solid #2d2924;border-radius:14px 14px 0 0;}
+  .eve-hero .hb{position:absolute;top:-40px;width:180px;height:520px;transform-origin:50% 0;pointer-events:none;
+    background:linear-gradient(to bottom, rgba(255,205,150,.22), rgba(255,205,150,0) 75%);
+    clip-path:polygon(44% 0,56% 0,100% 100%,0 100%);filter:blur(4px);animation:sway 8s ease-in-out infinite;}
+  .eve-hero .hb.h1{left:18%;--a:-20deg;} .eve-hero .hb.h2{left:62%;--a:16deg;animation-duration:10s;animation-delay:-4s;}
+  .eve-hero .eve-head{position:relative;margin-bottom:22px;}
+  .eve-hero .eve-kicker{display:flex;align-items:center;gap:10px;color:#c9c1b4;font-size:12.5px;margin-bottom:10px;}
+  .eve-hero .eve-title{font-size:68px;line-height:1.02;margin:0 0 14px;display:block;letter-spacing:.01em;}
+  .eve-hero .eve-title .et-hot{background:linear-gradient(90deg,#ffb26b,#ff6a3d 60%,#e5383b);-webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 18px rgba(255,120,60,.45));}
+  .eve-hero .eve-title .et-en{display:block;font-size:13px;letter-spacing:.32em;color:#ff8a3d;margin-bottom:8px;}
+  .eve-hero .eve-lead{color:#d6cfc3;}
+  .eve-hero .eve-count{color:#948b7e;}
+  .eve-hero .stub{--surface:#070605;}
+  .eve-hero .stub::before,.eve-hero .stub::after{background:#070605;}
+  .marquee{margin:0 -28px;border-top:1px solid #2d2924;overflow:hidden;white-space:nowrap;padding:11px 0;background:rgba(0,0,0,.35);}
+  .marquee-track{display:inline-block;animation:marquee 28s linear infinite;}
+  .marquee span{font-family:var(--font-display);font-size:13px;letter-spacing:.18em;color:#ff8a3d;padding-right:40px;}
+  .marquee span i{font-style:normal;color:#f2ede4;margin:0 14px;}
+  @keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+  /* カウントダウン */
+  .stub-label2{font-size:11px;color:#6b645a;margin-top:8px;letter-spacing:.06em;}
+  .stub-time{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;font-size:34px;margin-top:0;}
+  .stub-time small{font-family:var(--font-display);font-size:15px;font-weight:400;margin-left:1px;color:#cf530a;}
+  .stub-sec{font-family:var(--font-body);font-size:12px;color:#867e72;font-variant-numeric:tabular-nums;margin-left:2px;}
+
+  /* 入口の前夜トークボタン */
+  .ticket .btn.eve-go{background:#e5383b;border-color:#e5383b;color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;}
+  .ticket .btn.eve-go i{width:7px;height:7px;border-radius:50%;background:#fff;animation:pulse 1.4s ease-in-out infinite;}
+
+  /* ライトモードの照明 */
+  :root[data-theme="light"] .beam{opacity:1;filter:blur(3px);background:linear-gradient(to bottom, rgba(222,93,12,.26), rgba(222,93,12,0) 72%);}
+  :root[data-theme="light"] .beam.b2{background:linear-gradient(to bottom, rgba(160,70,20,.20), rgba(160,70,20,0) 72%);}
+  :root[data-theme="light"] .spot{background:radial-gradient(900px 460px at 50% -140px, rgba(222,93,12,.14), transparent 70%);}
+
+  @media (max-width:600px){
+    .eve-hero{margin:-20px -14px 20px;padding:26px 16px 0;}
+    .eve-hero .eve-title{font-size:44px;}
+    .marquee{margin:0 -16px;}
+    .stage-screen{border-width:4px;}
+    .eve-strip{flex-wrap:wrap;gap:6px 10px;}
+    .eve-strip .es-go{margin-left:0;}
+  }
   @media (prefers-reduced-motion: reduce){
     *{animation:none !important;transition:none !important;}
     .reveal{opacity:1 !important;translate:none !important;}
@@ -605,6 +685,27 @@
     <a href="https://bokunchi.radwimps.jp/" target="_blank" rel="noopener">ボクンチ ↗</a>
     <a href="#links">メンバーのSNS ↓</a>
   </nav>
+  <button type="button" class="eve-strip" id="eveStrip">
+    <span class="live-badge"><i></i>LIVE</span>
+    <span class="es-main"><b>横浜 前夜トーク</b>開催中</span>
+    <span class="es-count" data-role="strip-count"></span>
+    <span class="es-go">入る →</span>
+  </button>
+
+  <section class="stage" id="stage" aria-label="ライブ映像">
+    <div class="stage-screen">
+      <div id="stagePlayer"></div>
+      <div class="stage-fallback" hidden><b>LIVE SCREEN</b>公開ページで開くと、ここでライブ映像が流れます</div>
+    </div>
+    <div class="stage-bar">
+      <span class="stage-now"><i class="rec"></i>NOW PLAYING</span>
+      <b data-role="stage-title"></b><small data-role="stage-sub"></small>
+      <span class="spacer"></span>
+      <button type="button" class="stage-btn" data-stage-prev aria-label="前の映像">◀◀</button>
+      <button type="button" class="stage-btn sound" data-stage-sound>🔇 音を出す</button>
+      <button type="button" class="stage-btn" data-stage-next aria-label="次の映像">▶▶</button>
+    </div>
+  </section>
   <hr class="head-rule">
 
   <section id="gate">
@@ -618,21 +719,25 @@
       <div class="ticket-stub">
         <div class="stub-label">ENTRANCE</div>
         <button class="btn" id="revealBtn" type="button">セトリを見る</button>
-        <button class="btn ghost" id="eveBtn" type="button">横浜 前夜トークへ</button>
+        <button class="btn eve-go" id="eveBtn" type="button"><i></i>横浜 前夜トークへ</button>
       </div>
     </div>
   </section>
 
   <main id="content">
     <section class="eve" id="eveRoom" aria-labelledby="eveTitle">
-      <div class="eve-head">
-        <div class="eve-intro">
-          <p class="eve-kicker">おかわり公演 ・ ぴあアリーナMM ・ 11/10(火)・11/11(水)</p>
-          <h2 class="eve-title" id="eveTitle">横浜 前夜トーク <span class="live-badge" title="新しい投稿は自動で表示されます"><i></i>LIVE</span></h2>
-          <p class="eve-lead">通常公演をふまえたセトリ予想も感想も、Xだとまだ書けない話はここで。前夜・前々夜の「楽しみ！」も、今回は行けない人の「念」も、ぜんぶ置いていってください。</p>
-          <p class="eve-count">投稿 <span data-role="count">-</span></p>
+      <div class="eve-hero">
+        <i class="hb h1" aria-hidden="true"></i><i class="hb h2" aria-hidden="true"></i>
+        <div class="eve-head">
+          <div class="eve-intro">
+            <p class="eve-kicker"><span class="live-badge" title="新しい投稿は自動で表示されます"><i></i>LIVE</span>おかわり公演 ・ ぴあアリーナMM ・ 11/10(火)・11/11(水)</p>
+            <h2 class="eve-title" id="eveTitle"><span class="et-en">YOKOHAMA OKAWARI</span>横浜<span class="et-hot">前夜</span>トーク</h2>
+            <p class="eve-lead">通常公演をふまえたセトリ予想も感想も、Xだとまだ書けない話はここで。前夜・前々夜の「楽しみ！」も、今回は行けない人の「念」も、ぜんぶ置いていってください。</p>
+            <p class="eve-count">投稿 <span data-role="count">-</span></p>
+          </div>
+          <div class="stub" id="eveCountdown"></div>
         </div>
-        <div class="stub" id="eveCountdown"></div>
+        <div class="marquee" aria-hidden="true"><div class="marquee-track"><span>YOKOHAMA OKAWARI<i>✶</i>11.10 TUE<i>✶</i>11.11 WED<i>✶</i>PIA ARENA MM<i>✶</i>前夜トーク開催中<i>✶</i>RADWIMPS<i>✶</i>ユーリンチー</span><span>YOKOHAMA OKAWARI<i>✶</i>11.10 TUE<i>✶</i>11.11 WED<i>✶</i>PIA ARENA MM<i>✶</i>前夜トーク開催中<i>✶</i>RADWIMPS<i>✶</i>ユーリンチー</span></div></div>
       </div>
 
       <div class="eve-tabs" id="eveTabs" role="tablist" aria-label="参戦日でしぼる"></div>
@@ -708,7 +813,7 @@
         <span class="chip"><span class="dot rare"></span>限定 = 1公演のみ</span>
       </div>
       <div class="summary-line" id="summary"></div>
-      <p class="play-hint">曲名をタップすると再生できます。ライブ映像・ライブ音源がある曲は、このページの中でそのまま流れます。</p>
+      <p class="play-hint">曲名タップで再生できます。</p>
 
       <details class="general-talk" id="generalTalk">
         <summary class="general-talk-summary">全体トークルーム <span class="count" data-role="count"></span></summary>
@@ -785,30 +890,28 @@
         <div class="lc-name">山口智史</div>
         <p class="lc-desc">2025.12.27 有明アリーナで「25コ目の染色体」を一緒に演奏。</p>
         <div class="lc-links">
-          <a href="https://www.instagram.com/explore/search/keyword/?q=%E5%B1%B1%E5%8F%A3%E6%99%BA%E5%8F%B2" target="_blank" rel="noopener">Instagramで探す ↗</a>
+          <a href="https://www.instagram.com/satoshi_y21/" target="_blank" rel="noopener">Instagram ↗</a>
         </div>
       </div>
     </div>
 
-    <p class="links-sub">SUPPORT<small>ライブを支えるサポートメンバー</small></p>
+    <p class="links-sub">SUPPORT</p>
     <div class="links-grid support">
       <div class="link-card">
         <div class="lc-role">GUITAR</div>
         <div class="lc-name">白川詢</div>
-        <div class="lc-links"><a href="https://www.instagram.com/explore/search/keyword/?q=%E7%99%BD%E5%B7%9D%E8%A9%A2" target="_blank" rel="noopener">Instagramで探す ↗</a></div>
+        <div class="lc-links"><a href="https://www.instagram.com/junjulyboi/" target="_blank" rel="noopener">Instagram ↗</a></div>
       </div>
       <div class="link-card">
         <div class="lc-role">DRUMS</div>
         <div class="lc-name">森瑞希</div>
-        <div class="lc-links"><a href="https://www.instagram.com/explore/search/keyword/?q=%E6%A3%AE%E7%91%9E%E5%B8%8C" target="_blank" rel="noopener">Instagramで探す ↗</a></div>
       </div>
       <div class="link-card">
         <div class="lc-role">DRUMS</div>
         <div class="lc-name">エノマサフミ</div>
-        <div class="lc-links"><a href="https://www.instagram.com/explore/search/keyword/?q=%E3%82%A8%E3%83%8E%E3%83%9E%E3%82%B5%E3%83%95%E3%83%9F" target="_blank" rel="noopener">Instagramで探す ↗</a></div>
+        <div class="lc-links"><a href="https://www.instagram.com/masafumieno/" target="_blank" rel="noopener">Instagram ↗</a></div>
       </div>
     </div>
-    <p class="links-note">メンバーのリンクは RADWIMPS 公式サイトのプロフィール掲載のアカウントです。山口智史さんとサポートメンバーは公式に載っているアカウントが確認できなかったため、Instagram内の検索に飛びます。</p>
   </section>
 
   <p class="footnote">
@@ -1013,6 +1116,7 @@ function sourceHTML(src, title){
     `allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="${escapeHtml(LIVE_ALBUM.title)}"></iframe>`;
 }
 function openPlayer(title, idx = 0){
+  pauseStage();
   const clean = cleanTitle(title);
   playerTitle = clean;
   const srcs = sourcesFor(clean);
@@ -1035,7 +1139,7 @@ function openPlayer(title, idx = 0){
     `<a href="https://radwimps-store.radwimps.jp/" target="_blank" rel="noopener">RADWIMPS SHOP ↗</a>`;
   playerEl.querySelector('[data-role="pbody"]').innerHTML = main +
     `<div class="player-links">${links}</div>` +
-    `<p class="player-sub">サブスクにない曲は、公式ディスコグラフィやRADWIMPS SHOPからCD・配信をチェック。</p>`;
+    `<p class="player-sub">サブスクにない曲はディスコグラフィやSHOPから。</p>`;
   playerEl.hidden = false;
   requestAnimationFrame(() => playerEl.classList.add("show"));
 }
@@ -1637,7 +1741,7 @@ const EVE = {
     { key: "11/11", tag: "#11日", label: "横浜 2日目", day: "11/11(水)", stub: "11.11 WED", venue: "ぴあアリーナMM", start: "2026-11-11T19:00:00+09:00" }
   ],
   away: { key: "away", tag: "#行けない組", label: "行けない組", day: "今回は行けない組" },
-  moods: ["#楽しみ", "#セトリ予想", "#グッズ", "#遠征", "#ひとりごと"],
+  moods: ["#楽しみ", "#セトリ予想", "#聴きたい曲", "#グッズ", "#遠征", "#ひとりごと"],
   showHours: 3
 };
 EVE.groups = EVE.shows.concat([EVE.away]);
@@ -1658,11 +1762,13 @@ function jstDay(t){ return Math.floor((t + 9 * 3600e3) / 864e5); }
 function pad2(n){ return String(n).padStart(2, "0"); }
 function renderCountdown(){
   const el = document.getElementById("eveCountdown");
+  const strip = document.querySelector('[data-role="strip-count"]');
   const now = Date.now();
   const next = EVE.shows.find(s => now < new Date(s.start).getTime() + EVE.showHours * 3600e3);
   if (!next) {
     el.innerHTML = `<div class="stub-top"><span>YOKOHAMA 2DAYS</span></div>` +
       `<div class="stub-time word">おつかれさまでした</div><div class="stub-meta">感想は各公演カードのコメント欄へ</div>`;
+    if (strip) strip.textContent = "横浜2days おつかれさまでした";
     return;
   }
   const start = new Date(next.start).getTime();
@@ -1672,14 +1778,19 @@ function renderCountdown(){
   if (diff <= 0) {
     el.innerHTML = `<div class="stub-top"><span>ADMISSION</span><span class="stub-badge">ON STAGE</span></div>` + head +
       `<div class="stub-time word">いってらっしゃい</div>`;
+    if (strip) strip.textContent = `${next.label} 公演中`;
     return;
   }
   const dd = jstDay(start) - jstDay(now);
   const badge = dd === 0 ? "当日" : dd === 1 ? "前夜" : dd === 2 ? "前々夜" : `あと${dd}日`;
   const s = Math.floor(diff / 1000);
   const d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60), sec = s % 60;
+  const parts = d ? [[d, "d"], [h, "h"], [m, "m"]] : [[h, "h"], [m, "m"], [sec, "s"]];
+  const big = parts.map(([v, u]) => `<span>${v}<small>${u}</small></span>`).join("");
   el.innerHTML = `<div class="stub-top"><span>ADMISSION</span><span class="stub-badge">${badge}</span></div>` + head +
-    `<div class="stub-time">${d ? `${d}<small>日</small>` : ""}${pad2(h)}:${pad2(m)}:${pad2(sec)}</div>`;
+    `<div class="stub-label2">開演まで あと</div>` +
+    `<div class="stub-time">${big}${d ? `<span class="stub-sec">${pad2(sec)}s</span>` : ""}</div>`;
+  if (strip) strip.textContent = `${next.stub.split(" ")[0]} 開演まで ${parts.map(([v, u]) => v + u).join(" ")}`;
 }
 renderCountdown();
 setInterval(renderCountdown, 1000);
@@ -1819,7 +1930,7 @@ function eveComposerHTML(){
       EVE.groups.map(g => `<button type="button" class="chip" data-insert-tag="${g.tag}">${g.tag}</button>`).join("") +
     `</div>` +
     `<div class="chip-row"><span class="chip-label">タグ</span>` +
-      EVE.moods.filter(t => t !== PREDICT_TAG).map(t => `<button type="button" class="chip" data-insert-tag="${t}">${t}</button>`).join("") +
+      EVE.moods.map(t => `<button type="button" class="chip" data-insert-tag="${t}">${t}</button>`).join("") +
     `</div>` +
     `<p class="form-msg" data-role="msg"></p>` +
     `<div class="composer-foot">` +
@@ -2158,6 +2269,66 @@ document.getElementById("navToTalk").addEventListener("click", () => {
   generalTalkEl.dispatchEvent(new Event("toggle"));
   generalTalkEl.scrollIntoView({ behavior: "smooth", block: "start" });
   closeNavMenu();
+});
+
+/* ---- ステージスクリーン(最初からライブ映像を流す) ---- */
+// ブラウザの決まりで、最初は音なしで自動再生。「音を出す」で音が出ます
+const STAGE = [
+  { id: "eTJQbTYNU-I", title: "DADA", sub: "絶体延命ツアー(2011)" },
+  { id: "sQOqgRtnRXg", title: "賜物", sub: "20th ANNIVERSARY LIVE TOUR" },
+  { id: "ypgtn5aFmN0", title: "トアルハルノヒ", sub: "20th ANNIVERSARY LIVE TOUR" }
+];
+let stagePlayer = null, stageIdx = 0, stageMuted = true;
+const stageEl = document.getElementById("stage");
+function updateStageBar(){
+  stageEl.querySelector('[data-role="stage-title"]').textContent = STAGE[stageIdx].title;
+  stageEl.querySelector('[data-role="stage-sub"]').textContent = STAGE[stageIdx].sub;
+  const btn = stageEl.querySelector("[data-stage-sound]");
+  btn.textContent = stageMuted ? "🔇 音を出す" : "🔊 音あり";
+  btn.classList.toggle("on", !stageMuted);
+}
+function stageGo(i){
+  stageIdx = (i + STAGE.length) % STAGE.length;
+  updateStageBar();
+  if (stagePlayer && stagePlayer.loadVideoById) {
+    stagePlayer.loadVideoById(STAGE[stageIdx].id);
+    if (stageMuted) stagePlayer.mute(); else stagePlayer.unMute();
+  }
+}
+window.onYouTubeIframeAPIReady = function(){
+  stagePlayer = new YT.Player("stagePlayer", {
+    videoId: STAGE[0].id,
+    playerVars: { autoplay: 1, mute: 1, playsinline: 1, rel: 0, controls: 1, origin: location.origin },
+    events: {
+      onReady: (e) => { e.target.mute(); e.target.playVideo(); },
+      onStateChange: (e) => { if (e.data === 0) stageGo(stageIdx + 1); },
+      onError: () => stageGo(stageIdx + 1)
+    }
+  });
+};
+updateStageBar();
+if (location.protocol === "file:") {
+  stageEl.querySelector(".stage-fallback").hidden = false;
+} else {
+  const tag = document.createElement("script");
+  tag.src = "https://www.youtube.com/iframe_api";
+  document.head.appendChild(tag);
+}
+stageEl.addEventListener("click", (e) => {
+  if (e.target.closest("[data-stage-next]")) { stageGo(stageIdx + 1); return; }
+  if (e.target.closest("[data-stage-prev]")) { stageGo(stageIdx - 1); return; }
+  if (e.target.closest("[data-stage-sound]")) {
+    stageMuted = !stageMuted;
+    if (stagePlayer && stagePlayer.unMute) {
+      if (stageMuted) stagePlayer.mute(); else { stagePlayer.unMute(); stagePlayer.setVolume(80); stagePlayer.playVideo(); }
+    }
+    updateStageBar();
+  }
+});
+function pauseStage(){ if (stagePlayer && stagePlayer.pauseVideo) stagePlayer.pauseVideo(); }
+document.getElementById("eveStrip").addEventListener("click", () => {
+  if (!document.getElementById("content").classList.contains("visible")) { revealContent("eveRoom"); return; }
+  document.getElementById("eveRoom").scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
 /* ---- gate reveal ---- */
