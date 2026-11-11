@@ -220,6 +220,7 @@
   .tbl-bar button{font-size:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink-soft);border-radius:100px;padding:5px 11px;cursor:pointer;white-space:nowrap;}
   .tbl-bar button.on{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:700;}
   .tbl-zoom button{min-width:34px;padding:5px 9px;}
+  .tbl-zoom button.on{background:var(--ink);color:var(--bg);border-color:var(--ink);}
   .tbl-zoom .zl{font-size:11px;color:var(--ash);min-width:3.2em;text-align:center;font-variant-numeric:tabular-nums;}
   .tbl-hint{font-size:11.5px;color:var(--ash);padding:6px 12px 0;margin:0;}
   .tbl-key{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--ash);padding:4px 12px 8px;}
@@ -793,6 +794,11 @@
     .board-pick button.future{border-style:dashed;}
     .board.pick-one .board-item:not(.sel){display:none;}
     .setlists .viewswitch{display:none;}
+    .tbl-hint{display:none;}
+    .tbl-bar{padding:6px 8px;gap:6px;}
+    .tbl-bar button{padding:5px 9px;font-size:11.5px;}
+    .tbl-key{font-size:10.5px;gap:4px 10px;padding:4px 10px 6px;}
+    .matrix-fit{max-height:calc(100svh - 280px);}
     .quicklinks{display:none;}
     .head-rule{display:none;}
     .setlists .legend{gap:4px 6px;}
@@ -997,7 +1003,8 @@
               <button type="button" data-tz="-" aria-label="縮小">−</button>
               <span class="zl" id="tblZl"></span>
               <button type="button" data-tz="+" aria-label="拡大">＋</button>
-              <button type="button" data-tz="fit">全体</button>
+              <button type="button" data-tz="fit" class="on">全体</button>
+              <button type="button" data-tz="fitw">横幅</button>
               <button type="button" data-tz="full" id="tblFullBtn">⛶ 全画面</button>
             </div>
           </div>
@@ -1745,20 +1752,26 @@ const matrixFit = document.getElementById("matrixFit");
 const tblWrap = document.getElementById("tblWrap");
 let tz = 1, tzFit = 1, tzTouched = false;
 function setTZ(nz, cx, cy){
-  nz = Math.max(Math.min(tzFit, 1) * 0.9, Math.min(2.5, nz));
+  nz = Math.max(Math.min(0.1, tzFit * 0.8), Math.min(2.5, nz));
   if (cx == null) { cx = matrixFit.clientWidth / 2; cy = 0; }
   const px = (matrixFit.scrollLeft + cx) / tz, py = (matrixFit.scrollTop + cy) / tz;
   tz = nz; allTable.style.zoom = tz; gridTable.style.zoom = tz;
   matrixFit.scrollLeft = px * tz - cx; matrixFit.scrollTop = py * tz - cy;
   document.getElementById("tblZl").textContent = Math.round(tz * 100) + "%";
 }
+let fitMode = "whole";  // whole = 表全体が1画面に入る / width = 横幅に合わせる
 function fitAllTable(force){
   allTable.style.zoom = 1; gridTable.style.zoom = 1;
-  const w = visTable().scrollWidth;
-  tzFit = Math.min(1, (matrixFit.clientWidth - 2) / w);
-  if (force || !tzTouched) setTZ(tzFit); else setTZ(tz);
+  const t = visTable(), w = t.scrollWidth, h = t.scrollHeight;
+  const availW = matrixFit.clientWidth - 2;
+  const mh = parseFloat(getComputedStyle(matrixFit).maxHeight);
+  const availH = (tblWrap.classList.contains("full") || !mh ? matrixFit.clientHeight : mh) - 4;
+  const fw = Math.min(1, availW / w), fh = Math.min(1, availH / h);
+  tzFit = fitMode === "whole" ? Math.min(fw, fh) : fw;
+  if (force || !tzTouched) { setTZ(tzFit); matrixFit.scrollTop = 0; matrixFit.scrollLeft = 0; } else setTZ(tz);
 }
-window.addEventListener("resize", () => { if (tableView.classList.contains("active")) fitAllTable(); });
+let lastVW = innerWidth;  // スマホはスクロールでアドレスバーが出入りして高さが変わるので、横幅が変わったときだけ合わせ直す
+window.addEventListener("resize", () => { if (innerWidth === lastVW) return; lastVW = innerWidth; if (tableView.classList.contains("active")) fitAllTable(); });
 let pinch = null;
 const dist = (t) => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
 matrixFit.addEventListener("touchstart", (e) => {
@@ -1811,7 +1824,10 @@ tblWrap.addEventListener("click", (e) => {
   const k = z.dataset.tz;
   if (k === "+") { tzTouched = true; setTZ(tz * 1.25); }
   if (k === "-") { tzTouched = true; setTZ(tz / 1.25); }
-  if (k === "fit") { tzTouched = false; fitAllTable(true); }
+  if (k === "fit" || k === "fitw") {
+    fitMode = k === "fit" ? "whole" : "width"; tzTouched = false; fitAllTable(true);
+    tblWrap.querySelectorAll('[data-tz="fit"],[data-tz="fitw"]').forEach(b => b.classList.toggle("on", b === z));
+  }
   if (k === "full") {
     const on = !tblWrap.classList.contains("full");
     if (on) { tblWrap.parentNode.insertBefore(tblHome, tblWrap); document.body.appendChild(tblWrap); }
