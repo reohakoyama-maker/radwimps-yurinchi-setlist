@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0b0a09">
-<title>ユーリンチー セトリまとめ(非公式)| 横浜おかわり前夜トーク</title>
+<title>ユーリンチー セトリまとめ(非公式)| 全11公演</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Yusei+Magic&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -792,6 +792,8 @@
     .board-pick button.future{border-style:dashed;}
     .board.pick-one .board-item:not(.sel){display:none;}
     .setlists .viewswitch{display:none;}
+    .quicklinks{display:none;}
+    .head-rule{display:none;}
     .setlists .legend{gap:4px 6px;}
     .setlists .legend .chip{font-size:11.5px;padding:3px 10px;}
     #sectionSub{display:none;}
@@ -820,6 +822,8 @@
   table.matrix.setgrid tbody tr:hover td,table.matrix.setgrid tbody tr:hover th{filter:brightness(1.12);}
   .tbl-key[hidden],.tbl-filter[hidden]{display:none;}
   .tbl-key .kb{display:inline-block;width:14px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px;}
+  .tour-done{font-size:14px;margin:4px 0 14px;color:var(--ink-soft);}
+  .tour-done b{color:var(--accent);}
   @media (prefers-reduced-motion: reduce){
     *{animation:none !important;transition:none !important;}
     .reveal{opacity:1 !important;translate:none !important;}
@@ -863,29 +867,16 @@
     <a href="https://bokunchi.radwimps.jp/" target="_blank" rel="noopener">ボクンチ ↗</a>
     <a href="#links">メンバーのSNS ↓</a>
   </nav>
-  <button type="button" class="eve-strip" id="eveStrip">
+  <button type="button" class="eve-strip" id="eveStrip" style="display:none">
     <span class="live-badge"><i></i>LIVE</span>
     <span class="es-main"><b>横浜 前夜トーク</b>開催中</span>
     <span class="es-count" data-role="strip-count"></span>
     <span class="es-go">入る →</span>
   </button>
 
-  <section class="stage" id="stage" aria-label="ライブ映像">
-    <div class="stage-screen">
-      <div id="stagePlayer"></div>
-    </div>
-    <div class="stage-bar">
-      <span class="stage-now"><i class="rec"></i>NOW PLAYING</span>
-      <b data-role="stage-title"></b><small data-role="stage-sub"></small>
-      <span class="spacer"></span>
-      <button type="button" class="stage-btn" data-stage-prev aria-label="前の映像">◀◀</button>
-      <button type="button" class="stage-btn sound" data-stage-sound>🔇 音を出す</button>
-      <button type="button" class="stage-btn" data-stage-next aria-label="次の映像">▶▶</button>
-    </div>
-  </section>
   <hr class="head-rule">
 
-  <section id="gate">
+  <section id="gate" style="display:none">
     <div class="ticket">
       <div class="ticket-main">
         <div class="ticket-kicker">ADMIT ONE ・ SPOILER ALERT</div>
@@ -912,7 +903,8 @@
     </nav>
     <section class="setlists" id="setlists">
       <p class="sec-kicker">SETLIST</p>
-      <h2 class="section-title">公演セトリ比較</h2>
+      <h2 class="section-title">全11公演のセトリ</h2>
+      <p class="tour-done">7/22 名古屋 〜 11/11 横浜、<b>全11公演 終了！</b> 全公演のセトリをまとめて見られます。</p>
       <p class="section-sub" id="sectionSub"></p>
 
       <div class="viewswitch" role="tablist" aria-label="表示切り替え">
@@ -990,7 +982,7 @@
         <i class="hb h1" aria-hidden="true"></i><i class="hb h2" aria-hidden="true"></i>
         <div class="eve-head">
           <div class="eve-intro">
-            <p class="eve-kicker"><span class="live-badge" title="新しい投稿は自動で表示されます"><i></i>LIVE</span>おかわり公演 ・ ぴあアリーナMM ・ 11/10(火)・11/11(水)</p>
+            <p class="eve-kicker"><span class="live-badge" style="background:#5a524a">終了</span>おかわり公演 ・ ぴあアリーナMM ・ 11/10(火)・11/11(水)</p>
             <h2 class="eve-title" id="eveTitle"><span class="et-en">YOKOHAMA OKAWARI</span>横浜<span class="et-hot">前夜</span>トーク</h2>
             <p class="eve-lead">通常公演をふまえたセトリ予想も感想も、Xだとまだ書けない話はここで。前夜・前々夜の「楽しみ！」も、今回は行けない人の「念」も、ぜんぶ置いていってください。</p>
             <p class="eve-count">投稿 <span data-role="count">-</span></p>
@@ -999,7 +991,7 @@
           </div>
           <div class="stub" id="eveCountdown"></div>
         </div>
-        <div class="marquee" aria-hidden="true"><div class="marquee-track"><span>YOKOHAMA OKAWARI<i>✶</i>11.10 TUE<i>✶</i>11.11 WED<i>✶</i>PIA ARENA MM<i>✶</i>前夜トーク開催中<i>✶</i>RADWIMPS<i>✶</i>ユーリンチー</span><span>YOKOHAMA OKAWARI<i>✶</i>11.10 TUE<i>✶</i>11.11 WED<i>✶</i>PIA ARENA MM<i>✶</i>前夜トーク開催中<i>✶</i>RADWIMPS<i>✶</i>ユーリンチー</span></div></div>
+        <div class="marquee" aria-hidden="true"><div class="marquee-track"><span>YOKOHAMA OKAWARI<i>✶</i>11.10 TUE<i>✶</i>11.11 WED<i>✶</i>PIA ARENA MM<i>✶</i>全公演終了<i>✶</i>RADWIMPS<i>✶</i>ユーリンチー</span><span>YOKOHAMA OKAWARI<i>✶</i>11.10 TUE<i>✶</i>11.11 WED<i>✶</i>PIA ARENA MM<i>✶</i>全公演終了<i>✶</i>RADWIMPS<i>✶</i>ユーリンチー</span></div></div>
       </div>
 
       <div class="eve-body" id="eveBody">
@@ -1068,7 +1060,7 @@
     </section>
       <details class="general-talk" id="generalTalk">
         <summary class="general-talk-summary">全体トークルーム <span class="count" data-role="count"></span></summary>
-        <p class="section-sub">感想戦や雑談はこちらへ。横浜公演の予想は上の前夜トークへ、公演ごとのネタバレコメントは各カード下のコメント欄へどうぞ。</p>
+        <p class="section-sub">感想戦や雑談はこちらへ。公演ごとのコメントは各カード下のコメント欄へどうぞ。</p>
         <div class="comments-body">
           <div class="comment-list" data-role="list"><p class="comment-empty">読み込み中...</p></div>
         </div>
@@ -1076,6 +1068,21 @@
     </section>
 
   </main>
+
+  <p class="sec-kicker" style="margin-top:64px">LIVE VIDEO</p>
+  <section class="stage" id="stage" aria-label="ライブ映像">
+    <div class="stage-screen">
+      <div id="stagePlayer"></div>
+    </div>
+    <div class="stage-bar">
+      <span class="stage-now"><i class="rec"></i>NOW PLAYING</span>
+      <b data-role="stage-title"></b><small data-role="stage-sub"></small>
+      <span class="spacer"></span>
+      <button type="button" class="stage-btn" data-stage-prev aria-label="前の映像">◀◀</button>
+      <button type="button" class="stage-btn sound" data-stage-sound>🔇 音を出す</button>
+      <button type="button" class="stage-btn" data-stage-next aria-label="次の映像">▶▶</button>
+    </div>
+  </section>
 
   <section class="links" id="links">
     <p class="sec-kicker">OFFICIAL &amp; MEMBERS</p>
@@ -1617,7 +1624,7 @@ function buildAllTable(){
     tr.dataset.cls = cls;
     if (cls === "rare") tr.className = "row-rare";
     const th = document.createElement("th");
-    th.innerHTML = `<span class="dot ${cls}"></span>${escapeHtml(title)}<span class="cnt">${countByTitle[title]}/${totalShows}公演${cls === "rare" ? "・限定" : ""}</span>`;
+    th.innerHTML = `<span class="dot ${cls}"></span>${escapeHtml(title)}<span class="cnt">${cls === "rare" ? "限定" : cls === "fixed" ? "全公演" : countByTitle[title] + "公演"}</span>`;
     tr.appendChild(th);
     cols.forEach(show => {
       const td = document.createElement("td");
@@ -2985,6 +2992,8 @@ function revealContent(scrollTargetId){
   }, delay);
 }
 document.getElementById("revealBtn").addEventListener("click", () => revealContent(null));
+// 全公演が終わったので、ネタバレ確認なしで最初からセトリを出す
+(() => { const c = document.getElementById("content"); c.classList.add("visible"); requestAnimationFrame(() => c.classList.add("fade-in")); })();
 
 /* ---- スクロールでふわっと出す ---- */
 (function initReveal(){
