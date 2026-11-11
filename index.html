@@ -870,6 +870,49 @@
   .show-chip{font-family:var(--font-body);}
   @media (max-width:820px){ .cmp-grid{gap:0 12px;padding:24px 10px 12px;} .cmp-cell{font-size:13.5px;gap:5px;} .cmp-cell .cn{min-width:24px;} .cmp-head{top:54px;} .cmp-head b{font-size:17px;} }
   .song-note{display:block;font-family:var(--font-body);font-size:10.5px;color:#867e72;line-height:1.4;margin-top:1px;}
+
+  /* ---------- v10: 2段ナビ / 最高を目立たせる / 思い出トーク ---------- */
+  .pagenav{display:block;padding-top:8px;padding-bottom:8px;}
+  .pn-main,.pn-sub{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;}
+  .pn-main::-webkit-scrollbar,.pn-sub::-webkit-scrollbar{display:none;}
+  .pn-sub{margin-top:7px;padding-top:7px;border-top:1px dashed var(--line);}
+  .pagenav:not(.in-setlists) .pn-sub{display:none;}
+  .pagenav .pn-main button{font-size:13.5px;padding:7px 18px;}
+  .pagenav .pn-sub button{font-size:12px;font-weight:500;padding:5px 12px;background:transparent;}
+  .pagenav .pn-sub button.on{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:700;}
+  #setlists,#boardView,#compareView,#matrixView,#tableView,#talkArea,#eveRoom,#memRoom,#links{scroll-margin-top:110px;}
+  .cmp-head{top:100px;}
+  /* 最高 */
+  .hot-card{border:1px solid var(--accent);border-radius:12px;background:var(--surface);padding:12px 14px;margin:0 0 18px;}
+  .hot-card h3{margin:0 0 2px;font-family:var(--font-display);font-weight:400;font-size:16px;color:var(--accent);}
+  .hot-card p{margin:0 0 8px;font-size:11.5px;color:var(--ash);}
+  .hot-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;}
+  .hot-list li{display:flex;align-items:center;gap:8px;font-size:13px;}
+  .hot-list .rk{flex:none;width:22px;font-family:var(--font-display);font-size:12px;color:var(--accent);}
+  .hot-list .tt{font-family:var(--font-hand);font-size:15px;min-width:0;}
+  .hot-list .sh{font-size:11px;color:var(--ash);white-space:nowrap;}
+  .hot-list .react-btn{margin-left:auto;flex:none;}
+  .hot-more{font-size:12px;border:none;background:none;color:var(--accent);cursor:pointer;padding:6px 0 0;text-decoration:underline;}
+  table.matrix td[data-play]{cursor:pointer;}
+  table.matrix td[data-play]:hover{outline:2px solid var(--accent);outline-offset:-2px;}
+  table.matrix td .hotn{display:block;font-family:var(--font-body);font-size:9.5px;font-weight:700;color:var(--accent);}
+  .cmp-cell .react-btn{margin-left:auto;flex:none;font-size:10px;padding:1px 7px;}
+  .cmp-cell .tag + .react-btn{margin-left:4px;}
+  .player-react{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 12px;padding:10px 12px;border-radius:10px;background:rgba(255,138,61,.12);border:1px solid rgba(255,138,61,.4);font-size:13px;color:#f2ede4;}
+  .player-react b{color:#ff8a3d;}
+  .player-react .react-btn{margin-left:auto;font-size:13px;padding:5px 14px;}
+  /* 思い出トーク(目立つ) と 前夜トーク(控えめ) */
+  .eve.mem .comments-body{margin-top:6px;}
+  .eve-title .nb{white-space:nowrap;}
+  .mem-composer{margin-bottom:14px;}
+  .eve.plain{background:var(--surface);border:1px solid var(--line);box-shadow:none;padding:16px 18px 6px;}
+  .eve.plain .eve-hero{background:none;margin:0;padding:0;overflow:visible;--ink:var(--ink);}
+  .eve.plain .hb,.eve.plain .marquee,.eve.plain .stub,.eve.plain .et-en,.eve.plain .eve-lead,.eve.plain .eve-cta{display:none;}
+  .eve.plain .eve-title{font-size:17px;margin:2px 0 4px;color:var(--ink);}
+  .eve.plain .eve-title .et-hot{background:none;-webkit-text-fill-color:currentColor;color:inherit;}
+  .eve.plain .eve-kicker{font-size:11.5px;}
+  .eve.plain .eve-count{margin:0;}
+  .eve.plain .eve-fold{margin:8px 0 8px;}
   @media (prefers-reduced-motion: reduce){
     *{animation:none !important;transition:none !important;}
     .reveal{opacity:1 !important;translate:none !important;}
@@ -901,7 +944,7 @@
       <button type="button" data-view="matrix">曲ごと</button>
       <div class="nav-sep">TALK</div>
       <button type="button" id="navToEve">横浜 前夜トーク</button>
-      <button type="button" id="navToTalk">全体トークルーム</button>
+      <button type="button" id="navToTalk">ユーリンチー思い出トーク</button>
       <div class="nav-sep">LINKS</div>
       <button type="button" id="navToLinks">公式・メンバーのSNS</button>
     </nav>
@@ -939,13 +982,18 @@
   </section>
 
   <main id="content">
-    <nav class="pagenav" id="pageNav" aria-label="ページ内の移動">
-      <button type="button" data-go="board" class="on">セトリ</button>
-      <button type="button" data-go="compare">2公演くらべる</button>
-      <button type="button" data-go="table">全公演一覧表</button>
-      <button type="button" data-go="matrix">曲ごと</button>
-      <button type="button" data-go="talk">トーク</button>
-      <button type="button" data-go="links">SNS</button>
+    <nav class="pagenav in-setlists" id="pageNav" aria-label="ページ内の移動">
+      <div class="pn-main">
+        <button type="button" data-go="setlists" class="on">セトリ</button>
+        <button type="button" data-go="talk">トーク</button>
+        <button type="button" data-go="links">SNS</button>
+      </div>
+      <div class="pn-sub" aria-label="セトリの見方">
+        <button type="button" data-go="board" class="on">公演別</button>
+        <button type="button" data-go="compare">2公演くらべる</button>
+        <button type="button" data-go="table">全公演一覧表</button>
+        <button type="button" data-go="matrix">曲ごと</button>
+      </div>
     </nav>
     <section class="setlists" id="setlists">
       <p class="sec-kicker">SETLIST</p>
@@ -966,7 +1014,13 @@
         <span class="chip"><span class="dot rare"></span>限定 = 1公演のみ</span>
       </div>
       <div class="summary-line" id="summary"></div>
-      <p class="play-hint">曲名タップで再生できます。</p>
+      <p class="play-hint">曲名タップで再生・「最高」がつけられます。</p>
+      <div class="hot-card" id="hotCard">
+        <h3>みんなの「最高」ランキング</h3>
+        <p>この公演のこの曲が最高だった！の数。どの見方でも、曲を押すと「最高」をつけられます。</p>
+        <ol class="hot-list"></ol>
+        <button type="button" class="hot-more" hidden></button>
+      </div>
 
 
       <div id="boardView">
@@ -1023,8 +1077,26 @@
     <section class="talk-area" id="talkArea">
       <p class="sec-kicker">TALK</p>
       <h2 class="section-title">トーク</h2>
-      <p class="section-sub">前夜トーク(予想・答え合わせ)と、全体の感想戦。どちらも開いたり閉じたりできます。公演ごとのコメントは各公演のカードの下へ。</p>
-    <section class="eve folded" id="eveRoom" aria-labelledby="eveTitle">
+      <p class="section-sub">ユーリンチーの思い出はここへ。公演ごとのコメントは各公演のカードの下へ。横浜の前夜トーク(予想・答え合わせ)はいちばん下にあります。</p>
+    <section class="eve mem" id="memRoom" aria-labelledby="memTitle">
+      <div class="eve-hero">
+        <i class="hb h1" aria-hidden="true"></i><i class="hb h2" aria-hidden="true"></i>
+        <div class="eve-head">
+          <div class="eve-intro">
+            <p class="eve-kicker"><span class="live-badge">OPEN</span>全11公演 おつかれさまでした ・ 7/22 名古屋 〜 11/11 横浜</p>
+            <h2 class="eve-title" id="memTitle"><span class="et-en">YURINCHI MEMORIES</span><span class="nb">ユーリンチー</span><span class="nb"><span class="et-hot">思い出</span>トーク</span></h2>
+            <p class="eve-lead">名古屋から横浜まで、全11公演。忘れられない1曲、MC、遠征、グッズ、隣の人とのこと。ぜんぶここに残していってください。</p>
+            <p class="eve-count">投稿 <span data-role="count">-</span></p>
+          </div>
+        </div>
+        <div class="marquee" aria-hidden="true"><div class="marquee-track"><span>YURINCHI MEMORIES<i>✶</i>全11公演<i>✶</i>7.22 NAGOYA<i>✶</i>11.11 YOKOHAMA<i>✶</i>ありがとう<i>✶</i>RADWIMPS<i>✶</i>ユーリンチー</span><span>YURINCHI MEMORIES<i>✶</i>全11公演<i>✶</i>7.22 NAGOYA<i>✶</i>11.11 YOKOHAMA<i>✶</i>ありがとう<i>✶</i>RADWIMPS<i>✶</i>ユーリンチー</span></div></div>
+      </div>
+      <div class="comments-body">
+        <div class="mem-composer" data-role="composer"></div>
+        <div class="comment-list" data-role="list"><p class="comment-empty">読み込み中...</p></div>
+      </div>
+    </section>
+    <section class="eve folded plain" id="eveRoom" aria-labelledby="eveTitle">
       <div class="eve-hero">
         <i class="hb h1" aria-hidden="true"></i><i class="hb h2" aria-hidden="true"></i>
         <div class="eve-head">
@@ -1105,13 +1177,6 @@
       </div>
       </div>
     </section>
-      <details class="general-talk" id="generalTalk">
-        <summary class="general-talk-summary">全体トークルーム <span class="count" data-role="count"></span></summary>
-        <p class="section-sub">感想戦や雑談はこちらへ。公演ごとのコメントは各カード下のコメント欄へどうぞ。</p>
-        <div class="comments-body">
-          <div class="comment-list" data-role="list"><p class="comment-empty">読み込み中...</p></div>
-        </div>
-      </details>
     </section>
 
   </main>
@@ -1412,7 +1477,7 @@ function songButtonHTML(title){
     `${escapeHtml(title)}<span class="play-ico" aria-hidden="true">▶</span></button>`;
 }
 const playerEl = document.getElementById("player");
-let playerTitle = "";
+let playerTitle = "", playerShow = "";
 function sourceHTML(src, title){
   if (src.yt) {
     if (location.protocol === "file:") {
@@ -1426,10 +1491,16 @@ function sourceHTML(src, title){
     `<iframe class="player-spotify" src="https://open.spotify.com/embed/album/${encodeURIComponent(src.sp)}?theme=0" height="352" ` +
     `allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="${escapeHtml(LIVE_ALBUM.title)}"></iframe>`;
 }
-function openPlayer(title, idx = 0){
+function openPlayer(title, idx = 0, showDate){
   pauseStage();
   const clean = cleanTitle(title);
   playerTitle = clean;
+  if (showDate !== undefined) playerShow = showDate || "";
+  const pShow = playerShow && shows.find(x => x.date === playerShow);
+  const rawTitle = pShow ? (pShow.songs.find(([, t]) => cleanTitle(t) === clean) || [, title])[1] : title;
+  const reactRow = pShow
+    ? `<div class="player-react"><span><b>${pShow.label}</b>(${pShow.date})の「${escapeHtml(clean)}」</span>${reactBtnHTML(pShow.date, rawTitle, "good")}</div>`
+    : "";
   const srcs = sourcesFor(clean);
   const cur = srcs[idx];
   const q = encodeURIComponent(clean);
@@ -1448,7 +1519,7 @@ function openPlayer(title, idx = 0){
     `<a href="https://music.apple.com/jp/search?term=${q}" target="_blank" rel="noopener">Apple Music ↗</a>` +
     `<a href="${discoUrl(clean)}" target="_blank" rel="noopener">公式ディスコグラフィ ↗</a>` +
     `<a href="https://radwimps-store.radwimps.jp/" target="_blank" rel="noopener">RADWIMPS SHOP ↗</a>`;
-  playerEl.querySelector('[data-role="pbody"]').innerHTML = main +
+  playerEl.querySelector('[data-role="pbody"]').innerHTML = reactRow + main +
     `<div class="player-links">${links}</div>` +
     `<p class="player-sub">サブスクにない曲はディスコグラフィやSHOPから。</p>`;
   playerEl.hidden = false;
@@ -1461,7 +1532,7 @@ function closePlayer(){
 }
 document.addEventListener("click", (e) => {
   const b = e.target.closest("[data-play]");
-  if (b) { openPlayer(b.dataset.play); return; }
+  if (b) { openPlayer(b.dataset.play, 0, b.dataset.playShow || b.closest("[data-show-date]")?.dataset.showDate || ""); return; }
   const s = e.target.closest("#player [data-src]");
   if (s) { openPlayer(playerTitle, Number(s.dataset.src)); return; }
   if (e.target.closest("[data-player-close]")) closePlayer();
@@ -1481,6 +1552,7 @@ function reactBtnHTML(showDate, title, kind){
     `最高 <span class="react-count">${count || ""}</span></button>`;
 }
 function refreshAllReactionButtons(){
+  refreshHot();
   document.querySelectorAll(".react-btn").forEach(btn => {
     const key = reactionKey(btn.dataset.show, btn.dataset.title, btn.dataset.kind);
     const count = reactionCounts.get(key) || 0;
@@ -1552,6 +1624,7 @@ shows.forEach((show) => {
   }, { once: false });
 
   item.dataset.idx = shows.indexOf(show);
+  item.dataset.showDate = show.date;
   board.appendChild(item);
 });
 /* スマホ: 公演を1つずつ選んで見る */
@@ -1678,6 +1751,7 @@ function buildAllTable(){
       if (show.placeholder) { td.className = "future"; tr.appendChild(td); return; }
       const hits = show.songs.filter(([, t]) => t === title).map(([n]) => n);
       td.innerHTML = hits.length ? hits.map(n => `<b class="${/^EN/i.test(n) ? "en" : ""}">${n}</b>`).join("") : "·";
+      if (hits.length) { td.dataset.play = title; td.dataset.playShow = show.date; }
       tr.appendChild(td);
     });
     tbody.appendChild(tr);
@@ -1706,14 +1780,15 @@ function buildGrid(){
     let k = 0;
     s.songs.filter(([n]) => !/^EN/i.test(n)).forEach(([n, t]) => {
       const ai = anchors.indexOf(t, k);
-      if (ai >= k) k = ai + 1; else arr[k].push([n, t]);
+      if (ai >= k) k = ai + 1; else arr[k].push([n, t, (s.songs.find(x => x[0] === n) || [])[2]]);
     });
-    segs.set(s, { arr, en: s.songs.filter(([n]) => /^EN/i.test(n)) });
+    arr.forEach(seg => seg.forEach(x => { x.show = s.date; }));
+    segs.set(s, { arr, en: s.songs.filter(([n]) => /^EN/i.test(n)).map(x => Object.assign(x.slice(), { show: s.date })) });
   });
   const cell = (x) => {
     if (!x) return `<td class="empty">―</td>`;
     const rare = classFor(x[1]) === "rare";
-    return `<td class="${rare ? "rare" : ""}"><small>${x[0]}</small>${escapeHtml(x[1])}${x[2] ? `<span class="song-note">${x[2]}</span>` : ""}</td>`;
+    return `<td class="${rare ? "rare" : ""}" data-play="${escapeHtml(x[1])}" data-play-show="${x.show}"><small>${x[0]}</small>${escapeHtml(x[1])}${x[2] ? `<span class="song-note">${x[2]}</span>` : ""}</td>`;
   };
   let body = "", blk = 0;
   const futureCell = (first) => `<td class="future">${first ? "公演前" : ""}</td>`;
@@ -1734,7 +1809,7 @@ function buildGrid(){
       body += `<tr class="anchor"><th>全公演</th>` + cols.map(s => {
         if (s.placeholder || !s.songs.length) { const c = futureCell(firstRow); firstRow = false; return c; }
         const f = s.songs.find(([n, x]) => x === t && !/^EN/i.test(n));
-        return cell(f);
+        return cell(f && Object.assign(f.slice(), { show: s.date }));
       }).join("") + `</tr>`;
       firstRow = false;
     }
@@ -1860,11 +1935,11 @@ function alignSongs(A, B){
   }
   return rows;
 }
-function cmpCell(x, side, kind){
+function cmpCell(x, side, kind, date){
   if (!x) return `<div class="cmp-cell gap">―</div>`;
   const en = /^EN/i.test(x[0]);
   const tag = kind === "moved" ? `<span class="tag" title="両方でやったけど順番が入れかわった曲">↕</span>` : "";
-  return `<div class="cmp-cell ${kind || ""} ${side}"><span class="cn${en ? " en" : ""}">${x[0]}</span><span class="ct">${escapeHtml(x[1])}${x[2] ? `<span class="song-note">${x[2]}</span>` : ""}</span>${tag}</div>`;
+  return `<div class="cmp-cell ${kind || ""} ${side}"><span class="cn${en ? " en" : ""}">${x[0]}</span><span class="ct" data-play="${escapeHtml(x[1])}" data-play-show="${date}" style="cursor:pointer">${escapeHtml(x[1])}${x[2] ? `<span class="song-note">${x[2]}</span>` : ""}</span>${tag}${reactBtnHTML(date, x[1], "good")}</div>`;
 }
 function renderCompare(){
   const A = shows[+cmpA.value], B = shows[+cmpB.value];
@@ -1880,13 +1955,13 @@ function renderCompare(){
     if (r.a && r.b) {
       both++;
       const diffNo = r.a[0] !== r.b[0];
-      html += cmpCell(r.a, "a", diffNo ? "diffno" : "") + cmpCell(r.b, "b", diffNo ? "diffno" : "");
+      html += cmpCell(r.a, "a", diffNo ? "diffno" : "", A.date) + cmpCell(r.b, "b", diffNo ? "diffno" : "", B.date);
     } else {
       const x = r.a || r.b, side = r.a ? "a" : "b";
       const other = side === "a" ? inB : inA;
       const kind = other.has(x[1]) ? "moved" : "only";
       if (kind === "moved") moved += 0.5; else if (side === "a") onlyA++; else onlyB++;
-      html += side === "a" ? cmpCell(x, "a", kind) + cmpCell(null) : cmpCell(null) + cmpCell(x, "b", kind);
+      html += side === "a" ? cmpCell(x, "a", kind, A.date) + cmpCell(null) : cmpCell(null) + cmpCell(x, "b", kind, B.date);
     }
   });
   both += Math.round(moved);
@@ -1952,10 +2027,11 @@ btnCompare.addEventListener("click", () => activateView("compare"));
 let currentView = "board", currentArea = "setlists";
 const pageNav = document.getElementById("pageNav");
 function updatePageNav(){
-  const key = currentArea === "setlists" ? currentView : currentArea;
-  pageNav.querySelectorAll("[data-go]").forEach(b => b.classList.toggle("on", b.dataset.go === key));
-  const on = pageNav.querySelector(".on");
-  if (on) pageNav.scrollLeft = Math.max(0, on.offsetLeft - 20);
+  pageNav.classList.toggle("in-setlists", currentArea === "setlists");
+  pageNav.querySelectorAll(".pn-main [data-go]").forEach(b => b.classList.toggle("on", b.dataset.go === currentArea));
+  pageNav.querySelectorAll(".pn-sub [data-go]").forEach(b => b.classList.toggle("on", b.dataset.go === currentView));
+  const sub = pageNav.querySelector(".pn-sub"), on = sub.querySelector(".on");
+  if (on) sub.scrollLeft = Math.max(0, on.offsetLeft - 20);
 }
 function openEve(){
   eveEl.classList.remove("folded");
@@ -1973,7 +2049,7 @@ pageNav.addEventListener("click", (e) => {
   const go = b.dataset.go;
   if (go === "talk") { currentArea = "talk"; updatePageNav(); document.getElementById("talkArea").scrollIntoView({ behavior: "smooth", block: "start" }); return; }
   if (go === "links") { openLinks(); currentArea = "links"; updatePageNav(); document.getElementById("links").scrollIntoView({ behavior: "smooth", block: "start" }); return; }
-  currentArea = "setlists"; activateView(go);
+  currentArea = "setlists"; activateView(go === "setlists" ? currentView : go);
 });
 if ("IntersectionObserver" in window) {
   const areaIO = new IntersectionObserver((ents) => {
@@ -2331,7 +2407,8 @@ async function loadReactions(){
   if (error || !data) return;
   const deviceId = getDeviceId();
   data.forEach(r => {
-    const key = reactionKey(r.show_date, r.song_title, r.kind);
+    const t = (r.song_title === "新曲" && (r.show_date === "8/3" || r.show_date === "8/12")) ? "娑婆堕罵 -Shabadaba-" : r.song_title;
+    const key = reactionKey(r.show_date, t, r.kind);
     reactionCounts.set(key, (reactionCounts.get(key) || 0) + 1);
     if (r.device_id === deviceId) myReactions.add(key);
   });
@@ -2352,7 +2429,7 @@ async function toggleReaction(showDate, title, kind){
 
   if (wasActive) {
     await supabaseClient.from("song_reactions").delete()
-      .eq("show_date", showDate).eq("song_title", title).eq("kind", kind).eq("device_id", deviceId);
+      .eq("show_date", showDate).in("song_title", title === "娑婆堕罵 -Shabadaba-" ? [title, "新曲"] : [title]).eq("kind", kind).eq("device_id", deviceId);
   } else {
     await supabaseClient.from("song_reactions")
       .insert({ show_date: showDate, song_title: title, kind, device_id: deviceId });
@@ -2365,12 +2442,41 @@ document.addEventListener("click", (e) => {
   toggleReaction(btn.dataset.show, btn.dataset.title, btn.dataset.kind);
 });
 
-const generalTalkEl = document.getElementById("generalTalk");
-generalTalkEl.addEventListener("toggle", () => {
-  if (generalTalkEl.open) initShowComments("general", generalTalkEl);
-});
+const generalTalkEl = document.getElementById("memRoom");
+initShowComments("general", generalTalkEl);
 
 loadReactions().then(refreshAllReactionButtons);
+
+/* みんなの最高ランキング・一覧表の最高の数 */
+let hotAll = false;
+function refreshHot(){
+  const card = document.getElementById("hotCard");
+  if (!card) return;
+  const rows = [];
+  reactionCounts.forEach((n, key) => {
+    const [d, t, k] = key.split("||");
+    if (k !== "good" || !n) return;
+    const sh = shows.find(x => x.date === d && x.songs.some(([, tt]) => tt === t));
+    if (sh) rows.push({ d, t, n, label: sh.label });
+  });
+  rows.sort((a, b) => b.n - a.n);
+  const top = hotAll ? rows.slice(0, 30) : rows.slice(0, 5);
+  card.querySelector(".hot-list").innerHTML = top.length
+    ? top.map((r, i) => `<li><span class="rk">${i + 1}</span><span class="tt">${escapeHtml(r.t)}</span><span class="sh">${r.label}</span>` +
+        `<button type="button" class="react-btn${myReactions.has(reactionKey(r.d, r.t, "good")) ? " active" : ""}" data-show="${r.d}" data-title="${escapeHtml(r.t)}" data-kind="good">最高 <span class="react-count">${r.n}</span></button></li>`).join("")
+    : `<li>まだ最高がありません。曲を押して「最高」をつけてね</li>`;
+  card.querySelector(".hot-more").hidden = rows.length <= 5;
+  card.querySelector(".hot-more").textContent = hotAll ? "たたむ" : `もっと見る(${Math.min(rows.length, 30)}位まで)`;
+  document.querySelectorAll("table.matrix td[data-play]").forEach(td => {
+    const n = reactionCounts.get(reactionKey(td.dataset.playShow, td.dataset.play, "good")) || 0;
+    let el = td.querySelector(".hotn");
+    if (n) { if (!el) { el = document.createElement("span"); el.className = "hotn"; td.appendChild(el); } el.textContent = "最高 " + n; }
+    else if (el) el.remove();
+  });
+}
+document.getElementById("hotCard").addEventListener("click", (e) => {
+  if (e.target.closest(".hot-more")) { hotAll = !hotAll; refreshHot(); }
+});
 
 /* ---- 横浜 前夜トーク ---- */
 const EVE = {
@@ -2452,7 +2558,8 @@ function actualFor(key){
 function judgeHTML(c){
   const pred = parsePrediction(c.body);
   if (!pred) return "";
-  const results = EVE.shows.filter(s => hasTag(c.body, s.tag)).map(s => {
+  const tagged = EVE.shows.filter(s => hasTag(c.body, s.tag));
+  const results = (tagged.length ? tagged : EVE.shows).map(s => {
     const act = actualFor(s.key);
     if (!act) return null;
     const actual = new Map(act.songs.map(([n, t]) => [normTitle(t), String(n).toUpperCase()]));
