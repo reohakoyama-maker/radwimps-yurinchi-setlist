@@ -213,19 +213,43 @@
   .show-chip.notplayed .pos{display:none;}
 
   #tableView{display:none;} #tableView.active{display:block;}
-  .matrix-fit{border:1px solid var(--line);border-radius:6px;background:var(--surface);overflow:hidden;}
-  table.matrix{border-collapse:collapse;font-size:12px;transform-origin:top left;}
-  table.matrix th, table.matrix td{padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap;}
-  table.matrix thead th{background:var(--surface);font-weight:500;font-size:11px;color:var(--ink-soft);
-    border-bottom:1px solid var(--line-strong);text-align:center;}
-  table.matrix thead th.songcol{text-align:left;}
-  table.matrix tbody th{background:var(--surface);text-align:left;font-weight:400;white-space:normal;max-width:180px;border-right:1px solid var(--line);}
-  table.matrix tbody th .dot{margin-right:6px;}
-  table.matrix td{text-align:center;font-variant-numeric:tabular-nums;color:var(--ash);}
-  table.matrix td.played{color:var(--ink);font-weight:700;}
-  table.matrix td.encore{color:var(--accent);}
-  table.matrix tbody tr:hover td, table.matrix tbody tr:hover th{background:var(--accent-soft);}
+  /* 全公演一覧表: ピンチで拡大縮小・曲名と公演名は固定 */
+  .tbl-wrap{border:1px solid var(--line);border-radius:10px;background:var(--surface);overflow:hidden;}
+  .tbl-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;padding:8px 10px;border-bottom:1px solid var(--line);background:var(--surface2);}
+  .tbl-filter,.tbl-zoom{display:flex;gap:4px;align-items:center;}
+  .tbl-bar button{font-size:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink-soft);border-radius:100px;padding:5px 11px;cursor:pointer;white-space:nowrap;}
+  .tbl-bar button.on{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:700;}
+  .tbl-zoom button{min-width:34px;padding:5px 9px;}
+  .tbl-zoom .zl{font-size:11px;color:var(--ash);min-width:3.2em;text-align:center;font-variant-numeric:tabular-nums;}
+  .tbl-hint{font-size:11.5px;color:var(--ash);padding:6px 12px 0;margin:0;}
+  .tbl-key{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--ash);padding:4px 12px 8px;}
+  .tbl-key i{display:inline-block;font-style:normal;font-weight:700;font-size:10px;border-radius:4px;padding:1px 5px;margin-right:4px;}
+  .matrix-fit{overflow:auto;max-height:78vh;max-height:78svh;touch-action:pan-x pan-y;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;}
+  table.matrix{border-collapse:separate;border-spacing:0;font-size:12px;}
+  table.matrix th, table.matrix td{padding:6px 6px;border-bottom:1px solid var(--line);white-space:nowrap;}
+  table.matrix thead th{position:sticky;top:0;z-index:2;background:var(--surface);font-weight:500;font-size:11px;color:var(--ink-soft);
+    border-bottom:1.5px solid var(--line-strong);text-align:center;line-height:1.35;min-width:48px;}
+  table.matrix thead th small{display:block;font-weight:400;color:var(--ash);font-size:10px;}
+  table.matrix thead th.songcol{left:0;z-index:3;text-align:left;}
+  table.matrix thead th.future{color:var(--ash);}
+  table.matrix tbody th{position:sticky;left:0;z-index:1;background:var(--surface);text-align:left;font-weight:500;white-space:normal;
+    min-width:8.5em;max-width:10em;border-right:1px solid var(--line);font-size:12px;line-height:1.35;color:var(--ink);}
+  table.matrix tbody th .dot{margin-right:5px;vertical-align:1px;}
+  table.matrix tbody th .cnt{display:block;font-size:10px;font-weight:400;color:var(--ash);margin-top:1px;}
   table.matrix tbody tr.row-rare th{color:var(--accent);}
+  table.matrix tbody tr.row-rare th .cnt{color:var(--accent);}
+  table.matrix tbody tr.row-rare td{background:var(--accent-soft);}
+  table.matrix td{text-align:center;font-variant-numeric:tabular-nums;color:var(--line);}
+  table.matrix td b{display:inline-block;min-width:26px;padding:2px 4px;border-radius:5px;font-family:var(--font-display);font-weight:400;font-size:12px;
+    background:var(--ink);color:var(--bg);}
+  table.matrix td b.en{background:var(--accent);color:var(--accent-ink);}
+  table.matrix td b + b{margin-left:2px;}
+  table.matrix td.future{background:repeating-linear-gradient(135deg,transparent 0 6px,rgba(128,128,128,.08) 6px 12px);}
+  table.matrix tbody tr.hide{display:none;}
+  table.matrix tbody tr:hover td, table.matrix tbody tr:hover th{background:var(--accent-soft);}
+  .tbl-wrap.full{position:fixed;inset:0;z-index:90;border-radius:0;border:0;display:flex;flex-direction:column;}
+  .tbl-wrap.full .matrix-fit{max-height:none;flex:1;}
+  body.tbl-lock{overflow:hidden;}
 
   .footnote{margin-top:54px;padding-top:24px;border-top:1px solid var(--line);font-size:12px;color:var(--ash);line-height:2;}
   .footnote .handle{color:var(--ink);}
@@ -885,8 +909,27 @@
         <div id="matrixTable"></div>
       </div>
       <div id="tableView">
-        <div class="matrix-fit" id="matrixFit">
-          <table class="matrix" id="allTable"></table>
+        <div class="tbl-wrap" id="tblWrap">
+          <div class="tbl-bar">
+            <div class="tbl-filter" role="group" aria-label="曲をしぼる">
+              <button type="button" data-tf="all" class="on">すべて</button>
+              <button type="button" data-tf="rare">限定だけ</button>
+              <button type="button" data-tf="sometimes">たまに</button>
+              <button type="button" data-tf="fixed">固定</button>
+            </div>
+            <div class="tbl-zoom">
+              <button type="button" data-tz="-" aria-label="縮小">−</button>
+              <span class="zl" id="tblZl"></span>
+              <button type="button" data-tz="+" aria-label="拡大">＋</button>
+              <button type="button" data-tz="fit">全体</button>
+              <button type="button" data-tz="full" id="tblFullBtn">⛶ 全画面</button>
+            </div>
+          </div>
+          <p class="tbl-hint">2本指でピンチすると拡大・縮小できます。曲名と公演名はスクロールしても残ります。</p>
+          <div class="tbl-key"><span><i style="background:var(--ink);color:var(--bg)">7</i>本編の曲順</span><span><i style="background:var(--accent);color:var(--accent-ink)">EN1</i>アンコール</span><span><i style="background:var(--accent-soft);color:var(--accent)">限定</i>1公演だけ</span></div>
+          <div class="matrix-fit" id="matrixFit">
+            <table class="matrix" id="allTable"></table>
+          </div>
         </div>
       </div>
     </section>
@@ -1335,57 +1378,105 @@ function buildMatrix(){
 }
 buildMatrix();
 
-/* ---- full table view: rows = songs, columns = every show, all in one glance ---- */
+/* ---- full table view: rows = songs, columns = every show (公演前の回は空けておく) ---- */
 const allTable = document.getElementById("allTable");
 function buildAllTable(){
+  const cols = shows;  // placeholder(公演前)も列として出す
   const thead = document.createElement("thead");
   const htr = document.createElement("tr");
-  htr.innerHTML = `<th class="songcol">曲目</th>` +
-    realShows.map(s => `<th>${s.label}<br><span style="font-weight:400;color:var(--ash);">${s.date}</span></th>`).join("");
+  htr.innerHTML = `<th class="songcol">曲目<small>演奏回数</small></th>` +
+    cols.map(s => `<th class="${s.placeholder ? "future" : ""}">${s.label.replace(" ", "<br>")}<small>${s.date}${s.placeholder ? " 公演前" : ""}</small></th>`).join("");
   thead.appendChild(htr);
-
   const tbody = document.createElement("tbody");
   titles.forEach(title => {
     const cls = classFor(title);
     const tr = document.createElement("tr");
+    tr.dataset.cls = cls;
     if (cls === "rare") tr.className = "row-rare";
     const th = document.createElement("th");
-    th.innerHTML = `<span class="dot ${cls}"></span>${title}`;
+    th.innerHTML = `<span class="dot ${cls}"></span>${escapeHtml(title)}<span class="cnt">${countByTitle[title]}/${totalShows}公演${cls === "rare" ? "・限定" : ""}</span>`;
     tr.appendChild(th);
-    realShows.forEach(show => {
-      const found = show.songs.find(([, t]) => t === title);
+    cols.forEach(show => {
       const td = document.createElement("td");
-      if (found) {
-        const isEncore = /^EN/.test(found[0]);
-        td.className = "played" + (isEncore ? " encore" : "");
-        td.textContent = found[0];
-      } else {
-        td.textContent = "–";
-      }
+      if (show.placeholder) { td.className = "future"; tr.appendChild(td); return; }
+      const hits = show.songs.filter(([, t]) => t === title).map(([n]) => n);
+      td.innerHTML = hits.length ? hits.map(n => `<b class="${/^EN/i.test(n) ? "en" : ""}">${n}</b>`).join("") : "·";
       tr.appendChild(td);
     });
     tbody.appendChild(tr);
   });
-
   allTable.appendChild(thead);
   allTable.appendChild(tbody);
 }
 buildAllTable();
 
-/* ---- shrink the full table to fit the screen width, no horizontal scroll needed ---- */
+/* ---- 拡大・縮小(ピンチ / ボタン)。CSSのzoomなので、固定した曲名・公演名もそのまま効く ---- */
 const matrixFit = document.getElementById("matrixFit");
-function fitAllTable(){
-  allTable.style.transform = "none";
-  matrixFit.style.height = "";
-  const naturalWidth = allTable.scrollWidth;
-  const naturalHeight = allTable.scrollHeight;
-  const availWidth = matrixFit.clientWidth;
-  const scale = Math.min(1, availWidth / naturalWidth);
-  allTable.style.transform = `scale(${scale})`;
-  matrixFit.style.height = (naturalHeight * scale) + "px";
+const tblWrap = document.getElementById("tblWrap");
+let tz = 1, tzFit = 1, tzTouched = false;
+function setTZ(nz, cx, cy){
+  nz = Math.max(Math.min(tzFit, 1) * 0.9, Math.min(2.5, nz));
+  if (cx == null) { cx = matrixFit.clientWidth / 2; cy = 0; }
+  const px = (matrixFit.scrollLeft + cx) / tz, py = (matrixFit.scrollTop + cy) / tz;
+  tz = nz; allTable.style.zoom = tz;
+  matrixFit.scrollLeft = px * tz - cx; matrixFit.scrollTop = py * tz - cy;
+  document.getElementById("tblZl").textContent = Math.round(tz * 100) + "%";
 }
-window.addEventListener("resize", () => {
-  if (tableView.classList.contains("active")) fitAllTable();
+function fitAllTable(force){
+  allTable.style.zoom = 1;
+  const w = allTable.scrollWidth;
+  tzFit = Math.min(1, (matrixFit.clientWidth - 2) / w);
+  if (force || !tzTouched) setTZ(tzFit); else setTZ(tz);
+}
+window.addEventListener("resize", () => { if (tableView.classList.contains("active")) fitAllTable(); });
+let pinch = null;
+const dist = (t) => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+matrixFit.addEventListener("touchstart", (e) => {
+  if (e.touches.length === 2) {
+    const r = matrixFit.getBoundingClientRect();
+    pinch = { d: dist(e.touches), z: tz,
+      cx: (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left,
+      cy: (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top };
+    e.preventDefault();
+  }
+}, { passive: false });
+matrixFit.addEventListener("touchmove", (e) => {
+  if (pinch && e.touches.length === 2) {
+    e.preventDefault(); tzTouched = true;
+    setTZ(pinch.z * dist(e.touches) / pinch.d, pinch.cx, pinch.cy);
+  }
+}, { passive: false });
+matrixFit.addEventListener("touchend", (e) => { if (e.touches.length < 2) pinch = null; });
+["gesturestart", "gesturechange"].forEach(ev => matrixFit.addEventListener(ev, (e) => e.preventDefault()));  // iPhoneでページ全体が拡大されないように
+// トラックパッドのピンチ(ctrl+ホイール)
+matrixFit.addEventListener("wheel", (e) => {
+  if (!e.ctrlKey) return;
+  e.preventDefault(); tzTouched = true;
+  const r = matrixFit.getBoundingClientRect();
+  setTZ(tz * Math.exp(-e.deltaY / 200), e.clientX - r.left, e.clientY - r.top);
+}, { passive: false });
+const tblHome = document.createComment("tbl");
+tblWrap.addEventListener("click", (e) => {
+  const f = e.target.closest("[data-tf]");
+  if (f) {
+    tblWrap.querySelectorAll("[data-tf]").forEach(b => b.classList.toggle("on", b === f));
+    allTable.querySelectorAll("tbody tr").forEach(tr => tr.classList.toggle("hide", f.dataset.tf !== "all" && tr.dataset.cls !== f.dataset.tf));
+    return;
+  }
+  const z = e.target.closest("[data-tz]");
+  if (!z) return;
+  const k = z.dataset.tz;
+  if (k === "+") { tzTouched = true; setTZ(tz * 1.25); }
+  if (k === "-") { tzTouched = true; setTZ(tz / 1.25); }
+  if (k === "fit") { tzTouched = false; fitAllTable(true); }
+  if (k === "full") {
+    const on = !tblWrap.classList.contains("full");
+    if (on) { tblWrap.parentNode.insertBefore(tblHome, tblWrap); document.body.appendChild(tblWrap); }
+    else { tblHome.parentNode.insertBefore(tblWrap, tblHome); tblHome.remove(); }
+    tblWrap.classList.toggle("full", on); document.body.classList.toggle("tbl-lock", on);
+    z.textContent = on ? "✕ 閉じる" : "⛶ 全画面";
+    requestAnimationFrame(() => fitAllTable());
+  }
 });
 
 /* ---- view switch ---- */
