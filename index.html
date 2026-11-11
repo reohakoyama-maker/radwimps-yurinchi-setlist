@@ -975,7 +975,7 @@
         <div class="cmp-quick" id="cmpQuick"></div>
         <div class="cmp-sum" id="cmpSum"></div>
         <div class="cmp-grid" id="cmpGrid"></div>
-        <p class="cmp-note">同じ曲は同じ行にそろえています。色つきはその公演だけの曲、「曲順ちがい」は両方でやったけど順番が入れかわった曲です。</p>
+        <p class="cmp-note">同じ曲は同じ行にそろえています。マーカーを引いた曲は、その公演でしかやっていない曲です。↕ は両方でやったけど順番が入れかわった曲です。</p>
       </div>
       <div id="matrixView">
         <div id="matrixTable"></div>
@@ -1846,7 +1846,7 @@ function alignSongs(A, B){
 function cmpCell(x, side, kind){
   if (!x) return `<div class="cmp-cell gap">―</div>`;
   const en = /^EN/i.test(x[0]);
-  const tag = kind === "only" ? `<span class="tag">${side === "a" ? "左だけ" : "右だけ"}</span>` : kind === "moved" ? `<span class="tag">曲順ちがい</span>` : "";
+  const tag = kind === "moved" ? `<span class="tag" title="両方でやったけど順番が入れかわった曲">↕</span>` : "";
   return `<div class="cmp-cell ${kind || ""} ${side}"><span class="cn${en ? " en" : ""}">${x[0]}</span><span class="ct">${escapeHtml(x[1])}</span>${tag}</div>`;
 }
 function renderCompare(){
