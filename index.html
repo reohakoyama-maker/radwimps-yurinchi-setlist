@@ -716,6 +716,110 @@
     .md-strip .md-empty{background:transparent;color:#948b7e;padding-left:0;}
     @keyframes mdpop{0%{transform:scale(.6);background:#ff8a3d;}100%{transform:none;}}
   }
+
+  /* ---------- v6: 迷わない構成 / 2公演くらべる / 公演えらび ---------- */
+  .pagenav{position:sticky;top:0;z-index:40;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;
+    margin:0 -20px 22px;padding:10px 20px;background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+  .pagenav::-webkit-scrollbar{display:none;}
+  .pagenav button{flex:none;font-size:13px;font-weight:700;border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);
+    border-radius:100px;padding:7px 15px;cursor:pointer;white-space:nowrap;}
+  .pagenav button.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);}
+  #setlists,#boardView,#compareView,#matrixView,#tableView,#talkArea,#eveRoom,#links,#generalTalk{scroll-margin-top:70px;}
+  .viewswitch{flex-wrap:wrap;}
+  .talk-area{margin-top:64px;padding-top:30px;border-top:1px solid var(--line);}
+  .talk-area > .section-sub{margin-bottom:18px;}
+  .eve.folded .eve-body,.eve.folded .stub,.eve.folded .marquee,.eve.folded .eve-lead,.eve.folded .eve-cta{display:none;}
+  .eve.folded{padding-bottom:4px;}
+  .eve.folded .eve-hero{margin-bottom:0;}
+  .eve-fold,.fold-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;border:1px solid var(--accent);
+    background:transparent;color:var(--accent);border-radius:100px;padding:7px 16px;cursor:pointer;margin-top:10px;}
+  .eve-fold{margin-left:8px;}
+  .eve.folded .eve-fold{margin-left:0;}
+  .links-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  .links-head .fold-btn{margin:0 0 6px;}
+  .links-peek{font-size:12.5px;color:var(--ash);margin:2px 0 0;}
+  /* 公演えらび(スマホ) */
+  .board-pick{display:none;}
+  .diff-prev{font-size:12px;line-height:1.9;margin:4px 0 10px;padding:8px 10px;border-radius:6px;background:#efe7da;color:#4a443c;}
+  .diff-prev .dp-l{font-weight:700;margin-right:4px;}
+  .diff-prev .plus{color:#cf530a;font-weight:700;margin-right:6px;white-space:nowrap;}
+  .diff-prev .minus{color:#867e72;text-decoration:line-through;margin-right:6px;white-space:nowrap;}
+  .diff-prev .same{color:#867e72;}
+  .diff-prev button{font-size:11.5px;font-weight:700;border:1px solid #cf530a;background:transparent;color:#cf530a;border-radius:100px;padding:2px 10px;cursor:pointer;margin-left:2px;}
+  /* 2公演くらべる */
+  #compareView{display:none;} #compareView.active{display:block;}
+  .cmp-bar{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;margin-bottom:10px;}
+  .cmp-bar select{width:100%;font:inherit;font-size:14px;font-weight:700;padding:9px 10px;border-radius:10px;border:1px solid var(--line);
+    background:var(--surface);color:var(--ink);}
+  .cmp-bar .cmp-a{border-color:var(--accent);}
+  .cmp-swap{font-size:16px;border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);border-radius:50%;width:38px;height:38px;cursor:pointer;}
+  .cmp-quick{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+  .cmp-quick button{font-size:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink-soft);border-radius:100px;padding:5px 12px;cursor:pointer;}
+  .cmp-sum{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;font-size:12.5px;}
+  .cmp-sum span{border-radius:6px;padding:4px 10px;background:var(--surface);border:1px solid var(--line);}
+  .cmp-sum b{font-family:var(--font-display);font-weight:400;font-size:15px;margin-left:4px;}
+  .cmp-sum .s-a{border-color:var(--accent);color:var(--accent);}
+  .cmp-sum .s-b{border-color:#5aa0d8;color:#5aa0d8;}
+  .cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 8px;}
+  .cmp-head{position:sticky;top:58px;z-index:2;font-size:12px;font-weight:700;padding:7px 10px;border-radius:8px 8px 0 0;background:var(--surface2);color:var(--ink);
+    border-bottom:2px solid var(--accent);}
+  .cmp-head.b{border-bottom-color:#5aa0d8;}
+  .cmp-head small{display:block;font-weight:400;color:var(--ash);font-size:10.5px;}
+  .cmp-cell{display:flex;align-items:center;gap:8px;min-height:40px;padding:6px 8px;border-bottom:1px solid var(--line);font-size:13.5px;line-height:1.35;}
+  .cmp-cell .cn{flex:none;min-width:30px;text-align:center;font-family:var(--font-display);font-size:11px;border-radius:5px;padding:2px 4px;background:var(--ink);color:var(--bg);}
+  .cmp-cell .cn.en{background:var(--accent);color:var(--accent-ink);}
+  .cmp-cell.only.a{background:var(--accent-soft);}
+  .cmp-cell.only.b{background:rgba(90,160,216,.16);}
+  .cmp-cell.only .tag{margin-left:auto;flex:none;font-size:10px;font-weight:700;border-radius:4px;padding:1px 6px;}
+  .cmp-cell.only.a .tag{background:var(--accent);color:var(--accent-ink);}
+  .cmp-cell.only.b .tag{background:#5aa0d8;color:#fff;}
+  .cmp-cell.moved .tag{margin-left:auto;flex:none;font-size:10px;color:var(--ash);border:1px dashed var(--ash);border-radius:4px;padding:0 5px;}
+  .cmp-cell.gap{color:var(--line);justify-content:center;}
+  .cmp-cell.diffno .cn{outline:2px solid #e8b04b;outline-offset:1px;}
+  .cmp-sep{grid-column:1 / -1;font-family:var(--font-display);font-size:12px;letter-spacing:.12em;color:var(--accent);padding:14px 4px 4px;}
+  .cmp-note{font-size:11.5px;color:var(--ash);margin:10px 0 0;line-height:1.8;}
+  table.matrix tbody tr.sep th,table.matrix tbody tr.sep td{background:var(--surface2);font-family:var(--font-display);font-size:11px;letter-spacing:.12em;color:var(--accent);padding:5px 8px;}
+  .song-sep{font-family:var(--font-display);font-size:12px;letter-spacing:.12em;color:var(--accent);padding:10px 2px 0;}
+  @media (max-width:820px){
+    .pagenav{margin:0 -14px 18px;padding:9px 14px;}
+    .board-pick{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:2px 0 14px;margin-bottom:6px;}
+    .board-pick::-webkit-scrollbar{display:none;}
+    .board-pick button{flex:none;font-size:12.5px;border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);border-radius:10px;padding:6px 11px;cursor:pointer;line-height:1.3;text-align:center;}
+    .board-pick button small{display:block;font-size:10px;color:var(--ash);}
+    .board-pick button.on{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:700;}
+    .board-pick button.on small{color:inherit;opacity:.7;}
+    .board-pick button.future{border-style:dashed;}
+    .board.pick-one .board-item:not(.sel){display:none;}
+    .setlists .viewswitch{display:none;}
+    .setlists .legend{gap:4px 6px;}
+    .setlists .legend .chip{font-size:11.5px;padding:3px 10px;}
+    #sectionSub{display:none;}
+    .cmp-head{top:54px;}
+    .cmp-cell{font-size:12.5px;padding:6px 6px;gap:6px;}
+    .cmp-cell .cn{min-width:26px;}
+  }
+
+  /* ---------- v7: セトリ表(曲名でそろえた表) ---------- */
+  .tbl-mode{display:flex;gap:4px;align-items:center;}
+  .tbl-bar .tbl-mode button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);}
+  table.matrix.setgrid tbody th{min-width:3.6em;max-width:4.2em;font-size:10px;font-weight:400;color:var(--ash);text-align:center;padding:4px 3px;}
+  table.matrix.setgrid td{color:var(--ink);white-space:normal;min-width:7.6em;max-width:9em;font-size:12px;line-height:1.35;padding:5px 6px;
+    border-right:1px solid var(--line);}
+  table.matrix.setgrid td small{display:block;font-size:9.5px;color:var(--ash);font-family:var(--font-display);letter-spacing:.02em;}
+  table.matrix.setgrid td.empty{color:var(--ash);opacity:.5;}
+  table.matrix.setgrid td.rare{color:var(--accent);font-weight:700;}
+  table.matrix.setgrid td.future{color:var(--ash);font-size:10px;}
+  table.matrix.setgrid tr.blk0 td,table.matrix.setgrid tr.blk0 th{background:linear-gradient(rgba(120,180,100,.15),rgba(120,180,100,.15)),var(--surface);}
+  table.matrix.setgrid tr.blk1 td,table.matrix.setgrid tr.blk1 th{background:linear-gradient(rgba(230,190,70,.16),rgba(230,190,70,.16)),var(--surface);}
+  table.matrix.setgrid tr.blk2 td,table.matrix.setgrid tr.blk2 th{background:linear-gradient(rgba(90,160,216,.15),rgba(90,160,216,.15)),var(--surface);}
+  table.matrix.setgrid tr.blk3 td,table.matrix.setgrid tr.blk3 th{background:linear-gradient(rgba(180,120,210,.14),rgba(180,120,210,.14)),var(--surface);}
+  table.matrix.setgrid tr.enc td,table.matrix.setgrid tr.enc th{background:linear-gradient(rgba(255,138,61,.13),rgba(255,138,61,.13)),var(--surface);}
+  table.matrix.setgrid tr.blk-top td,table.matrix.setgrid tr.blk-top th{border-top:1.5px solid var(--line-strong);}
+  table.matrix.setgrid tr.total td,table.matrix.setgrid tr.total th{font-size:11px;color:var(--ash);background:var(--surface2);}
+  table.matrix.setgrid tbody tr:hover td,table.matrix.setgrid tbody tr:hover th{filter:brightness(1.12);}
+  .tbl-key[hidden],.tbl-filter[hidden]{display:none;}
+  .tbl-key .kb{display:inline-block;width:14px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px;}
   @media (prefers-reduced-motion: reduce){
     *{animation:none !important;transition:none !important;}
     .reveal{opacity:1 !important;translate:none !important;}
@@ -742,8 +846,9 @@
     <nav class="nav-menu" id="navMenu" hidden>
       <div class="nav-sep">SETLIST</div>
       <button type="button" data-view="board">公演別</button>
-      <button type="button" data-view="matrix">曲目比較</button>
+      <button type="button" data-view="compare">2公演くらべる</button>
       <button type="button" data-view="table">全公演一覧表</button>
+      <button type="button" data-view="matrix">曲ごと</button>
       <div class="nav-sep">TALK</div>
       <button type="button" id="navToEve">横浜 前夜トーク</button>
       <button type="button" id="navToTalk">全体トークルーム</button>
@@ -797,7 +902,90 @@
   </section>
 
   <main id="content">
-    <section class="eve" id="eveRoom" aria-labelledby="eveTitle">
+    <nav class="pagenav" id="pageNav" aria-label="ページ内の移動">
+      <button type="button" data-go="board" class="on">セトリ</button>
+      <button type="button" data-go="compare">2公演くらべる</button>
+      <button type="button" data-go="table">全公演一覧表</button>
+      <button type="button" data-go="matrix">曲ごと</button>
+      <button type="button" data-go="talk">トーク</button>
+      <button type="button" data-go="links">SNS</button>
+    </nav>
+    <section class="setlists" id="setlists">
+      <p class="sec-kicker">SETLIST</p>
+      <h2 class="section-title">公演セトリ比較</h2>
+      <p class="section-sub" id="sectionSub"></p>
+
+      <div class="viewswitch" role="tablist" aria-label="表示切り替え">
+        <button type="button" id="btnBoard" class="active" role="tab" aria-selected="true">公演別</button>
+        <button type="button" id="btnCompare" role="tab" aria-selected="false">2公演くらべる</button>
+        <button type="button" id="btnTable" role="tab" aria-selected="false">全公演一覧表</button>
+        <button type="button" id="btnMatrix" role="tab" aria-selected="false">曲ごと</button>
+      </div>
+
+      <div class="legend">
+        <span class="chip"><span class="dot fixed"></span>固定 = 全公演で演奏</span>
+        <span class="chip"><span class="dot sometimes"></span>たまに = 一部の公演で演奏</span>
+        <span class="chip"><span class="dot rare"></span>限定 = 1公演のみ</span>
+      </div>
+      <div class="summary-line" id="summary"></div>
+      <p class="play-hint">曲名タップで再生できます。</p>
+
+
+      <div id="boardView">
+        <div class="board-pick" id="boardPick" role="tablist" aria-label="公演をえらぶ"></div>
+        <div class="board" id="board"></div>
+      </div>
+      <div id="compareView">
+        <div class="cmp-bar">
+          <select id="cmpA" class="cmp-a" aria-label="くらべる公演(左)"></select>
+          <button type="button" class="cmp-swap" id="cmpSwap" aria-label="左右を入れかえ">⇄</button>
+          <select id="cmpB" aria-label="くらべる公演(右)"></select>
+        </div>
+        <div class="cmp-quick" id="cmpQuick"></div>
+        <div class="cmp-sum" id="cmpSum"></div>
+        <div class="cmp-grid" id="cmpGrid"></div>
+        <p class="cmp-note">同じ曲は同じ行にそろえています。色つきはその公演だけの曲、「曲順ちがい」は両方でやったけど順番が入れかわった曲です。</p>
+      </div>
+      <div id="matrixView">
+        <div id="matrixTable"></div>
+      </div>
+      <div id="tableView">
+        <div class="tbl-wrap" id="tblWrap">
+          <div class="tbl-bar">
+            <div class="tbl-mode" role="group" aria-label="表の形">
+              <button type="button" data-tm="grid" class="on">曲名で見る</button>
+              <button type="button" data-tm="num">曲順の番号で見る</button>
+            </div>
+            <div class="tbl-filter" role="group" aria-label="曲をしぼる" hidden>
+              <button type="button" data-tf="all" class="on">すべて</button>
+              <button type="button" data-tf="rare">限定だけ</button>
+              <button type="button" data-tf="sometimes">たまに</button>
+              <button type="button" data-tf="fixed">固定</button>
+            </div>
+            <div class="tbl-zoom">
+              <button type="button" data-tz="-" aria-label="縮小">−</button>
+              <span class="zl" id="tblZl"></span>
+              <button type="button" data-tz="+" aria-label="拡大">＋</button>
+              <button type="button" data-tz="fit">全体</button>
+              <button type="button" data-tz="full" id="tblFullBtn">⛶ 全画面</button>
+            </div>
+          </div>
+          <p class="tbl-hint">2本指でピンチすると拡大・縮小できます。曲名と公演名はスクロールしても残ります。</p>
+          <div class="tbl-key" id="keyGrid"><span><i class="kb" style="background:rgba(120,180,100,.5)"></i><i class="kb" style="background:rgba(230,190,70,.55)"></i><i class="kb" style="background:rgba(90,160,216,.5)"></i>色の帯 = 公演によって入れかわった曲</span><span>白い行 = 全公演でやった曲</span><span><b style="color:var(--accent)">オレンジ文字</b> = 限定(1公演だけ)</span><span>小さい数字 = 曲順</span></div>
+          <div class="tbl-key" id="keyNum" hidden><span><i style="background:var(--ink);color:var(--bg)">7</i>本編の曲順</span><span><i style="background:var(--accent);color:var(--accent-ink)">EN1</i>アンコール</span><span><i style="background:var(--accent-soft);color:var(--accent)">限定</i>1公演だけ</span></div>
+          <div class="matrix-fit" id="matrixFit">
+            <table class="matrix setgrid" id="gridTable"></table>
+            <table class="matrix" id="allTable" hidden></table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="talk-area" id="talkArea">
+      <p class="sec-kicker">TALK</p>
+      <h2 class="section-title">トーク</h2>
+      <p class="section-sub">前夜トーク(予想・答え合わせ)と、全体の感想戦。どちらも開いたり閉じたりできます。公演ごとのコメントは各公演のカードの下へ。</p>
+    <section class="eve folded" id="eveRoom" aria-labelledby="eveTitle">
       <div class="eve-hero">
         <i class="hb h1" aria-hidden="true"></i><i class="hb h2" aria-hidden="true"></i>
         <div class="eve-head">
@@ -807,12 +995,14 @@
             <p class="eve-lead">通常公演をふまえたセトリ予想も感想も、Xだとまだ書けない話はここで。前夜・前々夜の「楽しみ！」も、今回は行けない人の「念」も、ぜんぶ置いていってください。</p>
             <p class="eve-count">投稿 <span data-role="count">-</span></p>
             <button type="button" class="eve-cta" id="eveCta">🎤 セトリ予想をつくる</button>
+            <button type="button" class="eve-fold" id="eveFold" aria-expanded="false">トークをひらく ▼</button>
           </div>
           <div class="stub" id="eveCountdown"></div>
         </div>
         <div class="marquee" aria-hidden="true"><div class="marquee-track"><span>YOKOHAMA OKAWARI<i>✶</i>11.10 TUE<i>✶</i>11.11 WED<i>✶</i>PIA ARENA MM<i>✶</i>前夜トーク開催中<i>✶</i>RADWIMPS<i>✶</i>ユーリンチー</span><span>YOKOHAMA OKAWARI<i>✶</i>11.10 TUE<i>✶</i>11.11 WED<i>✶</i>PIA ARENA MM<i>✶</i>前夜トーク開催中<i>✶</i>RADWIMPS<i>✶</i>ユーリンチー</span></div></div>
       </div>
 
+      <div class="eve-body" id="eveBody">
       <div class="eve-tabs" id="eveTabs" role="tablist" aria-label="参戦日でしぼる"></div>
 
       <div class="maker" id="eveMaker">
@@ -874,71 +1064,29 @@
           <div class="comment-list timeline" data-role="list"><p class="comment-empty">読み込み中...</p></div>
         </div>
       </div>
+      </div>
     </section>
-    <section class="setlists" id="setlists">
-      <p class="sec-kicker">SETLIST</p>
-      <h2 class="section-title">公演セトリ比較</h2>
-      <p class="section-sub" id="sectionSub"></p>
-
-      <div class="viewswitch" role="tablist" aria-label="表示切り替え">
-        <button type="button" id="btnBoard" class="active" role="tab" aria-selected="true">公演別</button>
-        <button type="button" id="btnMatrix" role="tab" aria-selected="false">曲目比較</button>
-        <button type="button" id="btnTable" role="tab" aria-selected="false">全公演一覧表</button>
-      </div>
-
-      <div class="legend">
-        <span class="chip"><span class="dot fixed"></span>固定 = 全公演で演奏</span>
-        <span class="chip"><span class="dot sometimes"></span>たまに = 一部の公演で演奏</span>
-        <span class="chip"><span class="dot rare"></span>限定 = 1公演のみ</span>
-      </div>
-      <div class="summary-line" id="summary"></div>
-      <p class="play-hint">曲名タップで再生できます。</p>
-
       <details class="general-talk" id="generalTalk">
         <summary class="general-talk-summary">全体トークルーム <span class="count" data-role="count"></span></summary>
-        <p class="section-sub">感想戦や雑談はこちらへ。横浜公演に向けた話は上の前夜トークへ、公演ごとのネタバレコメントは各カード下のコメント欄へどうぞ。</p>
+        <p class="section-sub">感想戦や雑談はこちらへ。横浜公演の予想は上の前夜トークへ、公演ごとのネタバレコメントは各カード下のコメント欄へどうぞ。</p>
         <div class="comments-body">
           <div class="comment-list" data-role="list"><p class="comment-empty">読み込み中...</p></div>
         </div>
       </details>
-
-      <div id="boardView">
-        <div class="board" id="board"></div>
-      </div>
-      <div id="matrixView">
-        <div id="matrixTable"></div>
-      </div>
-      <div id="tableView">
-        <div class="tbl-wrap" id="tblWrap">
-          <div class="tbl-bar">
-            <div class="tbl-filter" role="group" aria-label="曲をしぼる">
-              <button type="button" data-tf="all" class="on">すべて</button>
-              <button type="button" data-tf="rare">限定だけ</button>
-              <button type="button" data-tf="sometimes">たまに</button>
-              <button type="button" data-tf="fixed">固定</button>
-            </div>
-            <div class="tbl-zoom">
-              <button type="button" data-tz="-" aria-label="縮小">−</button>
-              <span class="zl" id="tblZl"></span>
-              <button type="button" data-tz="+" aria-label="拡大">＋</button>
-              <button type="button" data-tz="fit">全体</button>
-              <button type="button" data-tz="full" id="tblFullBtn">⛶ 全画面</button>
-            </div>
-          </div>
-          <p class="tbl-hint">2本指でピンチすると拡大・縮小できます。曲名と公演名はスクロールしても残ります。</p>
-          <div class="tbl-key"><span><i style="background:var(--ink);color:var(--bg)">7</i>本編の曲順</span><span><i style="background:var(--accent);color:var(--accent-ink)">EN1</i>アンコール</span><span><i style="background:var(--accent-soft);color:var(--accent)">限定</i>1公演だけ</span></div>
-          <div class="matrix-fit" id="matrixFit">
-            <table class="matrix" id="allTable"></table>
-          </div>
-        </div>
-      </div>
     </section>
 
   </main>
 
   <section class="links" id="links">
     <p class="sec-kicker">OFFICIAL &amp; MEMBERS</p>
-    <h2 class="section-title">公式・メンバーのSNS</h2>
+    <div class="links-head">
+      <div>
+        <h2 class="section-title">公式・メンバーのSNS</h2>
+        <p class="links-peek">ユーリンチー公式・RADWIMPS・メンバー・サポートメンバー</p>
+      </div>
+      <button type="button" class="fold-btn" id="linksFold" aria-expanded="false">ひらく ▼</button>
+    </div>
+    <div id="linksBody" hidden>
     <div class="links-grid">
       <div class="link-card">
         <div class="lc-role">TOUR</div>
@@ -1009,6 +1157,7 @@
         <div class="lc-name">エノマサフミ</div>
         <div class="lc-links"><a href="https://www.instagram.com/masafumieno/" target="_blank" rel="noopener">Instagram ↗</a></div>
       </div>
+    </div>
     </div>
   </section>
 
@@ -1286,6 +1435,23 @@ document.getElementById("sectionSub").textContent = shows.map(s => `${s.label}($
 
 /* ---- per-show board ---- */
 const board = document.getElementById("board");
+const playedShows = shows.filter(s => !s.placeholder && s.songs.length);
+function prevShowOf(show){ const i = playedShows.indexOf(show); return i > 0 ? playedShows[i - 1] : null; }
+function diffPrevEl(show){
+  const el = document.createElement("div");
+  if (show.placeholder || !show.songs.length) return el;
+  el.className = "diff-prev";
+  const prev = prevShowOf(show);
+  if (!prev) { el.innerHTML = `<span class="dp-l">ツアー初日</span><span class="same">ここから始まりました</span>`; return el; }
+  const cur = new Set(show.songs.map(([, t]) => t)), old = new Set(prev.songs.map(([, t]) => t));
+  const plus = [...cur].filter(t => !old.has(t) && t !== "？？？"), minus = [...old].filter(t => !cur.has(t) && t !== "？？？");
+  el.innerHTML = `<span class="dp-l">前回(${prev.label})から</span>` +
+    (plus.length || minus.length
+      ? plus.map(t => `<span class="plus">＋${escapeHtml(t)}</span>`).join("") + minus.map(t => `<span class="minus">${escapeHtml(t)}</span>`).join("")
+      : `<span class="same">同じ曲(順番だけ確認してね)</span>`) +
+    ` <button type="button" data-cmp-a="${shows.indexOf(show)}" data-cmp-b="${shows.indexOf(prev)}">くらべる →</button>`;
+  return el;
+}
 shows.forEach((show) => {
   const item = document.createElement("div");
   item.className = "board-item" + (show.placeholder ? " is-placeholder" : "");
@@ -1296,6 +1462,7 @@ shows.forEach((show) => {
   inner.innerHTML = `<div class="show-date">${show.date}</div><div class="show-city">${show.label}${badge}</div>` +
     (show.draftNote ? `<p class="draft-note">${show.draftNote}</p>` : "");
   item.appendChild(inner);
+  item.appendChild(diffPrevEl(show));
 
   const table = document.createElement("table");
   table.innerHTML = `<thead><tr><th>No.</th><th>曲目</th><th>頻度</th><th></th></tr></thead>`;
@@ -1325,8 +1492,26 @@ shows.forEach((show) => {
     if (comments.open) initShowComments(showId, comments);
   }, { once: false });
 
+  item.dataset.idx = shows.indexOf(show);
   board.appendChild(item);
 });
+/* スマホ: 公演を1つずつ選んで見る */
+const boardPick = document.getElementById("boardPick");
+let boardSel = String(shows.indexOf(playedShows[playedShows.length - 1]));
+function renderBoardPick(){
+  boardPick.innerHTML = shows.map((s, i) => `<button type="button" data-bp="${i}" class="${String(i) === boardSel ? "on" : ""}${s.placeholder ? " future" : ""}">${s.date}<small>${s.label}</small></button>`).join("") +
+    `<button type="button" data-bp="all" class="${boardSel === "all" ? "on" : ""}">ぜんぶ<small>並べて見る</small></button>`;
+  board.classList.toggle("pick-one", boardSel !== "all");
+  board.querySelectorAll(".board-item").forEach(el => el.classList.toggle("sel", el.dataset.idx === boardSel));
+  const on = boardPick.querySelector(".on");
+  if (on) boardPick.scrollLeft = on.offsetLeft - boardPick.clientWidth / 2 + on.offsetWidth / 2;
+}
+boardPick.addEventListener("click", (e) => {
+  const b = e.target.closest("[data-bp]");
+  if (!b) return;
+  boardSel = b.dataset.bp; renderBoardPick();
+});
+renderBoardPick();
 
 /* ---- summary ---- */
 const total = Object.keys(countByTitle).length;
@@ -1338,14 +1523,39 @@ document.getElementById("summary").innerHTML =
 
 /* ---- matrix (comparison) view: song cards with wrapping show-chips, no side-scroll on any screen ---- */
 const matrixTable = document.getElementById("matrixTable");
-const titles = Object.keys(countByTitle).sort((a, b) => firstSeenOrder[a] - firstSeenOrder[b]);
+// 「いつもの流れ」順: 本編は曲順の中央値、アンコール中心の曲は本編のあとに EN番号の中央値で並べる
+const songPos = {};
+realShows.forEach(show => {
+  show.songs.forEach(([n, t], idx) => {
+    if (t === "？？？") return;
+    const st = songPos[t] || (songPos[t] = { main: [], en: [] });
+    if (/^EN/i.test(n)) st.en.push(parseInt(String(n).replace(/\D/g, ""), 10) || 1);
+    else st.main.push(parseFloat(n) || idx + 1);
+  });
+});
+const median = (a) => { const b = a.slice().sort((x, y) => x - y), m = b.length >> 1; return b.length % 2 ? b[m] : (b[m - 1] + b[m]) / 2; };
+function isEncoreSong(t){ const st = songPos[t]; return !!st && st.en.length > st.main.length; }
+function flowKey(t){
+  const st = songPos[t];
+  if (!st) return 9999;
+  return isEncoreSong(t) ? 1000 + median(st.en) : median(st.main);
+}
+const titles = Object.keys(countByTitle).sort((a, b) =>
+  (flowKey(a) - flowKey(b)) || (countByTitle[b] - countByTitle[a]) || (firstSeenOrder[a] - firstSeenOrder[b]));
 
 function buildMatrix(){
   const list = document.createElement("div");
   list.className = "song-list";
 
+  let sepDone = false;
   titles.forEach(title => {
     const cls = classFor(title);
+    if (!sepDone && isEncoreSong(title)) {
+      sepDone = true;
+      const sep = document.createElement("div");
+      sep.className = "song-sep"; sep.textContent = "ENCORE ― アンコールが中心の曲";
+      list.appendChild(sep);
+    }
     const row = document.createElement("div");
     row.className = "song-row";
 
@@ -1388,8 +1598,16 @@ function buildAllTable(){
     cols.map(s => `<th class="${s.placeholder ? "future" : ""}">${s.label.replace(" ", "<br>")}<small>${s.date}${s.placeholder ? " 公演前" : ""}</small></th>`).join("");
   thead.appendChild(htr);
   const tbody = document.createElement("tbody");
+  let sepDone = false;
   titles.forEach(title => {
     const cls = classFor(title);
+    if (!sepDone && isEncoreSong(title)) {
+      sepDone = true;
+      const sep = document.createElement("tr");
+      sep.className = "sep";
+      sep.innerHTML = `<th>ENCORE</th>` + cols.map(() => "<td></td>").join("");
+      tbody.appendChild(sep);
+    }
     const tr = document.createElement("tr");
     tr.dataset.cls = cls;
     if (cls === "rare") tr.className = "row-rare";
@@ -1410,6 +1628,67 @@ function buildAllTable(){
 }
 buildAllTable();
 
+
+/* ---- セトリ表: 公演を横に並べ、全公演でやった曲を区切りにして、その間で入れかわった曲をブロックにまとめる ---- */
+const gridTable = document.getElementById("gridTable");
+function buildGrid(){
+  const cols = shows;
+  const isMainOf = (s, t) => s.songs.findIndex(([n, x]) => x === t && !/^EN/i.test(n));
+  // 区切り(アンカー) = 全公演でやった本編の曲のうち、どの公演でも同じ順番に並んでいるもの
+  const anchors = [], last = new Map(playedShows.map(s => [s, -1]));
+  titles.filter(t => classFor(t) === "fixed" && !isEncoreSong(t)).forEach(t => {
+    if (playedShows.every(s => isMainOf(s, t) > last.get(s))) {
+      anchors.push(t); playedShows.forEach(s => last.set(s, isMainOf(s, t)));
+    }
+  });
+  const segs = new Map();
+  playedShows.forEach(s => {
+    const arr = Array.from({ length: anchors.length + 1 }, () => []);
+    let k = 0;
+    s.songs.filter(([n]) => !/^EN/i.test(n)).forEach(([n, t]) => {
+      const ai = anchors.indexOf(t, k);
+      if (ai >= k) k = ai + 1; else arr[k].push([n, t]);
+    });
+    segs.set(s, { arr, en: s.songs.filter(([n]) => /^EN/i.test(n)) });
+  });
+  const cell = (x) => {
+    if (!x) return `<td class="empty">―</td>`;
+    const rare = classFor(x[1]) === "rare";
+    return `<td class="${rare ? "rare" : ""}"><small>${x[0]}</small>${escapeHtml(x[1])}</td>`;
+  };
+  let body = "", blk = 0;
+  const futureCell = (first) => `<td class="future">${first ? "公演前" : ""}</td>`;
+  let firstRow = true;
+  const emitBlock = (getList, cls, label) => {
+    const h = Math.max(0, ...playedShows.map(s => getList(s).length));
+    for (let r = 0; r < h; r++) {
+      body += `<tr class="${cls}${r === 0 ? " blk-top" : ""}"><th>${r === 0 ? label : ""}</th>` +
+        cols.map(s => s.placeholder || !s.songs.length ? futureCell(firstRow && r === 0) : cell(getList(s)[r])).join("") + `</tr>`;
+      if (r === 0) firstRow = false;
+    }
+    return h;
+  };
+  for (let k = 0; k <= anchors.length; k++) {
+    if (emitBlock(s => segs.get(s).arr[k], "blk" + (blk % 4), "入れ<br>かわり")) blk++;
+    if (k < anchors.length) {
+      const t = anchors[k];
+      body += `<tr class="anchor"><th>全公演</th>` + cols.map(s => {
+        if (s.placeholder || !s.songs.length) { const c = futureCell(firstRow); firstRow = false; return c; }
+        const f = s.songs.find(([n, x]) => x === t && !/^EN/i.test(n));
+        return cell(f);
+      }).join("") + `</tr>`;
+      firstRow = false;
+    }
+  }
+  emitBlock(s => segs.get(s).en, "enc", "EN");
+  body += `<tr class="total"><th>曲数</th>` + cols.map(s => `<td>${s.placeholder || !s.songs.length ? "―" : s.songs.length + "曲"}</td>`).join("") + `</tr>`;
+  gridTable.innerHTML = `<thead><tr><th class="songcol">枠</th>` +
+    cols.map(s => `<th class="${s.placeholder ? "future" : ""}">${s.label.replace(" ", "<br>")}<small>${s.date}${s.placeholder ? " 公演前" : ""}</small></th>`).join("") +
+    `</tr></thead><tbody>${body}</tbody>`;
+}
+buildGrid();
+let tblMode = "grid";
+const visTable = () => tblMode === "grid" ? gridTable : allTable;
 /* ---- 拡大・縮小(ピンチ / ボタン)。CSSのzoomなので、固定した曲名・公演名もそのまま効く ---- */
 const matrixFit = document.getElementById("matrixFit");
 const tblWrap = document.getElementById("tblWrap");
@@ -1418,13 +1697,13 @@ function setTZ(nz, cx, cy){
   nz = Math.max(Math.min(tzFit, 1) * 0.9, Math.min(2.5, nz));
   if (cx == null) { cx = matrixFit.clientWidth / 2; cy = 0; }
   const px = (matrixFit.scrollLeft + cx) / tz, py = (matrixFit.scrollTop + cy) / tz;
-  tz = nz; allTable.style.zoom = tz;
+  tz = nz; allTable.style.zoom = tz; gridTable.style.zoom = tz;
   matrixFit.scrollLeft = px * tz - cx; matrixFit.scrollTop = py * tz - cy;
   document.getElementById("tblZl").textContent = Math.round(tz * 100) + "%";
 }
 function fitAllTable(force){
-  allTable.style.zoom = 1;
-  const w = allTable.scrollWidth;
+  allTable.style.zoom = 1; gridTable.style.zoom = 1;
+  const w = visTable().scrollWidth;
   tzFit = Math.min(1, (matrixFit.clientWidth - 2) / w);
   if (force || !tzTouched) setTZ(tzFit); else setTZ(tz);
 }
@@ -1457,10 +1736,23 @@ matrixFit.addEventListener("wheel", (e) => {
 }, { passive: false });
 const tblHome = document.createComment("tbl");
 tblWrap.addEventListener("click", (e) => {
+  const m = e.target.closest("[data-tm]");
+  if (m) {
+    tblMode = m.dataset.tm;
+    tblWrap.querySelectorAll("[data-tm]").forEach(b => b.classList.toggle("on", b === m));
+    gridTable.hidden = tblMode !== "grid"; allTable.hidden = tblMode === "grid";
+    tblWrap.querySelector(".tbl-filter").hidden = tblMode === "grid";
+    document.getElementById("keyGrid").hidden = tblMode !== "grid";
+    document.getElementById("keyNum").hidden = tblMode === "grid";
+    matrixFit.scrollTop = 0; matrixFit.scrollLeft = 0;
+    tzTouched = false; fitAllTable(true);
+    return;
+  }
   const f = e.target.closest("[data-tf]");
   if (f) {
     tblWrap.querySelectorAll("[data-tf]").forEach(b => b.classList.toggle("on", b === f));
     allTable.querySelectorAll("tbody tr").forEach(tr => tr.classList.toggle("hide", f.dataset.tf !== "all" && tr.dataset.cls !== f.dataset.tf));
+    allTable.querySelectorAll("tbody tr.sep").forEach(tr => tr.classList.remove("hide"));
     return;
   }
   const z = e.target.closest("[data-tz]");
@@ -1479,10 +1771,92 @@ tblWrap.addEventListener("click", (e) => {
   }
 });
 
+
+/* ---- 2公演くらべる: 同じ曲を同じ行にそろえて(LCS)、その公演だけの曲・曲順ちがいを色分け ---- */
+const cmpA = document.getElementById("cmpA"), cmpB = document.getElementById("cmpB");
+const cmpGrid = document.getElementById("cmpGrid"), cmpSum = document.getElementById("cmpSum"), cmpQuick = document.getElementById("cmpQuick");
+const cmpOpts = playedShows.map(s => `<option value="${shows.indexOf(s)}">${s.date} ${s.label}</option>`).join("");
+cmpA.innerHTML = cmpOpts; cmpB.innerHTML = cmpOpts;
+cmpA.value = String(shows.indexOf(playedShows[playedShows.length - 1]));
+cmpB.value = String(shows.indexOf(playedShows[Math.max(0, playedShows.length - 2)]));
+function alignSongs(A, B){
+  const m = A.length, n = B.length;
+  const dp = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
+  for (let i = m - 1; i >= 0; i--) for (let j = n - 1; j >= 0; j--)
+    dp[i][j] = A[i][1] === B[j][1] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+  const rows = []; let i = 0, j = 0;
+  while (i < m || j < n) {
+    if (i < m && j < n && A[i][1] === B[j][1]) { rows.push({ a: A[i++], b: B[j++] }); }
+    else if (j >= n || (i < m && dp[i + 1][j] >= dp[i][j + 1])) { rows.push({ a: A[i++], b: null }); }
+    else { rows.push({ a: null, b: B[j++] }); }
+  }
+  return rows;
+}
+function cmpCell(x, side, kind){
+  if (!x) return `<div class="cmp-cell gap">―</div>`;
+  const en = /^EN/i.test(x[0]);
+  const tag = kind === "only" ? `<span class="tag">${side === "a" ? "左だけ" : "右だけ"}</span>` : kind === "moved" ? `<span class="tag">曲順ちがい</span>` : "";
+  return `<div class="cmp-cell ${kind || ""} ${side}"><span class="cn${en ? " en" : ""}">${x[0]}</span><span class="ct">${escapeHtml(x[1])}</span>${tag}</div>`;
+}
+function renderCompare(){
+  const A = shows[+cmpA.value], B = shows[+cmpB.value];
+  const sa = A.songs.filter(([, t]) => t !== "？？？"), sb = B.songs.filter(([, t]) => t !== "？？？");
+  const rows = alignSongs(sa, sb);
+  const inA = new Set(sa.map(([, t]) => t)), inB = new Set(sb.map(([, t]) => t));
+  let both = 0, onlyA = 0, onlyB = 0, moved = 0;
+  let html = `<div class="cmp-head a">${A.label}<small>${A.date}・${sa.length}曲</small></div><div class="cmp-head b">${B.label}<small>${B.date}・${sb.length}曲</small></div>`;
+  let enShown = false;
+  rows.forEach(r => {
+    const isEn = (r.a && /^EN/i.test(r.a[0])) || (r.b && /^EN/i.test(r.b[0]));
+    if (isEn && !enShown) { enShown = true; html += `<div class="cmp-sep">ENCORE</div>`; }
+    if (r.a && r.b) {
+      both++;
+      const diffNo = r.a[0] !== r.b[0];
+      html += cmpCell(r.a, "a", diffNo ? "diffno" : "") + cmpCell(r.b, "b", diffNo ? "diffno" : "");
+    } else {
+      const x = r.a || r.b, side = r.a ? "a" : "b";
+      const other = side === "a" ? inB : inA;
+      const kind = other.has(x[1]) ? "moved" : "only";
+      if (kind === "moved") moved += 0.5; else if (side === "a") onlyA++; else onlyB++;
+      html += side === "a" ? cmpCell(x, "a", kind) + cmpCell(null) : cmpCell(null) + cmpCell(x, "b", kind);
+    }
+  });
+  both += Math.round(moved);
+  cmpGrid.innerHTML = html;
+  cmpSum.innerHTML = `<span>どちらも<b>${both}</b>曲</span><span class="s-a">${A.label}だけ<b>${onlyA}</b></span><span class="s-b">${B.label}だけ<b>${onlyB}</b></span>` +
+    (moved ? `<span>曲順ちがい<b>${Math.round(moved)}</b></span>` : "");
+  const ai = playedShows.indexOf(A);
+  cmpQuick.innerHTML =
+    (ai > 0 ? `<button type="button" data-q="prev">左の1つ前の公演とくらべる</button>` : "") +
+    `<button type="button" data-q="first">初日(${playedShows[0].label})とくらべる</button>` +
+    `<button type="button" data-q="latest">最新の公演を左に</button>`;
+}
+cmpA.addEventListener("change", renderCompare);
+cmpB.addEventListener("change", renderCompare);
+document.getElementById("cmpSwap").addEventListener("click", () => { const t = cmpA.value; cmpA.value = cmpB.value; cmpB.value = t; renderCompare(); });
+cmpQuick.addEventListener("click", (e) => {
+  const q = e.target.closest("[data-q]");
+  if (!q) return;
+  const A = shows[+cmpA.value], ai = playedShows.indexOf(A);
+  if (q.dataset.q === "prev" && ai > 0) cmpB.value = String(shows.indexOf(playedShows[ai - 1]));
+  if (q.dataset.q === "first") cmpB.value = String(shows.indexOf(playedShows[0]));
+  if (q.dataset.q === "latest") { cmpA.value = String(shows.indexOf(playedShows[playedShows.length - 1])); cmpB.value = String(shows.indexOf(playedShows[Math.max(0, playedShows.length - 2)])); }
+  renderCompare();
+});
+renderCompare();
+document.addEventListener("click", (e) => {
+  const b = e.target.closest("[data-cmp-a]");
+  if (!b) return;
+  cmpA.value = b.dataset.cmpA; cmpB.value = b.dataset.cmpB; renderCompare();
+  activateView("compare");
+});
+
 /* ---- view switch ---- */
 const btnBoard = document.getElementById("btnBoard");
 const btnMatrix = document.getElementById("btnMatrix");
 const btnTable = document.getElementById("btnTable");
+const btnCompare = document.getElementById("btnCompare");
+const compareView = document.getElementById("compareView");
 const boardView = document.getElementById("boardView");
 const matrixView = document.getElementById("matrixView");
 const tableView = document.getElementById("tableView");
@@ -1491,17 +1865,64 @@ function activateView(view){
   boardView.classList.toggle("hidden", view !== "board");
   matrixView.classList.toggle("active", view === "matrix");
   tableView.classList.toggle("active", view === "table");
-  [[btnBoard,"board"],[btnMatrix,"matrix"],[btnTable,"table"]].forEach(([btn, key]) => {
+  compareView.classList.toggle("active", view === "compare");
+  currentView = view; updatePageNav();
+  [[btnBoard,"board"],[btnMatrix,"matrix"],[btnTable,"table"],[btnCompare,"compare"]].forEach(([btn, key]) => {
     btn.classList.toggle("active", key === view);
     btn.setAttribute("aria-selected", String(key === view));
   });
   if (view === "table") requestAnimationFrame(fitAllTable);
-  const target = view === "board" ? boardView : view === "matrix" ? matrixView : tableView;
+  const target = view === "board" ? boardView : view === "matrix" ? matrixView : view === "compare" ? compareView : tableView;
   target.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 btnBoard.addEventListener("click", () => activateView("board"));
 btnMatrix.addEventListener("click", () => activateView("matrix"));
 btnTable.addEventListener("click", () => activateView("table"));
+btnCompare.addEventListener("click", () => activateView("compare"));
+
+/* ---- ページ上部のナビ(今どこにいるかを色で) ---- */
+let currentView = "board", currentArea = "setlists";
+const pageNav = document.getElementById("pageNav");
+function updatePageNav(){
+  const key = currentArea === "setlists" ? currentView : currentArea;
+  pageNav.querySelectorAll("[data-go]").forEach(b => b.classList.toggle("on", b.dataset.go === key));
+  const on = pageNav.querySelector(".on");
+  if (on) pageNav.scrollLeft = Math.max(0, on.offsetLeft - 20);
+}
+function openEve(){
+  eveEl.classList.remove("folded");
+  const b = document.getElementById("eveFold");
+  b.textContent = "トークを閉じる ▲"; b.setAttribute("aria-expanded", "true");
+}
+function openLinks(){
+  document.getElementById("linksBody").hidden = false;
+  const b = document.getElementById("linksFold");
+  b.textContent = "閉じる ▲"; b.setAttribute("aria-expanded", "true");
+}
+pageNav.addEventListener("click", (e) => {
+  const b = e.target.closest("[data-go]");
+  if (!b) return;
+  const go = b.dataset.go;
+  if (go === "talk") { currentArea = "talk"; updatePageNav(); document.getElementById("talkArea").scrollIntoView({ behavior: "smooth", block: "start" }); return; }
+  if (go === "links") { openLinks(); currentArea = "links"; updatePageNav(); document.getElementById("links").scrollIntoView({ behavior: "smooth", block: "start" }); return; }
+  currentArea = "setlists"; activateView(go);
+});
+if ("IntersectionObserver" in window) {
+  const areaIO = new IntersectionObserver((ents) => {
+    ents.forEach(en => { if (en.isIntersecting) { currentArea = en.target.id === "talkArea" ? "talk" : en.target.id === "links" ? "links" : "setlists"; updatePageNav(); } });
+  }, { rootMargin: "-45% 0px -50% 0px" });
+  ["setlists", "talkArea", "links"].forEach(id => areaIO.observe(document.getElementById(id)));
+}
+document.getElementById("eveFold").addEventListener("click", () => {
+  if (eveEl.classList.contains("folded")) openEve();
+  else { eveEl.classList.add("folded"); const b = document.getElementById("eveFold"); b.textContent = "トークをひらく ▼"; b.setAttribute("aria-expanded", "false"); eveEl.scrollIntoView({ behavior: "smooth", block: "start" }); }
+});
+document.getElementById("linksFold").addEventListener("click", () => {
+  const body = document.getElementById("linksBody");
+  if (body.hidden) openLinks();
+  else { body.hidden = true; const b = document.getElementById("linksFold"); b.textContent = "ひらく ▼"; b.setAttribute("aria-expanded", "false"); }
+});
+document.querySelectorAll('a[href="#links"]').forEach(a => a.addEventListener("click", openLinks));
 
 /* ---- 照明(暗転 / 客電) ---- */
 const themeToggle = document.getElementById("themeToggle");
@@ -2341,6 +2762,7 @@ makerEl.addEventListener("click", (e) => {
   makerEl.addEventListener("click", () => setTimeout(upd, 0));
 })();
 document.getElementById("eveCta").addEventListener("click", () => {
+  openEve();
   const m = document.getElementById("eveMaker");
   if (m.classList.contains("collapsed")) m.querySelector("[data-maker-toggle]").click();
   m.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -2461,11 +2883,13 @@ navMenu.querySelectorAll("button[data-view]").forEach(btn => {
   });
 });
 document.getElementById("navToLinks").addEventListener("click", () => {
+  openLinks();
   document.getElementById("links").scrollIntoView({ behavior: "smooth", block: "start" });
   closeNavMenu();
 });
 document.getElementById("navToEve").addEventListener("click", () => {
   closeNavMenu();
+  openEve();
   if (!document.getElementById("content").classList.contains("visible")) { revealContent("eveRoom"); return; }
   eveEl.scrollIntoView({ behavior: "smooth", block: "start" });
 });
@@ -2532,6 +2956,7 @@ stageEl.addEventListener("click", (e) => {
 });
 function pauseStage(){ if (stagePlayer && stagePlayer.pauseVideo) stagePlayer.pauseVideo(); }
 document.getElementById("eveStrip").addEventListener("click", () => {
+  openEve();
   if (!document.getElementById("content").classList.contains("visible")) { revealContent("eveRoom"); return; }
   document.getElementById("eveRoom").scrollIntoView({ behavior: "smooth", block: "start" });
 });
@@ -2547,11 +2972,10 @@ function revealContent(scrollTargetId){
   setTimeout(() => {
     gate.style.display = "none";
     content.classList.add("visible");
+    if (scrollTargetId === "eveRoom") openEve();
     requestAnimationFrame(() => {
       content.classList.add("fade-in");
-      if (scrollTargetId) {
-        document.getElementById(scrollTargetId).scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth" });
-      }
+      document.getElementById(scrollTargetId || "setlists").scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth" });
     });
   }, delay);
 }
