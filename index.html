@@ -761,6 +761,7 @@
   .cmp-sum b{font-family:var(--font-display);font-weight:400;font-size:15px;margin-left:4px;}
   .cmp-sum .s-a{border-color:var(--accent);color:var(--accent);}
   .cmp-sum .s-b{border-color:#5aa0d8;color:#5aa0d8;}
+  .live-badge{white-space:nowrap;flex:none;}
   .cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 8px;}
   .cmp-head{position:sticky;top:58px;z-index:2;font-size:12px;font-weight:700;padding:7px 10px;border-radius:8px 8px 0 0;background:var(--surface2);color:var(--ink);
     border-bottom:2px solid var(--accent);}
@@ -824,6 +825,44 @@
   .tbl-key .kb{display:inline-block;width:14px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px;}
   .tour-done{font-size:14px;margin:4px 0 14px;color:var(--ink-soft);}
   .tour-done b{color:var(--accent);}
+
+  /* ---------- v9: くらべるも紙のセトリに / フォント統一(曲名=手書き, 番号=見出し, UI=本文) ---------- */
+  .cmp-grid{
+    --ink:var(--paper-ink); --ink-soft:#4a443c; --ash:#867e72; --line:#e2d9ca; --line-strong:#2b2620; --accent:#cf530a; --accent-ink:#fff; --accent-soft:#fde0c9;
+    color-scheme:light;position:relative;background:var(--paper);color:var(--paper-ink);border-radius:2px;padding:26px 14px 14px;box-shadow:var(--shadow);margin-top:18px;gap:0 18px;}
+  .cmp-grid::before{content:"";position:absolute;top:-11px;left:50%;width:96px;height:24px;transform:translateX(-50%) rotate(-2.5deg);background:var(--tape);box-shadow:0 1px 2px rgba(0,0,0,.12);}
+  .cmp-grid::after{content:"";position:absolute;top:22px;bottom:14px;left:50%;border-left:1.5px dashed #d8cfbf;}
+  .cmp-head{position:sticky;top:58px;background:var(--paper);border-radius:0;padding:4px 2px 6px;border-bottom:1.5px solid #2b2620;
+    font-family:var(--font-body);font-size:12px;font-weight:400;color:#867e72;}
+  .cmp-head b{display:block;font-family:var(--font-display);font-weight:400;font-size:20px;line-height:1.2;color:#171411;}
+  .cmp-head small{display:inline;font-size:11px;color:#867e72;}
+  .cmp-head.a b{color:#cf530a;} .cmp-head.b b{color:#2f6fa3;}
+  .cmp-head.a,.cmp-head.b{border-bottom-color:#2b2620;}
+  .cmp-cell{min-height:38px;padding:5px 2px;border-bottom:1px solid #e6ddcf;font-family:var(--font-hand);font-size:15px;color:#171411;gap:8px;}
+  .cmp-cell .cn{min-width:30px;background:none;color:#867e72;font-family:var(--font-display);font-size:11px;padding:0;text-align:left;}
+  .cmp-cell .cn.en{background:none;color:#cf530a;}
+  .cmp-cell.only.a,.cmp-cell.only.b{background:none;}
+  .cmp-cell.only.a .ct{background:linear-gradient(transparent 55%, rgba(255,150,70,.45) 55%);}
+  .cmp-cell.only.b .ct{background:linear-gradient(transparent 55%, rgba(90,160,216,.4) 55%);}
+  .cmp-cell .tag{font-family:var(--font-body);}
+  .cmp-cell.only.a .tag{background:none;color:#cf530a;border:1px solid #cf530a;}
+  .cmp-cell.only.b .tag{background:none;color:#2f6fa3;border:1px solid #2f6fa3;}
+  .cmp-cell.moved .ct{text-decoration:underline dashed #867e72;text-underline-offset:4px;}
+  .cmp-cell.moved .tag{color:#867e72;border-color:#867e72;}
+  .cmp-cell.gap{color:#d6ccbc;font-family:var(--font-body);}
+  .cmp-cell.diffno .cn{outline:none;color:#b8860b;text-decoration:underline;}
+  .cmp-sep{font-family:var(--font-display);color:#cf530a;padding:14px 2px 2px;border-bottom:1.5px solid #2b2620;}
+  .cmp-sum .s-b{border-color:#5aa0d8;color:#5aa0d8;}
+  .live-badge{white-space:nowrap;flex:none;}
+  table.matrix tbody th{font-family:var(--font-hand);font-weight:400;font-size:13px;}
+  table.matrix tbody th .cnt{font-family:var(--font-body);}
+  table.matrix.setgrid tbody th{font-family:var(--font-body);}
+  table.matrix.setgrid td{font-family:var(--font-hand);font-size:13px;}
+  table.matrix.setgrid td.empty,table.matrix.setgrid td.future,table.matrix.setgrid tr.total td{font-family:var(--font-body);}
+  table.matrix tbody tr.sep th{font-family:var(--font-display);}
+  .song-row-head{font-family:var(--font-hand);font-weight:400;font-size:15px;}
+  .show-chip{font-family:var(--font-body);}
+  @media (max-width:820px){ .cmp-grid{gap:0 12px;padding:24px 10px 12px;} .cmp-cell{font-size:13.5px;gap:5px;} .cmp-cell .cn{min-width:24px;} .cmp-head{top:54px;} .cmp-head b{font-size:17px;} }
   @media (prefers-reduced-motion: reduce){
     *{animation:none !important;transition:none !important;}
     .reveal{opacity:1 !important;translate:none !important;}
@@ -1816,7 +1855,7 @@ function renderCompare(){
   const rows = alignSongs(sa, sb);
   const inA = new Set(sa.map(([, t]) => t)), inB = new Set(sb.map(([, t]) => t));
   let both = 0, onlyA = 0, onlyB = 0, moved = 0;
-  let html = `<div class="cmp-head a">${A.label}<small>${A.date}・${sa.length}曲</small></div><div class="cmp-head b">${B.label}<small>${B.date}・${sb.length}曲</small></div>`;
+  let html = `<div class="cmp-head a"><b>${A.date}</b>${A.label} <small>・${sa.length}曲</small></div><div class="cmp-head b"><b>${B.date}</b>${B.label} <small>・${sb.length}曲</small></div>`;
   let enShown = false;
   rows.forEach(r => {
     const isEn = (r.a && /^EN/i.test(r.a[0])) || (r.b && /^EN/i.test(r.b[0]));
