@@ -913,6 +913,19 @@
   .eve.plain .eve-kicker{font-size:11.5px;}
   .eve.plain .eve-count{margin:0;}
   .eve.plain .eve-fold{margin:8px 0 8px;}
+  #player{z-index:120;}
+  .tbl-search{flex:1 1 180px;min-width:150px;font:inherit;font-size:13px;padding:6px 12px;border-radius:100px;border:1px solid var(--line);background:var(--bg);color:var(--ink);}
+  .tbl-bar .tbl-filter button[data-tf="rare"]{border-color:var(--accent);color:var(--accent);font-weight:700;}
+  .tbl-bar .tbl-filter button[data-tf="rare"].on{background:var(--accent);color:var(--accent-ink);}
+  table.matrix tbody th[data-play]{cursor:pointer;}
+  table.matrix tbody th[data-play]:hover{text-decoration:underline;}
+  table.matrix.setgrid td .rare-tag{display:inline-block;font-style:normal;font-family:var(--font-body);font-size:9px;font-weight:700;background:var(--accent);color:var(--accent-ink);border-radius:3px;padding:0 4px;margin-bottom:2px;}
+  table.matrix.setgrid td.rare{box-shadow:inset 0 0 0 2px var(--accent);}
+  table.matrix.setgrid.filtering td[data-cls]:not(.match){opacity:.18;}
+  table.matrix.setgrid.filtering td.match{box-shadow:inset 0 0 0 2px var(--accent);}
+  .player-react.multi{flex-direction:column;align-items:stretch;gap:6px;}
+  .player-react.multi .pr-row{display:flex;align-items:center;gap:8px;}
+  .player-react.multi .react-btn{font-size:12px;padding:3px 12px;}
   @media (prefers-reduced-motion: reduce){
     *{animation:none !important;transition:none !important;}
     .reveal{opacity:1 !important;translate:none !important;}
@@ -1048,9 +1061,10 @@
               <button type="button" data-tm="grid" class="on">曲名で見る</button>
               <button type="button" data-tm="num">曲順の番号で見る</button>
             </div>
-            <div class="tbl-filter" role="group" aria-label="曲をしぼる" hidden>
+            <input type="search" class="tbl-search" id="tblQ" placeholder="曲名でさがす(例: 夢見月)" autocomplete="off">
+            <div class="tbl-filter" role="group" aria-label="曲をしぼる">
               <button type="button" data-tf="all" class="on">すべて</button>
-              <button type="button" data-tf="rare">限定だけ</button>
+              <button type="button" data-tf="rare">限定曲だけ</button>
               <button type="button" data-tf="sometimes">たまに</button>
               <button type="button" data-tf="fixed">固定</button>
             </div>
@@ -1496,11 +1510,14 @@ function openPlayer(title, idx = 0, showDate){
   const clean = cleanTitle(title);
   playerTitle = clean;
   if (showDate !== undefined) playerShow = showDate || "";
-  const pShow = playerShow && shows.find(x => x.date === playerShow);
+  const pShow = playerShow && playerShow !== "ALL" && shows.find(x => x.date === playerShow);
+  const allRows = playerShow === "ALL"
+    ? shows.map(sh => { const f = sh.songs.find(([, t]) => cleanTitle(t) === clean); return f ? `<div class="pr-row"><span><b>${sh.label}</b> ${sh.date}・${f[0]}曲目</span>${reactBtnHTML(sh.date, f[1], "good")}</div>` : ""; }).join("")
+    : "";
   const rawTitle = pShow ? (pShow.songs.find(([, t]) => cleanTitle(t) === clean) || [, title])[1] : title;
   const reactRow = pShow
     ? `<div class="player-react"><span><b>${pShow.label}</b>(${pShow.date})の「${escapeHtml(clean)}」</span>${reactBtnHTML(pShow.date, rawTitle, "good")}</div>`
-    : "";
+    : allRows ? `<div class="player-react multi"><span>「${escapeHtml(clean)}」をやった公演(最高をつけられます)</span>${allRows}</div>` : "";
   const srcs = sourcesFor(clean);
   const cur = srcs[idx];
   const q = encodeURIComponent(clean);
@@ -1741,9 +1758,10 @@ function buildAllTable(){
       tbody.appendChild(sep);
     }
     const tr = document.createElement("tr");
-    tr.dataset.cls = cls;
+    tr.dataset.cls = cls; tr.dataset.title = title;
     if (cls === "rare") tr.className = "row-rare";
     const th = document.createElement("th");
+    th.dataset.play = title; th.dataset.playShow = "ALL";
     th.innerHTML = `<span class="dot ${cls}"></span>${escapeHtml(title)}<span class="cnt">${cls === "rare" ? "限定" : cls === "fixed" ? "全公演" : countByTitle[title] + "公演"}</span>`;
     tr.appendChild(th);
     cols.forEach(show => {
@@ -1788,7 +1806,7 @@ function buildGrid(){
   const cell = (x) => {
     if (!x) return `<td class="empty">―</td>`;
     const rare = classFor(x[1]) === "rare";
-    return `<td class="${rare ? "rare" : ""}" data-play="${escapeHtml(x[1])}" data-play-show="${x.show}"><small>${x[0]}</small>${escapeHtml(x[1])}${x[2] ? `<span class="song-note">${x[2]}</span>` : ""}</td>`;
+    return `<td class="${rare ? "rare" : ""}" data-cls="${classFor(x[1])}" data-play="${escapeHtml(x[1])}" data-play-show="${x.show}">${rare ? `<em class="rare-tag">限定</em>` : ""}<small>${x[0]}</small>${escapeHtml(x[1])}${x[2] ? `<span class="song-note">${x[2]}</span>` : ""}</td>`;
   };
   let body = "", blk = 0;
   const futureCell = (first) => `<td class="future">${first ? "公演前" : ""}</td>`;
@@ -1875,13 +1893,36 @@ matrixFit.addEventListener("wheel", (e) => {
   setTZ(tz * Math.exp(-e.deltaY / 200), e.clientX - r.left, e.clientY - r.top);
 }, { passive: false });
 const tblHome = document.createComment("tbl");
+let tblFilter = "all";
+/* しぼり込み(限定/たまに/固定)と検索。番号の表は行を隠し、曲名の表は当てはまるマスだけ残して他を薄くする */
+function applyTblFilter(){
+  const q = normTitle(document.getElementById("tblQ").value || "");
+  const ok = (title, cls) => (tblFilter === "all" || cls === tblFilter) && (!q || normTitle(title).includes(q));
+  allTable.querySelectorAll("tbody tr").forEach(tr => {
+    if (tr.classList.contains("sep")) { tr.classList.toggle("hide", tblFilter !== "all" || !!q); return; }
+    tr.classList.toggle("hide", !ok(tr.dataset.title || "", tr.dataset.cls));
+  });
+  const on = tblFilter !== "all" || !!q;
+  gridTable.classList.toggle("filtering", on);
+  let first = null;
+  gridTable.querySelectorAll("td[data-cls]").forEach(td => {
+    const m = on && ok(td.dataset.play, td.dataset.cls);
+    td.classList.toggle("match", m);
+    if (m && !first) first = td;
+  });
+  if (q && first && tblMode === "grid") {
+    matrixFit.scrollTop = Math.max(0, first.offsetTop * tz - 60);
+    matrixFit.scrollLeft = Math.max(0, first.offsetLeft * tz - 80);
+  }
+}
+document.getElementById("tblQ").addEventListener("input", applyTblFilter);
 tblWrap.addEventListener("click", (e) => {
   const m = e.target.closest("[data-tm]");
   if (m) {
     tblMode = m.dataset.tm;
     tblWrap.querySelectorAll("[data-tm]").forEach(b => b.classList.toggle("on", b === m));
     gridTable.hidden = tblMode !== "grid"; allTable.hidden = tblMode === "grid";
-    tblWrap.querySelector(".tbl-filter").hidden = tblMode === "grid";
+    applyTblFilter();
     document.getElementById("keyGrid").hidden = tblMode !== "grid";
     document.getElementById("keyNum").hidden = tblMode === "grid";
     matrixFit.scrollTop = 0; matrixFit.scrollLeft = 0;
@@ -1891,8 +1932,7 @@ tblWrap.addEventListener("click", (e) => {
   const f = e.target.closest("[data-tf]");
   if (f) {
     tblWrap.querySelectorAll("[data-tf]").forEach(b => b.classList.toggle("on", b === f));
-    allTable.querySelectorAll("tbody tr").forEach(tr => tr.classList.toggle("hide", f.dataset.tf !== "all" && tr.dataset.cls !== f.dataset.tf));
-    allTable.querySelectorAll("tbody tr.sep").forEach(tr => tr.classList.remove("hide"));
+    tblFilter = f.dataset.tf; applyTblFilter();
     return;
   }
   const z = e.target.closest("[data-tz]");
